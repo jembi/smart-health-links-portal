@@ -17,7 +17,8 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    needs: [Tests with Coverage Check]
+    # needs: [Tests with Coverage Check]
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
