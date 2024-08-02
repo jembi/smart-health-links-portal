@@ -1,0 +1,29 @@
+name: Next.js Jest Tests
+
+on:
+  push:
+    branches:
+      - main  # Or your main branch name
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Adjust if needed
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Jest Tests
+        run: yarn test
