@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
-export default function Home() {
+export default function NotFound() {
   return (
     <Container maxWidth={false}>
       <Box

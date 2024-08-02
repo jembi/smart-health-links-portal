@@ -11,10 +11,10 @@ services:
     env_file:
       - .env
     volumes:
-        - ./src:/app/src
-        - ./node_modules:/app/node_modules
-        - ./public:/app/public
-        - /app/.next
+      - ./src:/app/src
+      - ./node_modules:/app/node_modules
+      - ./public:/app/public
+      - /app/.next
     ports:
       - "3000:3000"
     networks:
@@ -24,8 +24,7 @@ services:
       interval: 30s
       timeout: 3s
       retries: 10
-  
+
 networks:
   smart-health-links-portal-network:
-    name: smart-health-links-portal-network
     driver: bridge

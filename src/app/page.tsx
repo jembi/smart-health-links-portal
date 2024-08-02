@@ -18,7 +18,7 @@ export default function Home() {
           Welcome to Smart Health Links Portal!
         </Typography>
         <Typography variant="body1" align="center">   
-          Share you medical data with confidence
+          Share your medical data with confidence
         </Typography>
       </Box>
     </Container>

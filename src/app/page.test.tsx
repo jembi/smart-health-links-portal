@@ -9,7 +9,7 @@ describe('Home Component', () => {
 
     // Assertions
     expect(screen.getByRole('heading', { name: 'Welcome to Smart Health Links Portal!' })).toBeInTheDocument();
-    expect(screen.getByText('Share you medical data with confidence')).toBeInTheDocument();
+    expect(screen.getByText('Share your medical data with confidence')).toBeInTheDocument();
 
     // Optional: Check if the icon is rendered
     // You'll need to decide how you want to identify the icon (e.g., by class name, aria-label, etc.)
