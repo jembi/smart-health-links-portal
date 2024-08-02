@@ -1,11 +1,18 @@
 name: Build and Push Smart Health Links Portal Image
 
+# on:
+#   push:
+#     tags:
+#       - "*.*.*"
+#     branches:
+#       - main
+
 on:
-  push:
-    tags:
-      - "*.*.*"
+  workflow_run:
+    workflows: ['Tests with Coverage Check']
+    types: [completed]
     branches:
-      - main
+      - 'main'
 
 jobs:
   build-and-push:
