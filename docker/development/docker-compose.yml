@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    image: smart-health-links-portal:latest
+    container_name: smart-health-links-portal
+    build:
+      context: .
+      target: dev
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+      - ./node_modules:/app/node_modules
+      - ./public:/app/public
+      - /app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - smart-health-links-portal-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 3s
+      retries: 10
+
+networks:
+  smart-health-links-portal-network:
+    driver: bridge
