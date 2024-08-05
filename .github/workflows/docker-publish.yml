@@ -34,7 +34,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           file: docker/production/Dockerfile
-          target: production
           tags: jembi/smart-health-links-portal:${{ github.ref_name }}
 
       - name: Build and push latest
@@ -44,5 +43,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           file: docker/production/Dockerfile
-          target: production
           tags: jembi/smart-health-links-portal:latest
