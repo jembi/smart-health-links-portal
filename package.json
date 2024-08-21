@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "prisma migrate dev --schema=./prisma/schema.test.prisma && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "prisma:dev": "prisma migrate dev --schema=./prisma/schema.prisma",
+    "prisma:test": "prisma migrate dev --schema=./prisma/schema.test.prisma",
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -36,8 +39,5 @@
     "jest-environment-jsdom": "^29.7.0",
     "prisma": "^5.18.0",
     "typescript": "^5"
-  },
-  "prisma": {
-    "schema": "./src/db/schema.prisma"
   }
 }

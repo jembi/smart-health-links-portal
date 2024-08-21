@@ -1,0 +1,98 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db"
+}
+
+model cas_item {
+    hash       String   @id @unique
+    content    Bytes    @unique
+    ref_count  Int      @default(0)
+    shlinkFile shlink_file[]
+
+    @@index([hash], name: "idx_cas_item_hash")
+}
+
+model shlink_file {
+    id             String    @id @default(cuid())
+    shlinkId       String
+    content_type   String    @default("application/json")
+    contentHash    String?
+    casItem        cas_item? @relation(fields: [contentHash], references: [hash])
+    shlink         shlink    @relation(fields: [shlinkId], references: [id])
+
+    @@index([shlinkId], name: "idx_shlink_file_shlinkId")
+    @@index([contentHash], name: "idx_shlink_file_contentHash")
+}
+
+model shlink_access {
+    id           String   @id @default(cuid())
+    shlinkId     String
+    recipient    String
+    access_time  DateTime @default(now())
+    shlink       shlink   @relation(fields: [shlinkId], references: [id])
+
+    @@index([shlinkId], name: "idx_shlink_access_shlinkId")
+}
+
+
+model shlink {
+    id                         String           @id @unique
+    passcode_failures_remaining Int             @default(5)
+    config_passcode            String?
+    config_exp                 DateTime?
+    active                     Boolean          @default(true)
+    management_token           String           
+    user_id                    user   @relation(fields: [userId], references: [user_id])
+    userId                     String           
+    shlinkFile                 shlink_file[]
+    shlinkEndpoint             shlink_endpoint[]
+    shlinkAccess               shlink_access[]
+    
+
+    @@index([id], name: "idx_shlink_id")
+}
+
+model user {
+    id           String   @id @default(cuid()) 
+    user_id       String    @unique
+    patient_id    String
+    access_time  DateTime @default(now())
+    shlink       shlink[]
+    
+
+    @@index([id], name: "idx_user_id")
+}
+
+
+
+model server_config {
+    id                    String  @id @unique 
+    endpoint_url          String
+    config_key            String  
+    config_client_id      String
+    config_client_secret  String?
+    config_token_endpoint String
+    config_refresh_token  String?
+    refresh_time          DateTime @default(now())
+    access_token_response String
+    shlinkEndpoints       shlink_endpoint[]
+
+    @@index([id], name: "idx_server_config_id")
+}
+
+model shlink_endpoint {
+    id                    String          @id @unique 
+    shlinkId              String
+    server_config_id      String
+    url_path              String          
+    shlink                shlink          @relation(fields: [shlinkId], references: [id])
+    serverConfig          server_config   @relation(fields: [server_config_id], references: [id])
+
+    @@index([shlinkId], name: "idx_shlink_endpoint_shlinkId")
+    @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
+}
+
