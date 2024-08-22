@@ -1,0 +1,1 @@
+export const NOT_FOUND = 'Is this not embarrasing. We could not find the requested resource.'

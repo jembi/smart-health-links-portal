@@ -3,7 +3,7 @@ import { UserModel } from "@/domain/models/user";
 import { UserEntity } from "@/entities/user";
 
 export const mapEntityToModel = (userEntity: UserEntity): UserModel => {
-    return new UserModel(
+    return userEntity && new UserModel(
         userEntity.user_id, 
         userEntity.patient_id, 
         userEntity.id
@@ -11,7 +11,7 @@ export const mapEntityToModel = (userEntity: UserEntity): UserModel => {
 }
 
 const mapModelToEntity = (userModel: UserModel): UserEntity => {
-    return {
+    return userModel && {
         id: userModel.getId(),
         user_id: userModel.getUserId(),
         patient_id: userModel.getPatientId()
@@ -19,7 +19,8 @@ const mapModelToEntity = (userModel: UserModel): UserEntity => {
 }
 
 export const mapModelToDto = (userModel: UserModel): UserDto => {
-    return {
+
+    return userModel && {
         id: userModel.getId(),
         patientId: userModel.getId(),
         userId: userModel.getId()
@@ -27,7 +28,7 @@ export const mapModelToDto = (userModel: UserModel): UserDto => {
 }
 
 export const mapDtoToModel = (userDto: UserDto): UserModel => {
-    return new UserModel(
+    return userDto && new UserModel(
         userDto.userId, userDto.patientId, userDto.id
     );
 }

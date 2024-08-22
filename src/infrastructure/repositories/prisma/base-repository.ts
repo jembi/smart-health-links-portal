@@ -3,7 +3,7 @@ import { IRepository, QueryFilter } from "@/infrastructure/repositories/interfac
 import { BaseEntity } from "@/entities/base-entity";
 
 const getPrismaFilters = (filters?: QueryFilter) => {
-    return {} as any;
+    return filters as any;
 }
 
 export class BasePrismaRepository<T extends BaseEntity> implements IRepository<T> {
