@@ -1,3 +1,3 @@
 export class BaseEntity {
-    id: string
+    id: string;
 }
