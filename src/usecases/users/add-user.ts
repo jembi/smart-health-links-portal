@@ -8,7 +8,8 @@ export const addUserUseCase = async (context: {repo: IUserRepository}, data: {us
     let newUser: UserEntity;
     
     let entity = mapModelToEntity(data.user);
-    delete entity.id
+    entity.id = undefined;
+
     if(!oldUser){
         newUser = await context.repo.insert(entity);
     }  
