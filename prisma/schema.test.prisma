@@ -22,12 +22,12 @@ model shlink_file {
     id             String    @id @unique @default(cuid()) 
     shlink_id       String
     content_type   String    @default("application/json")
-    content_hash    String?
-    cas_item        cas_item? @relation(fields: [content_hash], references: [hash])
+    content_id    String?
+    cas_item        cas_item? @relation(fields: [content_id], references: [id])
     shlink         shlink    @relation(fields: [shlink_id], references: [id])
 
     @@index([shlink_id], name: "idx_shlink_file_shlinkId")
-    @@index([content_hash], name: "idx_shlink_file_content_hash")
+    @@index([content_id], name: "idx_shlink_file_content_id")
 }
 
 model shlink_access {
