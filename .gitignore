@@ -36,3 +36,7 @@ package-lock.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# db
+dev.db
+dev.db-journal
