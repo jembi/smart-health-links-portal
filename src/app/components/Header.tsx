@@ -16,6 +16,9 @@ export default function Header() {
         >
           Home
         </MenuItem>
+        <MenuItem key="key2" component={NextLink} href="/patient-summary">
+          Patient Summary View
+        </MenuItem>
       </Toolbar>
     </AppBar>
   );
