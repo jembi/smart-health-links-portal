@@ -1,6 +1,16 @@
-export class UserModel{
+import { BaseModel } from "./base-model";
+import z from 'zod';
+
+export class UserModel extends BaseModel{
     
-    constructor(private userId: string, private patientId: string, private id?: string){}
+    constructor(private userId: string, private patientId: string, private id?: string){
+        super(z.object({
+            userId: z.string().min(10),
+            patientId: z.string().min(2),
+            id: z.string().optional()
+        }));
+        this.validate();
+    }
 
     getId(): string | undefined{
         return this.id;

@@ -10,7 +10,7 @@ export const mapEntityToModel = (userEntity: UserEntity): UserModel | undefined 
     ) : undefined;
 }
 
-const mapModelToEntity = (userModel: UserModel): UserEntity | undefined => {
+export const mapModelToEntity = (userModel: UserModel): UserEntity | undefined => {
     return userModel ? {
         id: userModel.getId(),
         user_id: userModel.getUserId(),

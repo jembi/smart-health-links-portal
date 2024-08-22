@@ -23,8 +23,9 @@ export interface Filter{
 }
 
 export interface LogicOperator{
-    and: KeyValue[],
-    or: KeyValue[]
+    and?: KeyValue[],
+    or?: KeyValue[],
+    where?: any
 }
 export interface QueryFilter{
     filters: LogicOperator[]

@@ -35,12 +35,12 @@ export class BasePrismaRepository<T extends BaseEntity> implements IRepository<T
     return this.getModel().findFirst({where: {id}});
   }
   
-  async findOne(filter: QueryFilter): Promise<T | undefined> {
+  async findOne(filter: any): Promise<T | undefined> {
     // @ts-ignore
-    return this.getModel().findOne({where: getPrismaFilters(filter)});
+    return this.getModel().findFirst({where: getPrismaFilters(filter)});
   }
 
-  async findMany(filters?: QueryFilter): Promise<T[]> {
+  async findMany(filters?: any): Promise<T[]> {
     // @ts-ignore
     return this.getModel().findMany({where: getPrismaFilters(filters)});
   }
