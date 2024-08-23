@@ -22,9 +22,9 @@ export default function PatientSummary() {
     dataTabs.map((resourceType) => {
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-            <div>
-              Data of <b>{resourceType}</b> will be displayed here.
-            </div>
+          <div>
+            Data of <b>{resourceType}</b> will be displayed here.
+          </div>
         </TabPanel>
       );
     });
