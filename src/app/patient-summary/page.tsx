@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import { Container } from "@mui/material";
 import PatientSummary from "./components/PatientSummary";
+import fhirBundleJson from "./sample/bundle.json";
 
 export default function PatientSummaryPage() {
   return (
@@ -13,7 +14,7 @@ export default function PatientSummaryPage() {
         paddingTop={8}
         paddingBottom={8}
       >
-        <PatientSummary />
+        <PatientSummary fhirBundle={fhirBundleJson} />
       </Box>
     </Container>
   );
