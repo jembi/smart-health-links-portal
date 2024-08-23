@@ -1,0 +1,99 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("POSTGRES_PRISMA_URL")
+    directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model cas_item {
+    id         String   @id @unique @default(cuid()) @db.VarChar(43)
+    hash       String   @unique @db.VarChar(32)
+    content    Bytes    @unique
+    ref_count  Int      @default(0)
+    shlink_file shlink_file[]
+
+    @@index([id], name: "idx_cas_item_hash")
+}
+
+model shlink_file {
+    id             String    @id @unique @default(cuid()) @db.VarChar(43)
+    shlink_id       String
+    content_type   String    @default("application/json")
+    content_hash    String?
+    cas_item        cas_item? @relation(fields: [content_hash], references: [hash])
+    shlink         shlink    @relation(fields: [shlink_id], references: [id])
+
+    @@index([shlink_id], name: "idx_shlink_file_shlinkId")
+    @@index([content_hash], name: "idx_shlink_file_content_hash")
+}
+
+model shlink_access {
+    id           String   @id @default(cuid()) @db.VarChar(43)
+    shlink_id     String
+    recipient    String
+    access_time  DateTime @default(now())
+    shlink       shlink   @relation(fields: [shlink_id], references: [id])
+
+    @@index([shlink_id], name: "idx_shlink_access_shlinkId")
+}
+
+
+model shlink {
+    id                         String           @id @unique @db.VarChar(43)
+    passcode_failures_remaining Int             @default(5)
+    config_passcode            String?
+    config_exp                 DateTime?
+    active                     Boolean          @default(true)
+    management_token           String           @db.VarChar(43)
+    user                       user   @relation(fields: [user_id], references: [user_id])
+    user_id                    String           @db.VarChar(43)
+    shlink_file                 shlink_file[]
+    shlink_endpoint             shlink_endpoint[]
+    shlink_access               shlink_access[]
+    
+
+    @@index([id], name: "idx_shlink_id")
+}
+
+model user {
+    id           String   @id @default(cuid()) @db.VarChar(43)
+    user_id       String    @unique
+    patient_id    String
+    shlink       shlink[]
+    
+
+    @@index([id], name: "idx_user_id")
+}
+
+
+
+model server_config {
+    id                    String  @id @unique @db.VarChar(43)
+    endpoint_url          String
+    config_key            String?  @db.VarChar(43)
+    config_client_id      String?
+    config_client_secret  String?
+    config_token_endpoint String?
+    config_refresh_token  String?
+    refresh_time          DateTime @default(now())
+    access_token_response String
+    shlink_endpoints      shlink_endpoint[]
+
+    @@index([id], name: "idx_server_config_id")
+}
+
+model shlink_endpoint {
+    id                    String          @id @unique @db.VarChar(43)
+    shlink_id             String
+    server_config_id      String
+    url_path              String          @db.VarChar(43)
+    shlink                shlink          @relation(fields: [shlink_id], references: [id])
+    server_config         server_config   @relation(fields: [server_config_id], references: [id])
+
+    @@index([shlink_id], name: "idx_shlink_endpoint_shlinkId")
+    @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
+}
+
