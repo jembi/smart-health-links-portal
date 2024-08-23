@@ -11,11 +11,6 @@ const dataTabs = Array.from(
   new Set(fhirBundleJson.entry.map((entry) => entry.resource.resourceType))
 );
 
-const renderTabs = () =>
-  dataTabs.map((resourceType) => (
-    <Tab label={resourceType} key={resourceType} value={resourceType} />
-  ));
-
 export default function PatientSummary() {
   const [selectedTab, setSelectedTab] = useState(dataTabs[0]);
   const renderPanels = () =>
@@ -28,6 +23,10 @@ export default function PatientSummary() {
         </TabPanel>
       );
     });
+    const renderTabs = () =>
+      dataTabs.map((resourceType) => (
+        <Tab label={resourceType} key={resourceType} value={resourceType} />
+      ));
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
