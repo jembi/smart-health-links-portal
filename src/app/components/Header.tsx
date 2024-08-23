@@ -10,13 +10,13 @@ export default function Header() {
     <AppBar position="static">
       <Toolbar>
         <MenuItem
-          key="key1"
+          key="home"
           component={NextLink}
           href="/"
         >
           Home
         </MenuItem>
-        <MenuItem key="key2" component={NextLink} href="/patient-summary">
+        <MenuItem key="patient-summary" component={NextLink} href="/patient-summary">
           Patient Summary View
         </MenuItem>
       </Toolbar>
