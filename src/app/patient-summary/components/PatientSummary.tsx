@@ -10,7 +10,7 @@ export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
     new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType))
   );
-  const [selectedTab, setSelectedTab] = useState(dataTabs[0]);
+  const [selectedTab, setSelectedTab] = useState(dataTabs[0] || "");
   const renderPanels = () =>
     dataTabs.map((resourceType) => {
       return (
