@@ -40,5 +40,8 @@
     "jest-environment-jsdom": "^29.7.0",
     "prisma": "^5.18.0",
     "typescript": "^5"
-  }
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1"
+ }
 }
