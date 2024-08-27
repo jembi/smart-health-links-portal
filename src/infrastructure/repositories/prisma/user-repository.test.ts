@@ -1,7 +1,7 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { BaseEntity } from "@/entities/base-entity";
 import { UserEntity } from "@/entities/user";
-import { BasePrismaRepository } from "./base-repository";
+import { UserPrismaRepository } from "./user-repository";
 
 // Create a mock for PrismaClient
 const prismaMock = {
@@ -17,12 +17,12 @@ const prismaMock = {
 
 const entity = { id: '1', user_id: 'John', patient_id: 'Doe' };
 
-describe('BasePrismaRepository', () => {
-  let repository: BasePrismaRepository<BaseEntity>;
+describe('UserPrismaRepository', () => {
+  let repository: UserPrismaRepository;
 
   beforeEach(() => {
     // Instantiate the repository before each test
-    repository = new BasePrismaRepository(prismaMock as unknown as PrismaClient, 'user');
+    repository = new UserPrismaRepository(prismaMock as unknown as PrismaClient);
   });
 
   test('should call getModel and create a new entity', async () => {
@@ -36,7 +36,7 @@ describe('BasePrismaRepository', () => {
 
   test('should call getModel and create many entities', async () => {
     const entities = [entity, { id: '2', user_id: 'Jane Doe', patient_id: 'John Doe' }] as UserEntity[];
-    prismaMock.user.createMany.mockResolvedValue({ count: entities.length });
+    prismaMock.user.createMany.mockResolvedValue(entities);
 
     const result = await repository.insertMany(entities);
 
@@ -47,9 +47,9 @@ describe('BasePrismaRepository', () => {
   test('should call getModel and find an entity by id', async () => {
     prismaMock.user.findFirst.mockResolvedValue(entity);
 
-    const result = await repository.findById(1);
+    const result = await repository.findById('1');
 
-    expect(prismaMock.user.findFirst).toHaveBeenCalledWith({ where: { id: 1 } });
+    expect(prismaMock.user.findFirst).toHaveBeenCalledWith({ where: { id: '1' } });
     expect(result).toBe(entity);
   });
 
@@ -79,7 +79,7 @@ describe('BasePrismaRepository', () => {
 
     const result = await repository.update(entity);
 
-    expect(prismaMock.user.update).toHaveBeenCalledWith({ where: { id: 1 }, data: entity });
+    expect(prismaMock.user.update).toHaveBeenCalledWith({ where: { id: '1' }, data: entity });
     expect(result).toBe(entity);
   });
 
@@ -88,7 +88,7 @@ describe('BasePrismaRepository', () => {
 
     const result = await repository.delete(entity);
 
-    expect(prismaMock.user.delete).toHaveBeenCalledWith({ where: { id: 1 } });
+    expect(prismaMock.user.delete).toHaveBeenCalledWith({ where: { id: '1' } });
     expect(result).toBe(entity);
   });
 });
