@@ -84,10 +84,10 @@ export class ServerConfigModel extends BaseModel{
     }
 
     getTokenEndpoint(): string | undefined {
-        return this.tokenEndpoint
+        return this.tokenEndpoint;
     }
 
-    setTokenEnpoint(tokenEndpoint: string): void {
+    setTokenEndpoint(tokenEndpoint: string): void {
         this.tokenEndpoint = tokenEndpoint;
     }
 }
