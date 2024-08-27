@@ -10,4 +10,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ["src/**/{!(*.d.ts),}.{ts,js,tsx,jsx}"],
   coverageReporters: ["json-summary", "text", "lcov"],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  }
 };
