@@ -1,5 +1,5 @@
 
-export class CreateShlinkDto {
+export class CreateSHLinkDto {
     userId: string
     passcodeFailuresRemaining: number
     configPasscode?: string
@@ -8,6 +8,6 @@ export class CreateShlinkDto {
     managementToken: string
 }
 
-export class ShlinkDto extends CreateShlinkDto{
+export class SHLinkDto extends CreateSHLinkDto{
     id: string
 }

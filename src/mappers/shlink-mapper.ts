@@ -1,9 +1,9 @@
-import { ShlinkDto } from "@/domain/dtos/shlink";
-import { ShlinkModel } from "@/domain/models/shlink";
+import { SHLinkDto } from "@/domain/dtos/shlink";
+import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 
-export const mapEntityToModel = (shlinkEntity: SHLinkEntity): ShlinkModel | undefined => {
-    return shlinkEntity ? new ShlinkModel(
+export const mapEntityToModel = (shlinkEntity: SHLinkEntity): SHLinkModel | undefined => {
+    return shlinkEntity ? new SHLinkModel(
         shlinkEntity.user_id, 
         shlinkEntity.passcode_failures_remaining, 
         shlinkEntity.active, 
@@ -14,7 +14,7 @@ export const mapEntityToModel = (shlinkEntity: SHLinkEntity): ShlinkModel | unde
     ) : undefined;
 }
 
-export const mapModelToEntity = (shlinkModel: ShlinkModel): SHLinkEntity | undefined => {
+export const mapModelToEntity = (shlinkModel: SHLinkModel): SHLinkEntity | undefined => {
     return shlinkModel ? {
         id: shlinkModel.getId(),
         user_id: shlinkModel.getUserId(),
@@ -26,7 +26,7 @@ export const mapModelToEntity = (shlinkModel: ShlinkModel): SHLinkEntity | undef
     } : undefined;
 }
 
-export const mapModelToDto = (shlinkModel: ShlinkModel): ShlinkDto | undefined => {
+export const mapModelToDto = (shlinkModel: SHLinkModel): SHLinkDto | undefined => {
 
     return shlinkModel ? {
         id: shlinkModel.getId(),
@@ -39,14 +39,14 @@ export const mapModelToDto = (shlinkModel: ShlinkModel): ShlinkDto | undefined =
     } : undefined;
 }
 
-export const mapDtoToModel = (shlinkDto: ShlinkDto): ShlinkModel | undefined => {
-    return shlinkDto ? new ShlinkModel(
+export const mapDtoToModel = (shlinkDto: SHLinkDto): SHLinkModel | undefined => {
+    return shlinkDto ? new SHLinkModel(
         shlinkDto.userId, 
         shlinkDto.passcodeFailuresRemaining, 
         shlinkDto.active, 
         shlinkDto.managementToken, 
         shlinkDto.configPasscode, 
-        shlinkDto.configExp, 
+        shlinkDto.configExp ? new Date(shlinkDto.configExp) : null, 
         shlinkDto.id
     ) : undefined;
 }
