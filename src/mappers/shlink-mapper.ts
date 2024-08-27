@@ -6,10 +6,10 @@ export const mapEntityToModel = (shlinkEntity: SHLinkEntity): ShlinkModel | unde
     return shlinkEntity ? new ShlinkModel(
         shlinkEntity.user_id, 
         shlinkEntity.passcode_failures_remaining, 
-        shlinkEntity.config_passcode, 
-        shlinkEntity.config_exp, 
         shlinkEntity.active, 
         shlinkEntity.management_token, 
+        shlinkEntity.config_passcode, 
+        shlinkEntity.config_exp, 
         shlinkEntity.id
     ) : undefined;
 }
@@ -19,10 +19,10 @@ export const mapModelToEntity = (shlinkModel: ShlinkModel): SHLinkEntity | undef
         id: shlinkModel.getId(),
         user_id: shlinkModel.getUserId(),
         passcode_failures_remaining: shlinkModel.getPasscodeFailuresRemaining(),
+        active: shlinkModel.getActive(),
+        management_token: shlinkModel.getManagementToken(),
         config_passcode: shlinkModel.getConfigPasscode(),
         config_exp: shlinkModel.getConfigExp(),
-        active: shlinkModel.getActive(),
-        management_token: shlinkModel.getManagementToken()
     } : undefined;
 }
 
@@ -31,10 +31,10 @@ export const mapModelToDto = (shlinkModel: ShlinkModel): ShlinkDto | undefined =
     return shlinkModel ? {
         id: shlinkModel.getId(),
         passcodeFailuresRemaining: shlinkModel.getPasscodeFailuresRemaining(),
-        configPasscode: shlinkModel.getConfigPasscode(),
-        configExp: shlinkModel.getConfigExp(),
         active: shlinkModel.getActive(),
         managementToken: shlinkModel.getManagementToken(),
+        configPasscode: shlinkModel.getConfigPasscode(),
+        configExp: shlinkModel.getConfigExp(),
         userId: shlinkModel.getUserId()
     } : undefined;
 }
@@ -43,10 +43,10 @@ export const mapDtoToModel = (shlinkDto: ShlinkDto): ShlinkModel | undefined => 
     return shlinkDto ? new ShlinkModel(
         shlinkDto.userId, 
         shlinkDto.passcodeFailuresRemaining, 
-        shlinkDto.configPasscode, 
-        shlinkDto.configExp, 
         shlinkDto.active, 
         shlinkDto.managementToken, 
+        shlinkDto.configPasscode, 
+        shlinkDto.configExp, 
         shlinkDto.id
     ) : undefined;
 }

@@ -4,17 +4,12 @@ import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shli
 import { mapEntityToModel, mapModelToEntity } from "@/mappers/shlink-mapper";
 
 export const addShlinkUseCase = async (context: {repo: ISHLinkRepository}, data: {shlink: ShlinkModel}): Promise<ShlinkModel> => {
-    const oldShlink = await context.repo.findOne({id: data.shlink.getId()});
     let newShlink: SHLinkEntity;
     
     let entity = mapModelToEntity(data.shlink);
-
-    if(!oldShlink){
-        newShlink = await context.repo.insert(entity);
-    }  
-    else{
-      newShlink = await context.repo.update(entity);
-    }        
+    entity.id = undefined;
+    
+    newShlink = await context.repo.insert(entity);     
 
     return mapEntityToModel(newShlink);
 }

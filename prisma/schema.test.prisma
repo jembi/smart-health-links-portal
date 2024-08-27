@@ -31,7 +31,7 @@ model shlink_file {
 }
 
 model shlink_access {
-    id           String   @id @default(cuid()) 
+    id           String   @id @unique @default(cuid()) 
     shlink_id    String
     recipient    String
     access_time  DateTime @default(now())
@@ -42,7 +42,7 @@ model shlink_access {
 
 
 model shlink {
-    id                         String           @id @unique 
+    id                         String           @id @unique @default(cuid()) 
     passcode_failures_remaining Int             @default(5)
     config_passcode            String?
     config_exp                 DateTime?

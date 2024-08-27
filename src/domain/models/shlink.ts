@@ -5,18 +5,18 @@ export class ShlinkModel extends BaseModel{
     
     constructor(private userId: string, 
         private passcodeFailuresRemaining: number, 
-        private configPasscode: string, 
-        private configExp: Date, 
         private active: boolean, 
         private managementToken: string, 
+        private configPasscode?: string, 
+        private configExp?: Date, 
         private id?: string){
         super(z.object({
             userId: z.string().min(10),
             passcodeFailuresRemaining: z.number().min(5),
-            configPasscode: z.string().min(4),
-            configExp: z.date(),
             active: z.boolean(),
             managementToken: z.string().min(10),
+            configPasscode: z.string().min(4).optional().nullable(),
+            configExp: z.date().optional().nullable(),
             id: z.string().optional()
         }));
         this.validate();
@@ -38,19 +38,19 @@ export class ShlinkModel extends BaseModel{
         this.passcodeFailuresRemaining  = passcodeFailuresRemaining
     }
 
-    getConfigPasscode(): string {
+    getConfigPasscode(): string | undefined {
         return this.configPasscode;
     }
 
-    setConfigPasscode(configPasscode: string): void {
+    setConfigPasscode(configPasscode: string | undefined): void {
         this.configPasscode  = configPasscode
     }
 
-    getConfigExp(): Date {
+    getConfigExp(): Date | undefined {
         return this.configExp;
     }
 
-    setConfigExp(configExp: Date): void {
+    setConfigExp(configExp: Date | undefined): void {
         this.configExp  = configExp
     }
 
