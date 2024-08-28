@@ -6,7 +6,7 @@ export class UserModel extends BaseModel{
     constructor(private userId: string, private patientId: string, private id?: string){
         super(z.object({
             userId: z.string().min(10),
-            patientId: z.string().min(2),
+            patientId: z.string().min(1),
             id: z.string().optional()
         }));
         this.validate();
