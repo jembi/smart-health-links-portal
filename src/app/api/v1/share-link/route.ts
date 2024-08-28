@@ -22,10 +22,11 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
+    const url = new URL(request.url);
+    const userId = url.searchParams.get('user_id');
 
     try{
-        
-        const newShlink = await repo.findMany({})
+        const newShlink = await repo.findMany({user_id: userId})
         return NextResponse.json(newShlink.map(shlink => mapModelToDto(mapEntityToModel(shlink))), { status: 200 });
     }
     catch(error){

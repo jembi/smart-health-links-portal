@@ -9,14 +9,14 @@ export const getSHLinkUseCase = async (context: {repo: ISHLinkRepository}, data:
 }
 
 
-export const getSHLinkDeactivatedUseCase = async (context: {repo: ISHLinkRepository}, data: {id: string}): Promise<SHLinkModel> => {
+export const deactivatedSHLinksUseCase = async (context: {repo: ISHLinkRepository}, data: {id: string}): Promise<SHLinkModel> => {
     const entity = await context.repo.findById(data.id);
     if(entity) entity.active = false;
 
     return mapEntityToModel(entity);
 }
 
-export const getSHLinkActivatedUseCase = async (context: {repo: ISHLinkRepository}, data: {id: string}): Promise<SHLinkModel> => {
+export const activeSHLinksUseCase = async (context: {repo: ISHLinkRepository}, data: {id: string}): Promise<SHLinkModel> => {
     const entity = await context.repo.findById(data.id);
     if(entity) entity.active = true;
 

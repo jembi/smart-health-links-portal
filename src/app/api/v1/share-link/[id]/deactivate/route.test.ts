@@ -4,11 +4,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { GET } from './route';
-import { getSHLinkDeactivatedUseCase } from '@/usecases/shlinks/get-shlink';
+import { deactivatedSHLinksUseCase } from '@/usecases/shlinks/get-shlink';
 import { mapModelToDto } from '@/mappers/shlink-mapper';
 
 jest.mock('@/usecases/shlinks/get-shlink', () => ({
-  getSHLinkDeactivatedUseCase: jest.fn(),
+  deactivatedSHLinksUseCase: jest.fn(),
 }));
 
 jest.mock('@/mappers/shlink-mapper', () => ({
@@ -63,7 +63,7 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
   });
 
   it('should return deactivated link DTO and status 200 when link is found', async () => {
-    (getSHLinkDeactivatedUseCase as jest.Mock).mockResolvedValue(mockModel);
+    (deactivatedSHLinksUseCase as jest.Mock).mockResolvedValue(mockModel);
     (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
     const request = mockRequest();

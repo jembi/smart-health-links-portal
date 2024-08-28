@@ -3,7 +3,7 @@ import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
 import prisma from "@/infrastructure/clients/prisma";
 import { SHLinkPrismaRepository } from "@/infrastructure/repositories/prisma/shlink-repository";
 import { mapDtoToModel, mapEntityToModel, mapModelToDto } from "@/mappers/shlink-mapper";
-import { getSHLinkDeactivatedUseCase } from "@/usecases/shlinks/get-shlink";
+import { deactivatedSHLinksUseCase } from "@/usecases/shlinks/get-shlink";
 import { NextResponse } from "next/server";
 import { NOT_FOUND } from "@/app/constants/http-constants";
 
@@ -12,7 +12,7 @@ const repo = new SHLinkPrismaRepository(prisma);
   export async function GET(request: Request, { params }: { params: { id: string } }) {
 
     try{
-        const result = await getSHLinkDeactivatedUseCase({repo}, {id: params.id});
+        const result = await deactivatedSHLinksUseCase({repo}, {id: params.id});
         const data = {
           ...mapModelToDto(result),
           message: "deactivated"

@@ -107,7 +107,7 @@ describe("API Route Handlers", () => {
         
 
         it("should handle errors", async () => {
-            const request = new NextRequest('http://localhost/api/share-link', { method: 'GET'});
+            const request = new NextRequest('http://localhost/api/share-link?user_id=0', { method: 'GET'});
 
             const response = await GET(request);
 
