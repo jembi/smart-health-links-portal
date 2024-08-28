@@ -4,14 +4,14 @@ import { IHapiFhirInterface, HapiFhirRequestOptions } from "./hapi-fhir.interfac
 
 export class HapiFhirService<T> extends BaseService<T> implements IHapiFhirInterface, IAuthorization {
     constructor(baseUrl: string){
-        super(baseUrl, '/fhir/Patient')
+        super(baseUrl, 'fhir/Patient')
     }
     
     async getAccessToken(endpoint: string, clientId?: string, clientSecret?: string, username?: string, password?: string): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
 
-    async getPatientData(filterString: string, options?: HapiFhirRequestOptions): Promise<unknown> {
-        throw new Error("Method not implemented.");
+    async getPatientData(patientId: string, params: any, options?: HapiFhirRequestOptions): Promise<unknown> {
+        return this.get(patientId, params);
     }
 }
