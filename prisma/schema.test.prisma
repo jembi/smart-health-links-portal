@@ -71,7 +71,7 @@ model user {
 
 
 model server_config {
-    id                    String  @id @unique 
+    id                    String  @id @unique @default(cuid())
     endpoint_url          String
     config_key            String?  
     config_client_id      String?
@@ -86,7 +86,7 @@ model server_config {
 }
 
 model shlink_endpoint {
-    id                    String          @id @unique 
+    id                    String          @id @unique @default(cuid())
     shlink_id             String
     server_config_id      String
     url_path              String          

@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     try{
         const model = mapDtoToModel(dto as SHLinkDto)
         const newShlink = await addShlinkUseCase({ repo}, {shlink: model})
-        return NextResponse.json(mapModelToDto(newShlink), { status: 201 });
+        return NextResponse.json(mapModelToDto(newShlink), { status: 200 });
     }
     catch(error){
         return handleApiValidationError(error);
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     try{
         
         const newShlink = await repo.findMany({})
-        return NextResponse.json(newShlink.map(x => mapModelToDto(mapEntityToModel(x))), { status: 201 });
+        return NextResponse.json(newShlink.map(shlink => mapModelToDto(mapEntityToModel(shlink))), { status: 200 });
     }
     catch(error){
         return handleApiValidationError(error);
