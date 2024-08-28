@@ -48,8 +48,8 @@ model shlink {
     config_exp                 DateTime?
     active                     Boolean          @default(true)
     management_token           String           @db.VarChar(43)
-    user                       user   @relation(fields: [user_id], references: [user_id])
     user_id                    String           @db.VarChar(43)
+    user                       user   @relation(fields: [user_id], references: [user_id])
     shlink_file                 shlink_file[]
     shlink_endpoint             shlink_endpoint[]
     shlink_access               shlink_access[]
@@ -96,4 +96,3 @@ model shlink_endpoint {
     @@index([shlink_id], name: "idx_shlink_endpoint_shlinkId")
     @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
 }
-

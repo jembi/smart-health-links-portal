@@ -31,7 +31,7 @@ model shlink_file {
 }
 
 model shlink_access {
-    id           String   @id @default(cuid()) 
+    id           String   @id @unique @default(cuid()) 
     shlink_id    String
     recipient    String
     access_time  DateTime @default(now())
@@ -96,4 +96,3 @@ model shlink_endpoint {
     @@index([shlink_id], name: "idx_shlink_endpoint_shlinkId")
     @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
 }
-

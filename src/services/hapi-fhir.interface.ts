@@ -3,6 +3,6 @@ export interface HapiFhirRequestOptions{
     data?: unknown;
 };
 
-export interface IHapiFhirInterface {
-    getPatientData(patientId: string, params: any, options?: HapiFhirRequestOptions): Promise<unknown>;
+export interface IHapiFhirService {
+    getPatientData(patientId: string, filterString: string, options?: HapiFhirRequestOptions): Promise<unknown>;
 }
