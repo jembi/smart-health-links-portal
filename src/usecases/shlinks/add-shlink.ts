@@ -10,6 +10,7 @@ export const addShlinkUseCase = async (context: {repo: ISHLinkRepository}, data:
     entity.id = undefined;
     entity.active = true;
 
+
     newShlink = await context.repo.insert(entity);     
 
     return mapEntityToModel(newShlink);

@@ -10,7 +10,7 @@ import { NOT_FOUND } from "@/app/constants/http-constants";
 const repo = new SHLinkPrismaRepository(prisma);
 
   export async function GET(request: Request, { params }: { params: { id: string } }) {
-
+    console.log(params.id)
     try{
         const result = await deactivatedSHLinksUseCase({repo}, {id: params.id});
         const data = {

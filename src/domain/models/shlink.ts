@@ -4,17 +4,17 @@ import z from 'zod';
 export class SHLinkModel extends BaseModel{
     
     constructor(private userId: string, 
-        private passcodeFailuresRemaining: number, 
-        private active: boolean, 
-        private managementToken: string, 
+        private passcodeFailuresRemaining?: number, 
+        private active?: boolean, 
+        private managementToken?: string, 
         private configPasscode?: string, 
         private configExp?: Date, 
         private id?: string){
         super(z.object({
             userId: z.string().min(10),
-            passcodeFailuresRemaining: z.number().default(5),
+            passcodeFailuresRemaining: z.number().default(5).optional(),
             active: z.boolean().optional(),
-            managementToken: z.string().min(10),
+            managementToken: z.string().min(10).optional(),
             configPasscode: z.string().min(4).optional().nullable(),
             configExp: z.date().optional().nullable(),
             id: z.string().optional()

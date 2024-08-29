@@ -1,3 +1,4 @@
+import { CreateSHLinkDto } from "@/domain/dtos/shlink";
 import { addShlinkUseCase } from "./add-shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
@@ -19,19 +20,48 @@ describe("addShlinkUseCase", () => {
     let mockReturnedShlinkModel: SHLinkModel;
 
     beforeEach(() => {
-        // Set up mock repository
         mockRepo = {
             insert: jest.fn(),
-            // other methods of ISHLinkRepository can be mocked here if needed
         };
 
         mockContext = { repo: mockRepo as ISHLinkRepository };
 
+        // Constants
+const mockDto: CreateSHLinkDto = {
+    userId: "1234567890",
+    passcodeFailuresRemaining: 3,
+    active: true,
+    managementToken: "token-xyz1234",
+    configPasscode: "passcode-abcde",
+    configExp: new Date("2024-01-01T00:00:00Z"),
+};
+
+const mockModel = new SHLinkModel(
+    mockDto.userId,
+    mockDto.passcodeFailuresRemaining,
+    mockDto.active,
+    mockDto.managementToken,
+    mockDto.configPasscode,
+    mockDto.configExp,
+    "1"
+);
+
+const mockEntity: SHLinkEntity = {
+    id: "1",
+    user_id: mockDto.userId,
+    passcode_failures_remaining: mockDto.passcodeFailuresRemaining,
+    active: mockDto.active,
+    management_token: mockDto.managementToken,
+    config_passcode: mockDto.configPasscode,
+    config_exp: mockDto.configExp,
+};
+
+
         // Mock the data
-        mockShlinkModel = { /* your SHLinkModel data */ } as SHLinkModel;
-        mockShlinkEntity = { /* your SHLinkEntity data */ } as SHLinkEntity;
-        mockInsertedShlinkEntity = { /* your SHLinkEntity data for the inserted entity */ } as SHLinkEntity;
-        mockReturnedShlinkModel = { /* your SHLinkModel data for the returned entity */ } as SHLinkModel;
+        mockShlinkModel = mockModel;
+        mockShlinkEntity = mockEntity;
+        mockInsertedShlinkEntity = mockEntity;
+        mockReturnedShlinkModel = mockModel;
 
         // Set up mock implementations
         (mapModelToEntity as jest.Mock).mockReturnValue(mockShlinkEntity);

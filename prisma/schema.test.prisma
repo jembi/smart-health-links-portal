@@ -47,7 +47,7 @@ model shlink {
     config_passcode            String?
     config_exp                 DateTime?
     active                     Boolean          @default(true)
-    management_token           String           
+    management_token           String           @unique @default(cuid())
     user                       user   @relation(fields: [user_id], references: [user_id])
     user_id                    String           
     shlink_file                 shlink_file[]
