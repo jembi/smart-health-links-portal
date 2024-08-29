@@ -1,5 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
-import KeycloakProvider from "next-auth/providers/keycloak"
+import KeycloakProvider from "next-auth/providers/keycloak";
+
 export const authOptions: AuthOptions = {
   providers: [
     KeycloakProvider({
@@ -16,8 +17,9 @@ export const authOptions: AuthOptions = {
       },
       token: `${process.env.NEXT_CONTAINER_KEYCLOAK_ENDPOINT}/realms/shlp/protocol/openid-connect/token`,
       userinfo: `${process.env.NEXT_CONTAINER_KEYCLOAK_ENDPOINT}/realms/shlp/protocol/openid-connect/userinfo`,
-    })
-  ]
-}
+    }),
+  ],
+};
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST }
+
+export { handler as GET, handler as POST };
