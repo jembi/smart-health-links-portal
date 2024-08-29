@@ -4,11 +4,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { GET } from './route';
-import { deactivatedSHLinksUseCase } from '@/usecases/shlinks/get-shlink';
+import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
 import { mapModelToDto } from '@/mappers/shlink-mapper';
 
-jest.mock('@/usecases/shlinks/get-shlink', () => ({
-  deactivatedSHLinksUseCase: jest.fn(),
+jest.mock('@/usecases/shlinks/deactivate-shlink', () => ({
+  deactivateSHLinksUseCase: jest.fn(),
 }));
 
 jest.mock('@/mappers/shlink-mapper', () => ({
@@ -49,8 +49,7 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
     active: false,
     managementToken: 'token-xyzabcde',
     configPasscode: 'passcode-abcde',
-    configExp: '2024-01-01T00:00:00Z',
-    message: 'deactivated',
+    configExp: '2024-01-01T00:00:00Z'
   };
 
   const mockRequest = () => new NextRequest(
@@ -63,7 +62,7 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
   });
 
   it('should return deactivated link DTO and status 200 when link is found', async () => {
-    (deactivatedSHLinksUseCase as jest.Mock).mockResolvedValue(mockModel);
+    (deactivateSHLinksUseCase as jest.Mock).mockResolvedValue(mockModel);
     (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
     const request = mockRequest();
