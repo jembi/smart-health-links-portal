@@ -4,7 +4,7 @@
  */
 import { POST, GET } from "./route";
 import { handleApiValidationError } from "@/app/utils/error-handler";
-import { CreateSHLinkDto } from "@/domain/dtos/shlink";
+import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { SHLinkPrismaRepository } from "@/infrastructure/repositories/prisma/shlink-repository";
@@ -31,7 +31,7 @@ jest.mock('@/usecases/shlinks/add-shlink', () => ({
   }));
 
 // Constants
-const mockDto: CreateSHLinkDto = {
+const dataDto = {
     userId: "1234567890",
     passcodeFailuresRemaining: 3,
     active: true,
@@ -40,24 +40,30 @@ const mockDto: CreateSHLinkDto = {
     configExp: new Date("2024-01-01T00:00:00Z"),
 };
 
+const mockDto: CreateSHLinkDto = {
+    userId: "1234567890",
+    configPasscode: "passcode-abcde",
+    configExp: new Date("2024-01-01T00:00:00Z"),
+};
+
 const mockModel = new SHLinkModel(
-    mockDto.userId,
-    mockDto.passcodeFailuresRemaining,
-    mockDto.active,
-    mockDto.managementToken,
-    mockDto.configPasscode,
-    mockDto.configExp,
+    dataDto.userId,
+    dataDto.passcodeFailuresRemaining,
+    dataDto.active,
+    dataDto.managementToken,
+    dataDto.configPasscode,
+    dataDto.configExp,
     "1"
 );
 
 const mockEntity: SHLinkEntity = {
     id: "1",
-    user_id: mockDto.userId,
-    passcode_failures_remaining: mockDto.passcodeFailuresRemaining,
-    active: mockDto.active,
-    management_token: mockDto.managementToken,
-    config_passcode: mockDto.configPasscode,
-    config_exp: mockDto.configExp,
+    user_id: dataDto.userId,
+    passcode_failures_remaining: dataDto.passcodeFailuresRemaining,
+    active: dataDto.active,
+    management_token: dataDto.managementToken,
+    config_passcode: dataDto.configPasscode,
+    config_exp: dataDto.configExp,
 };
 
 // Mocks for repository methods

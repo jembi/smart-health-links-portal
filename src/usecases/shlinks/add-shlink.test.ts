@@ -27,7 +27,7 @@ describe("addShlinkUseCase", () => {
         mockContext = { repo: mockRepo as ISHLinkRepository };
 
         // Constants
-const mockDto: CreateSHLinkDto = {
+const mockDto = {
     userId: "1234567890",
     passcodeFailuresRemaining: 3,
     active: true,
