@@ -52,8 +52,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./import/config:/opt/keycloak/data/import
-      - ./import/theme/org.keycloak.keycloak-themes-25.0.4.jar:/opt/keycloak/lib/lib/main/org.keycloak.keycloak-themes-25.0.4.jar
+      - ./import/config/shlp:/opt/keycloak/data/import
     restart: always
     depends_on:
       - postgres
