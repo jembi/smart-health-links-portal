@@ -4,5 +4,5 @@ export interface HapiFhirRequestOptions{
 };
 
 export interface IHapiFhirService {
-    getPatientData(patientId: string, filterString: string, options?: HapiFhirRequestOptions): Promise<unknown>;
+    getPatientData(patientId: string, params: unknown, options?: HapiFhirRequestOptions): Promise<unknown>;
 }

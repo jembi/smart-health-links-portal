@@ -10,14 +10,13 @@ import { NextResponse } from "next/server";
 const userRepo = new UserPrismaRepository(prisma);
 const serverConfigRepo = new ServerConfigPrismaRepository(prisma);
 
-
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const user = await getUserUseCase({repo: userRepo}, {userId: params.id});
 
   if(!user) return NextResponse.json({message: NOT_FOUND}, { status: 404});
 
   try{
-    const result = await getPatientDataUseCase({repo: serverConfigRepo}, {user});
+    const result = await getPatientDataUseCase({repo: serverConfigRepo }, {user});
 
     return NextResponse.json(result, {status: 200});
   }

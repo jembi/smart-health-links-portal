@@ -1,6 +1,7 @@
 import { UserModel } from "@/domain/models/user";
 import { IServerConfigRepository } from "@/infrastructure/repositories/interfaces/server-config-repository"
-import { ExternalDataFetchError, HapiFhirService } from "@/services/hapi-fhir.service";
+import { HapiFhirServiceFactory } from "@/services/hapi-fhir-factory";
+import { ExternalDataFetchError } from "@/services/hapi-fhir.service";
 
 export const getPatientDataUseCase = async (context: {repo: IServerConfigRepository},
      data: {user: UserModel}): Promise<any> => {
@@ -11,7 +12,7 @@ export const getPatientDataUseCase = async (context: {repo: IServerConfigReposit
         throw new ExternalDataFetchError('Missing Config error.');
     }
     try{
-       const service = new HapiFhirService<any>(serverConfig.endpoint_url);
+        const service = HapiFhirServiceFactory.getService(serverConfig);
         const result = await service.getPatientData(data.user.getPatientId(), {});
         if(!result){
             throw new ExternalDataFetchError('Unfullfilled request');
