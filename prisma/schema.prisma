@@ -42,14 +42,14 @@ model shlink_access {
 
 
 model shlink {
-    id                         String           @id @unique @db.VarChar(43)
+    id                         String           @id @unique @default(cuid()) @db.VarChar(43)
     passcode_failures_remaining Int             @default(5)
     config_passcode            String?
     config_exp                 DateTime?
     active                     Boolean          @default(true)
-    management_token           String           @db.VarChar(43)
-    user                       user   @relation(fields: [user_id], references: [user_id])
+    management_token           String           @db.VarChar(43) @unique @default(cuid())
     user_id                    String           @db.VarChar(43)
+    user                       user   @relation(fields: [user_id], references: [user_id])
     shlink_file                 shlink_file[]
     shlink_endpoint             shlink_endpoint[]
     shlink_access               shlink_access[]
@@ -71,7 +71,7 @@ model user {
 
 
 model server_config {
-    id                    String  @id @unique @db.VarChar(43)
+    id                    String  @id @unique @default(cuid()) @db.VarChar(43)
     endpoint_url          String
     config_key            String?  @db.VarChar(43)
     config_client_id      String?
@@ -86,7 +86,7 @@ model server_config {
 }
 
 model shlink_endpoint {
-    id                    String          @id @unique @db.VarChar(43)
+    id                    String          @id @unique @default(cuid()) @db.VarChar(43)
     shlink_id             String
     server_config_id      String
     url_path              String          @db.VarChar(43)
