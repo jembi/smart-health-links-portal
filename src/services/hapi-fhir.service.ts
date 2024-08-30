@@ -1,8 +1,8 @@
 import { IAuthorization } from "./authorization.interface";
 import BaseService from "./base-service.service";
-import { IHapiFhirInterface, HapiFhirRequestOptions } from "./hapi-fhir.interface";
+import { IHapiFhirService, HapiFhirRequestOptions } from "./hapi-fhir.interface";
 
-export class HapiFhirService<T> extends BaseService<T> implements IHapiFhirInterface, IAuthorization {
+export class HapiFhirService<T> extends BaseService<T> implements IHapiFhirService, IAuthorization {
     constructor(baseUrl: string){
         super(baseUrl, 'fhir/Patient')
     }
@@ -12,6 +12,10 @@ export class HapiFhirService<T> extends BaseService<T> implements IHapiFhirInter
     }
 
     async getPatientData(patientId: string, params: any, options?: HapiFhirRequestOptions): Promise<unknown> {
+<<<<<<< Updated upstream
         return this.get(patientId, params);
+=======
+        return this.get(`${patientId}`, params);
+>>>>>>> Stashed changes
     }
 }

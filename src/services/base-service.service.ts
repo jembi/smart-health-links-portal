@@ -1,23 +1,40 @@
-import axios, { AxiosInstance } from "axios"
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
 
 export interface AuthHearder {
-    Authorization: string 
+    accessToken: string 
 }
 
 export default class BaseService<T>{
-    private _request: AxiosInstance;
+    protected _request: AxiosInstance;
 
 
     constructor(private _baseUrl: string, private _path: string, private _authHearders?: AuthHearder){
         this._request = axios.create({baseURL: `${this._baseUrl}/${this._path}`});
+        this.updateInterceptor();
+    }
+
+    private updateInterceptor(){
+        if(this._authHearders){
+            this._request.interceptors.request.use(
+                async (config: InternalAxiosRequestConfig) => {
+            
+                    if (config.headers) {
+                    config.headers['authorization'] = `Bearer ${this._authHearders.accessToken}`;
+                    }
+            
+                    return config;
+                }
+            )
+        }
     }
 
     updateAuthHeaders(authHeaders: AuthHearder): void {
         this._authHearders = authHeaders;
+        this.updateInterceptor();
     }
 
     async get(subString?: string, params?: any): Promise<T>{
-        const {data} = await this._request.get<T>(subString || '', { params: params});
+        const {data} = await this._request.get<T>(`/${subString || ''}`, { params: params});
         return data;
     }
 
