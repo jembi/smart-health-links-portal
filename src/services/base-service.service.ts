@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
 
-export interface AuthHearder {
+export interface AuthHeader {
     accessToken: string 
 }
 
@@ -8,18 +8,18 @@ export default class BaseService<T>{
     protected _request: AxiosInstance;
 
 
-    constructor(private _baseUrl: string, private _path: string, private _authHearders?: AuthHearder){
+    constructor(private _baseUrl: string, private _path: string, private _authHeaders?: AuthHeader){
         this._request = axios.create({baseURL: `${this._baseUrl}/${this._path}`});
         this.updateInterceptor();
     }
 
     private updateInterceptor(){
-        if(this._authHearders){
+        if(this._authHeaders){
             this._request.interceptors.request.use(
                 async (config: InternalAxiosRequestConfig) => {
             
                     if (config.headers) {
-                    config.headers['authorization'] = `Bearer ${this._authHearders.accessToken}`;
+                    config.headers['authorization'] = `Bearer ${this._authHeaders.accessToken}`;
                     }
             
                     return config;
@@ -28,8 +28,8 @@ export default class BaseService<T>{
         }
     }
 
-    updateAuthHeaders(authHeaders: AuthHearder): void {
-        this._authHearders = authHeaders;
+    updateAuthHeaders(authHeaders: AuthHeader): void {
+        this._authHeaders = authHeaders;
         this.updateInterceptor();
     }
 
