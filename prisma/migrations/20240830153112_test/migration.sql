@@ -1,9 +1,3 @@
-/*
-  Warnings:
-
-  - A unique constraint covering the columns `[id]` on the table `shlink_access` will be added. If there are existing duplicate values, this will fail.
-
-*/
 -- RedefineTables
 PRAGMA defer_foreign_keys=ON;
 PRAGMA foreign_keys=OFF;
@@ -25,6 +19,3 @@ CREATE UNIQUE INDEX "server_config_id_key" ON "server_config"("id");
 CREATE INDEX "idx_server_config_id" ON "server_config"("id");
 PRAGMA foreign_keys=ON;
 PRAGMA defer_foreign_keys=OFF;
-
--- CreateIndex
-CREATE UNIQUE INDEX "shlink_access_id_key" ON "shlink_access"("id");
