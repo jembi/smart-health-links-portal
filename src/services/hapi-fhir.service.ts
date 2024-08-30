@@ -2,6 +2,13 @@ import { IAuthorization } from "./authorization.interface";
 import BaseService from "./base-service.service";
 import { IHapiFhirService, HapiFhirRequestOptions } from "./hapi-fhir.interface";
 
+export class ExternalDataFetchError extends Error {
+    constructor(message: string, public code: number = 412) {
+      super(message);
+      this.name = 'ExternalDataFetchError';
+    }
+}
+
 export class HapiFhirService<T> extends BaseService<T> implements IHapiFhirService, IAuthorization {
     constructor(baseUrl: string){
         super(baseUrl, 'fhir/Patient')
@@ -11,11 +18,7 @@ export class HapiFhirService<T> extends BaseService<T> implements IHapiFhirServi
         throw new Error("Method not implemented.");
     }
 
-    async getPatientData(patientId: string, params: any, options?: HapiFhirRequestOptions): Promise<unknown> {
-<<<<<<< Updated upstream
-        return this.get(patientId, params);
-=======
-        return this.get(`${patientId}`, params);
->>>>>>> Stashed changes
+    async getPatientData(patientId: string, params: unknown, options?: HapiFhirRequestOptions): Promise<unknown> {
+        return this.get(`${patientId}/$summary`, params);
     }
 }

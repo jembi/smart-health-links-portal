@@ -5,14 +5,14 @@ import { ServerConfigPrismaRepository } from "@/infrastructure/repositories/pris
 import { UserPrismaRepository } from "@/infrastructure/repositories/prisma/user-repository";
 import { getPatientDataUseCase } from "@/usecases/patient/get-patient-data";
 import { getUserUseCase } from "@/usecases/users/get-user";
+import { NextResponse } from "next/server";
 
 const userRepo = new UserPrismaRepository(prisma);
 const serverConfigRepo = new ServerConfigPrismaRepository(prisma);
 
-import { NextResponse } from "next/server";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const user = await getUserUseCase({repo: userRepo}, {id: params.id});
+  const user = await getUserUseCase({repo: userRepo}, {userId: params.id});
 
   if(!user) return NextResponse.json({message: NOT_FOUND}, { status: 404});
 
@@ -22,6 +22,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return NextResponse.json(result, {status: 200});
   }
   catch(error){
-    handleApiValidationError(error);
+    return handleApiValidationError(error);
   }
 }
