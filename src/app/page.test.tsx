@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 import { render, screen } from '@testing-library/react';
 import Home from './page'; // Import your component
@@ -8,11 +8,17 @@ describe('Home Component', () => {
     render(<Home />); // Render the component
 
     // Assertions
-    expect(screen.getByRole('heading', { name: 'Welcome to Smart Health Links Portal!' })).toBeInTheDocument();
-    expect(screen.getByText('Share your medical data with confidence')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        name: 'Welcome to Smart Health Links Portal!',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Share your medical data with confidence'),
+    ).toBeInTheDocument();
 
     // Optional: Check if the icon is rendered
     // You'll need to decide how you want to identify the icon (e.g., by class name, aria-label, etc.)
-    expect(screen.getByTestId('MonitorHeartOutlinedIcon')).toBeInTheDocument(); 
+    expect(screen.getByTestId('MonitorHeartOutlinedIcon')).toBeInTheDocument();
   });
 });

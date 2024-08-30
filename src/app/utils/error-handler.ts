@@ -6,9 +6,14 @@ export function handleApiValidationError(error: unknown) {
   console.error('API route error:', error);
 
   if (error instanceof ModelValidationError) {
-    return NextResponse.json({error: BAD_REQUEST, detail: error}, { status: 422 })
-  }
-  else{
-    return NextResponse.json({error: SERVER_ERROR, detail: error}, {status: 500});
+    return NextResponse.json(
+      { error: BAD_REQUEST, detail: error },
+      { status: 422 },
+    );
+  } else {
+    return NextResponse.json(
+      { error: SERVER_ERROR, detail: error },
+      { status: 500 },
+    );
   }
 }

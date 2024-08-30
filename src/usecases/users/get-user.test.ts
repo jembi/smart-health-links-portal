@@ -1,7 +1,7 @@
-import { getUserUseCase } from "./get-user";
-import { UserModel } from "@/domain/models/user";
-import { IUserRepository } from "@/infrastructure/repositories/interfaces/user-repository";
-import { mapEntityToModel } from "@/mappers/user-mapper";
+import { getUserUseCase } from './get-user';
+import { UserModel } from '@/domain/models/user';
+import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { mapEntityToModel } from '@/mappers/user-mapper';
 
 jest.mock('@/mappers/user-mapper', () => ({
   mapEntityToModel: jest.fn(),
@@ -52,9 +52,9 @@ describe('getUserUseCase', () => {
     const error = new Error('Test error');
     mockRepo.findById.mockRejectedValue(error);
 
-    await expect(getUserUseCase({ repo: mockRepo }, { id: 'test-id' }))
-      .rejects
-      .toThrow(error);
+    await expect(
+      getUserUseCase({ repo: mockRepo }, { id: 'test-id' }),
+    ).rejects.toThrow(error);
 
     expect(mockRepo.findById).toHaveBeenCalledWith('test-id');
   });

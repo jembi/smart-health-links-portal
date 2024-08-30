@@ -1,16 +1,16 @@
-"use client";
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import TabPanel from "./TabPanel";
-import { useState } from "react";
+'use client';
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import TabPanel from './TabPanel';
+import { useState } from 'react';
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
-    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType))
+    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
   );
-  const [selectedTab, setSelectedTab] = useState(dataTabs[0] || "");
+  const [selectedTab, setSelectedTab] = useState(dataTabs[0] || '');
   const renderPanels = () =>
     dataTabs.map((resourceType) => {
       return (
@@ -30,8 +30,8 @@ export default function PatientSummary({ fhirBundle }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={selectedTab}
           onChange={handleChange}

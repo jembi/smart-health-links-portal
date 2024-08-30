@@ -1,4 +1,4 @@
-import { SHLinkFileEntity } from "@/entities/shlink-file";
-import { IRepository } from "./repository.interface";
+import { SHLinkFileEntity } from '@/entities/shlink-file';
+import { IRepository } from './repository.interface';
 
-export interface ISHLinkFileRepository extends IRepository<SHLinkFileEntity>{};
+export interface ISHLinkFileRepository extends IRepository<SHLinkFileEntity> {}

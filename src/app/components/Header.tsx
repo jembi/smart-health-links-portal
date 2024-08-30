@@ -9,14 +9,14 @@ export default function Header() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <MenuItem
-          key="home"
-          component={NextLink}
-          href="/"
-        >
+        <MenuItem key="home" component={NextLink} href="/">
           Home
         </MenuItem>
-        <MenuItem key="patient-summary" component={NextLink} href="/patient-summary">
+        <MenuItem
+          key="patient-summary"
+          component={NextLink}
+          href="/patient-summary"
+        >
           Patient Summary View
         </MenuItem>
       </Toolbar>
