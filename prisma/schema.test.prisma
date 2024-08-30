@@ -42,7 +42,7 @@ model shlink_access {
 
 
 model shlink {
-    id                         String           @id @unique @default(cuid()) 
+    id                         String           @id @unique @default(cuid())
     passcode_failures_remaining Int             @default(5)
     config_passcode            String?
     config_exp                 DateTime?
@@ -79,7 +79,7 @@ model server_config {
     config_token_endpoint String?
     config_refresh_token  String?
     refresh_time          DateTime @default(now())
-    access_token_response String
+    access_token_response String?
     shlink_endpoints      shlink_endpoint[]
 
     @@index([id], name: "idx_server_config_id")
@@ -96,4 +96,3 @@ model shlink_endpoint {
     @@index([shlink_id], name: "idx_shlink_endpoint_shlinkId")
     @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
 }
-

@@ -96,4 +96,3 @@ model shlink_endpoint {
     @@index([shlink_id], name: "idx_shlink_endpoint_shlinkId")
     @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
 }
-
