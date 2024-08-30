@@ -2,63 +2,72 @@
  * @jest-environment node
  */
 
-import { GET } from './route';
-import { handleApiValidationError } from '@/app/utils/error-handler';
+import { NextRequest, NextResponse } from 'next/server';
+import { GET } from './route'; // Import your API route handler
+import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
+import { mapEntityToModel, mapModelToDto } from '@/mappers/shlink-mapper';
+import { NOT_FOUND } from '@/app/constants/http-constants';
 import { SHLinkDto } from '@/domain/dtos/shlink';
 import { SHLinkModel } from '@/domain/models/shlink';
 import { SHLinkEntity } from '@/entities/shlink';
-import { getSHLinkUseCase } from '@/usecases/shlinks/get-shlink';
-import { mapDtoToModel, mapEntityToModel, mapModelToDto } from '@/mappers/shlink-mapper';
-import { NextRequest, NextResponse } from 'next/server';
-import { NOT_FOUND } from '@/app/constants/http-constants';
 
 // Mocks
-jest.mock('@/app/utils/error-handler');
-jest.mock('@/usecases/shlinks/get-shlink');
-jest.mock('@/mappers/shlink-mapper');
+jest.mock('@/usecases/shlinks/get-single-shlink', () => ({
+  getSingleSHLinkUseCase: jest.fn(),
+}));
 
-// Constants
-const mockId = '1';
-const userId= 'user-12345'
+jest.mock('@/mappers/shlink-mapper', () => ({
+  mapEntityToModel: jest.fn(),
+  mapModelToDto: jest.fn(),
+}));
 
+describe("GET /api/v1/share-link/[id]", () => {
 
-const mockDto: SHLinkDto = {
+  const mockEntity: SHLinkEntity = {
     id: '1',
-    userId: 'user-12345',
+    user_id: 'user-123456',
+    passcode_failures_remaining: 3,
+    active: true,
+    management_token: 'token-xyz12345',
+    config_passcode: 'passcode-abcde',
+    config_exp: new Date('2024-01-01T00:00:00Z'),
+  };
+
+  const mockModel = new SHLinkModel(
+    mockEntity.user_id,
+    mockEntity.passcode_failures_remaining,
+    mockEntity.active,
+    mockEntity.management_token,
+    mockEntity.config_passcode,
+    mockEntity.config_exp,
+    mockEntity.id
+  );
+
+  const mockDto: SHLinkDto = {
+    id: '1',
+    userId: 'user-123456',
     passcodeFailuresRemaining: 3,
     active: true,
     managementToken: 'token-xyz12345',
     configPasscode: 'passcode-abcde',
     configExp: new Date('2024-01-01T00:00:00Z')
-};
+  };
 
-const mockModel = new SHLinkModel(
-    mockDto.userId,
-    mockDto.passcodeFailuresRemaining,
-    mockDto.active,
-    mockDto.managementToken,
-    mockDto.configPasscode,
-    mockDto.configExp,
-    "1"
-);
+  it("should return SHLink DTO and status 200 when link is found", async () => {
+    // Mock implementations
+    (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockEntity);
+    (mapEntityToModel as jest.Mock).mockReturnValue(mockModel);
+    (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
-// Mocks for use cases and mappers
-(getSHLinkUseCase as jest.Mock).mockResolvedValue(mockModel);
-(mapModelToDto as jest.Mock).mockReturnValue(mockDto);
-(mapEntityToModel as jest.Mock).mockReturnValue(mockModel);
+    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/1', { method: 'GET' });
+    const response = await GET(mockRequest, { params: { id: '1' } });
 
-describe('GET /api/v1/share-link', () => {
-    it('should handle successful GET request when link is found', async () => {
-        const request = new NextRequest('http://localhost/api/share-link/1', { method: 'GET' });
+    expect(response).toBeInstanceOf(NextResponse);
+    expect(response.status).toBe(200);
 
-        const response = await GET(request, { params: { id: userId } });
+    const json = await response.json();
+    json.configExp = new Date(json.configExp)
+    expect(json).toEqual(mockDto);
+  });
 
-        expect(response).toBeInstanceOf(NextResponse);
-        expect(response.status).toBe(200);
-        const responseBody = await response.json();
-        responseBody.configExp = new Date(responseBody.configExp)
-        expect(responseBody).toEqual(mockDto);
-    });
-
-    
 });

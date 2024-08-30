@@ -12,7 +12,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     try{
         let shlink = await getSingleSHLinkUseCase({ repo}, {id: params.id})
-        console.log(shlink)
         if(!shlink && shlink === undefined) return NextResponse.json({message: NOT_FOUND}, { status: 404 });
         return NextResponse.json(mapModelToDto(shlink), { status: 200 });
     }
