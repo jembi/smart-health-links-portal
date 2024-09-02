@@ -1,13 +1,10 @@
-version: '3.8'
-
 services:
   app:
-    image: smart-health-links-portal:latest
     container_name: smart-health-links-portal
     build:
       context: .
       target: dev
-      dockerfile: Dockerfile
+      dockerfile: docker/development/Dockerfile
     env_file:
       - .env
     volumes:
