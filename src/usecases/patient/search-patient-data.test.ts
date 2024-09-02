@@ -10,7 +10,7 @@ jest.mock('@/infrastructure/repositories/interfaces/server-config-repository');
 
 describe('searchPatientUseCase', () => {
     let mockRepo: jest.Mocked<IServerConfigRepository>;
-    let mockService: jest.Mocked<IHapiFhirService<FhirPatient>>;
+    let mockService: jest.Mocked<IHapiFhirService>;
 
     beforeEach(() => {
         mockRepo = {

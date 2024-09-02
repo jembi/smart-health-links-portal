@@ -9,8 +9,8 @@ export const searchPatientUseCase = async(context: {repo: IServerConfigRepositor
         throw new ExternalDataFetchError('Missing Config error.');
     }
 
-    const service: IHapiFhirService<FhirSearchResult<FhirPatient>> = HapiFhirServiceFactory.getService(serviceConfig);
-    const result = await service.searchPatient(data.patientId);
+    const service: IHapiFhirService = HapiFhirServiceFactory.getService(serviceConfig);
+    const result = await service.searchPatient<FhirSearchResult<FhirPatient>>(data.patientId);
 
     if(!result || !result.entry?.length){
         throw new ExternalDataFetchError('Patient Data not found.', 404)

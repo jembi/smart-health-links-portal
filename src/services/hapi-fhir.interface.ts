@@ -3,9 +3,9 @@ export interface HapiFhirRequestOptions{
     data?: unknown;
 };
 
-export interface IHapiFhirService<T> {
-    getPatientData(patientId: string, params: T, options?: HapiFhirRequestOptions): Promise<T>;
-    searchPatient(patientId: string): Promise<FhirSearchResult<T>>;
+export interface IHapiFhirService {
+    getPatientData<T>(patientId: string, params: any, options?: HapiFhirRequestOptions): Promise<T>;
+    searchPatient<T>(patientId: string): Promise<FhirSearchResult<T>>;
 }
 
 interface FhirMeta {
@@ -16,7 +16,7 @@ interface FhirMeta {
 }
 
 export interface FhirIdentifier {
-    use: string,
+    use?: string,
     system: string,
     value: string
 }
@@ -36,6 +36,14 @@ export interface FhirSearchResult<T> {
     total: number,
     link: {relation: string, url: string }[],
     entry?: FhirResource<T>[]
+}
+
+export interface FhirBundle<T> {
+    resourceType: 'Bundle',
+    indentifier: FhirIdentifier,
+    type: string,
+    timestamp: Date,
+    entry: T[]
 }
 
 export interface FhirResource<T> {

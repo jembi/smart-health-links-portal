@@ -52,7 +52,7 @@ describe('POST /api/users', () => {
     method: 'POST',
     body: JSON.stringify(body),
   });
-  let mockService: jest.Mocked<IHapiFhirService<FhirPatient>>;
+  let mockService: jest.Mocked<IHapiFhirService>;
 
   HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);
 
