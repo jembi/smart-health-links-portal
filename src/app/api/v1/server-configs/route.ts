@@ -1,13 +1,13 @@
 import { handleApiValidationError } from "@/app/utils/error-handler";
+import { container, ServerConfigRepositoryToken } from "@/container";
 import { CreateServerConfigDto, ServerConfigDto } from "@/domain/dtos/server-config";
-import prisma from "@/infrastructure/clients/prisma";
-import { ServerConfigPrismaRepository } from "@/infrastructure/repositories/prisma/server-config-repository";
+import { IServerConfigRepository } from "@/infrastructure/repositories/interfaces/server-config-repository";
 import { mapDtoToModel, mapModelToDto } from "@/mappers/server-config-mapper";
 import { addServerConfigUseCase } from "@/usecases/server-configs/add-server-config";
 import { getServerConfigsUseCase } from "@/usecases/server-configs/get-server-configs";
 import { NextResponse } from "next/server";
 
-const repo = new ServerConfigPrismaRepository(prisma);
+const repo = container.get<IServerConfigRepository>(ServerConfigRepositoryToken);
 
 export async function POST(request: Request) {
     let dto: CreateServerConfigDto = await request.json();
