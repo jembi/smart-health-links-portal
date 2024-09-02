@@ -7,9 +7,18 @@ import { POST } from '@/app/api/v1/users/route';
 import { addUserUseCase } from '@/usecases/users/add-user';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { handleApiValidationError } from '@/app/utils/error-handler';
+import { searchPatientUseCase } from '@/usecases/patient/search-patient';
+import { FhirPatient, IHapiFhirService } from '@/services/hapi-fhir.interface';
+import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 
 jest.mock('@/usecases/users/add-user', () => ({
   addUserUseCase: jest.fn(),
+}));
+
+jest.mock('@/services/hapi-fhir-factory');
+
+jest.mock('@/usecases/patient/search-patient', () => ({
+  searchPatientUseCase: jest.fn(),
 }));
 
 jest.mock('@/mappers/user-mapper', () => ({
@@ -39,11 +48,13 @@ describe('POST /api/users', () => {
     patientId: 'dto-patient-id',
   };
 
-  const mockRequest = (body: any) =>
-    new NextRequest('http://localhost/api/users', {
-      method: 'POST',
-      body: JSON.stringify(body),
-    });
+  const mockRequest = (body: any) => new NextRequest('http://localhost/api/users', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+  let mockService: jest.Mocked<IHapiFhirService<FhirPatient>>;
+
+  HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -53,6 +64,7 @@ describe('POST /api/users', () => {
     (mapDtoToModel as jest.Mock).mockReturnValue(mockUserModel);
     (addUserUseCase as jest.Mock).mockResolvedValue(mockUserModel);
     (mapModelToDto as jest.Mock).mockReturnValue(mockUserDto);
+    (searchPatientUseCase as jest.Mock).mockResolvedValue('patient id');
 
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
