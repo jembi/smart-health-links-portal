@@ -1,6 +1,7 @@
 import { UserModel } from "@/domain/models/user";
 import { IServerConfigRepository } from "@/infrastructure/repositories/interfaces/server-config-repository"
 import { HapiFhirServiceFactory } from "@/services/hapi-fhir-factory";
+import { FhirBundle } from "@/services/hapi-fhir.interface";
 import { ExternalDataFetchError } from "@/services/hapi-fhir.service";
 
 export const getPatientDataUseCase = async (context: {repo: IServerConfigRepository},
@@ -13,7 +14,7 @@ export const getPatientDataUseCase = async (context: {repo: IServerConfigReposit
     }
     try{
         const service = HapiFhirServiceFactory.getService(serverConfig);
-        const result = await service.getPatientData(data.user.getPatientId(), {});
+        const result = await service.getPatientData<FhirBundle<any>>(data.user.getPatientId(), {});
         if(!result){
             throw new ExternalDataFetchError('Unfullfilled request');
         }

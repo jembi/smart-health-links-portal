@@ -4,7 +4,7 @@ export interface AuthHeader {
     accessToken: string 
 }
 
-export default class BaseService<T>{
+export default class BaseService{
     protected _request: AxiosInstance;
 
 
@@ -33,22 +33,22 @@ export default class BaseService<T>{
         this.updateInterceptor();
     }
 
-    async get(subString?: string, params?: any): Promise<T>{
+    async get<T>(subString?: string, params?: any): Promise<T>{
         const {data} = await this._request.get<T>(`/${subString || ''}`, { params: params});
         return data;
     }
 
-    async patch(subString: string | number, objData: T): Promise<T> {
+    async patch<T>(subString: string | number, objData: T): Promise<T> {
         const {data} = await this._request.patch<T>(`/${subString}`, objData);
         return data;
     }
 
-    async post(reqData: T, subString?: string): Promise<T> {
+    async post<T>(reqData: T, subString?: string): Promise<T> {
         const {data} = await this._request.post<T>(subString || '', reqData);
         return data;
     }
 
-    async delete(subString: string): Promise<T> {
+    async delete<T>(subString: string): Promise<T> {
         const {data} = await this._request.delete<T>(subString);
         return data;
     }

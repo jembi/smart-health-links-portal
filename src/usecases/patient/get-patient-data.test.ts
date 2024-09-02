@@ -12,7 +12,7 @@ jest.mock('@/services/hapi-fhir.service', () => ({
 describe('getPatientDataUseCase', () => {
   let mockRepo: jest.Mocked<IServerConfigRepository>;
   let mockUser: jest.Mocked<UserModel>;
-  let mockHapiFhirService: jest.Mocked<HapiFhirService<any>>;
+  let mockHapiFhirService: jest.Mocked<HapiFhirService>;
 
   beforeEach(() => {
     mockRepo = {

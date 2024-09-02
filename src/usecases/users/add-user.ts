@@ -14,12 +14,14 @@ export const addUserUseCase = async (
 
   let entity = mapModelToEntity(data.user);
   entity.id = undefined;
-
-  if (!oldUser) {
-    newUser = await context.repo.insert(entity);
-  } else {
+  
+  if(!oldUser){
+      newUser = await context.repo.insert(entity);
+  }  
+  else{
+    entity.id = oldUser.id;
     newUser = await context.repo.update(entity);
-  }
+  }        
 
   return mapEntityToModel(newUser);
 };

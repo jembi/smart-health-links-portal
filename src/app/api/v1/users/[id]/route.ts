@@ -1,10 +1,10 @@
-import { NOT_FOUND } from '@/app/constants/http-constants';
-import prisma from '@/infrastructure/clients/prisma';
-import { UserPrismaRepository } from '@/infrastructure/repositories/prisma/user-repository';
-import { mapModelToDto } from '@/mappers/user-mapper';
-import { getUserUseCase } from '@/usecases/users/get-user';
+import { NOT_FOUND } from "@/app/constants/http-constants";
+import { container, UserRepositoryToken } from "@/container";
+import { IUserRepository } from "@/infrastructure/repositories/interfaces/user-repository";
+import { mapModelToDto } from "@/mappers/user-mapper";
+import { getUserUseCase } from "@/usecases/users/get-user";
 
-const repo = new UserPrismaRepository(prisma);
+const repo = container.get<IUserRepository>(UserRepositoryToken);
 
 import { NextResponse } from 'next/server';
 
