@@ -14,6 +14,7 @@ export const addUserUseCase = async (context: {repo: IUserRepository}, data: {us
         newUser = await context.repo.insert(entity);
     }  
     else{
+      entity.id = oldUser.id;
       newUser = await context.repo.update(entity);
     }        
 
