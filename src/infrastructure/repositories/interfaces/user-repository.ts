@@ -1,4 +1,4 @@
-import { UserEntity } from "@/entities/user";
-import { IRepository } from "./repository.interface";
+import { UserEntity } from '@/entities/user';
+import { IRepository } from './repository.interface';
 
-export interface IUserRepository extends IRepository<UserEntity>{};
+export interface IUserRepository extends IRepository<UserEntity> {}

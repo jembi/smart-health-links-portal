@@ -39,10 +39,11 @@ describe('POST /api/users', () => {
     patientId: 'dto-patient-id',
   };
 
-  const mockRequest = (body: any) => new NextRequest('http://localhost/api/users', {
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+  const mockRequest = (body: any) =>
+    new NextRequest('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -66,7 +67,9 @@ describe('POST /api/users', () => {
   it('should handle validation errors and return status 400', async () => {
     const error = new Error('Validation error');
     (addUserUseCase as jest.Mock).mockRejectedValue(error);
-    (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Validation error' }, { status: 400 }));
+    (handleApiValidationError as jest.Mock).mockReturnValue(
+      NextResponse.json({ message: 'Validation error' }, { status: 400 }),
+    );
 
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
@@ -82,7 +85,9 @@ describe('POST /api/users', () => {
   it('should handle unexpected errors and return status 500', async () => {
     const error = new Error('Unexpected error');
     (addUserUseCase as jest.Mock).mockRejectedValue(error);
-    (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Unexpected error' }, { status: 500 }));
+    (handleApiValidationError as jest.Mock).mockReturnValue(
+      NextResponse.json({ message: 'Unexpected error' }, { status: 500 }),
+    );
 
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
