@@ -1,11 +1,30 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 
-import { MenuItem } from '@mui/material';
-import NextLink from 'next/link';
+import { Box, Grid, MenuItem } from "@mui/material";
+import NextLink from "next/link";
+import Logout from "./Logout";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import Login from "./Login";
 
-export default function Header() {
+export default async function Header() {
+  const session = await getServerSession(authOptions);
+
+  const AuthButton = session ? (
+    <div>
+      <div>
+        <Logout />
+      </div>
+      <div>Your full name is <b>{session.user?.name}</b></div>
+    </div>
+  ) : (
+    <div>
+      <Login />
+    </div>
+  );
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -19,6 +38,7 @@ export default function Header() {
         >
           Patient Summary View
         </MenuItem>
+        <Box sx={{ width: "100%", textAlign: "right" }}>{AuthButton}</Box>
       </Toolbar>
     </AppBar>
   );

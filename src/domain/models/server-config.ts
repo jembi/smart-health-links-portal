@@ -18,15 +18,19 @@ export class ServerConfigModel extends BaseModel {
   ) {
     super(
       z.object({
-        configKey: z.string().optional(),
+        configKey: z.string().optional().nullable(),
         endpointUrl: z.string().regex(urlRegex, urlErrorMessage),
-        id: z.string().optional(),
-        ClientId: z.string().optional(),
-        clientSecret: z.string().optional(),
-        tokenEndpoint: z.string().regex(urlRegex, urlErrorMessage).optional(),
-        refreshTime: z.date().optional(),
-        accessTokenResponse: z.string().optional(),
-        refreshToken: z.string().optional(),
+        id: z.string().optional().nullable(),
+        ClientId: z.string().optional().nullable(),
+        clientSecret: z.string().optional().nullable(),
+        tokenEndpoint: z
+          .string()
+          .regex(urlRegex, urlErrorMessage)
+          .optional()
+          .nullable(),
+        refreshTime: z.date().optional().nullable(),
+        accessTokenResponse: z.string().optional().nullable(),
+        refreshToken: z.string().optional().nullable(),
       }),
     );
     this.validate();

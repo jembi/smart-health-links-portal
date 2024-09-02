@@ -4,9 +4,9 @@ import { mapEntityToModel } from '@/mappers/user-mapper';
 
 export const getUserUseCase = async (
   context: { repo: IUserRepository },
-  data: { id: string },
+  data: { userId: string },
 ): Promise<UserModel> => {
-  const entity = await context.repo.findById(data.id);
+  const entity = await context.repo.findOne({ user_id: data.userId });
 
   return mapEntityToModel(entity);
 };

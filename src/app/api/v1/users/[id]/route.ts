@@ -12,7 +12,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  const result = await getUserUseCase({ repo }, { id: params.id });
+  const result = await getUserUseCase({ repo }, { userId: params.id });
 
   if (result) return NextResponse.json(mapModelToDto(result), { status: 200 });
 
