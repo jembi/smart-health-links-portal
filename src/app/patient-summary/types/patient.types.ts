@@ -88,13 +88,8 @@ type Practitioner = {};
 
 export type Patient = {
   id?: string;
-  meta?: {};
   implicitRules?: string;
   language?: string;
-  text?: {};
-  contained?: any[];
-  extension?: any[];
-  modifierExtension?: any[];
   identifier?: Identifier[];
   active?: boolean;
   name?: HumanName[];
