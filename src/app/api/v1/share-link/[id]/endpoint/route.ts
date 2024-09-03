@@ -3,7 +3,7 @@ import { handleApiValidationError } from "@/app/utils/error-handler";
 import { CreateSHLinkEndpointDto,SHLinkEndpointDto } from "@/domain/dtos/shlink-endpoint";
 import prisma from "@/infrastructure/clients/prisma";
 import { SHLinkPrismaRepository } from "@/infrastructure/repositories/prisma/shlink-repository";
-import {  mapModelToDto as mapModelToDtoShlinkMapper } from "@/mappers/shlink-mapper";
+import {  mapModelToDto as mapShlinkModelToDto } from "@/mappers/shlink-mapper";
 import { mapDtoToModel, mapModelToDto as mapModelToDtoEndpoint} from "@/mappers/shlink-endpoint-mapper"
 import { NextResponse } from "next/server";
 import { NOT_FOUND } from "@/app/constants/http-constants";
@@ -29,7 +29,7 @@ const serverConfigRepo = new ServerConfigPrismaRepository(prisma);
             return NextResponse.json({message: NOT_FOUND}, { status: 404});
         }
         
-        const shlinkData = mapModelToDtoShlinkMapper(shl);
+        const shlinkData = mapShlinkModelToDto(shl);
         dto.serverConfigId = serverConfig.getId();
         dto.shlinkId = shlinkData.id
         const endpoint = mapDtoToModel(dto as SHLinkEndpointDto);
