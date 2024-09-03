@@ -11,3 +11,8 @@ export class SHLinkDto extends CreateSHLinkDto{
     active: boolean
     managementToken: string
 }
+
+export class SHLinkRequestDto {
+    managementToken: string
+    recipient: string
+}
