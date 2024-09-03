@@ -15,4 +15,5 @@ export class SHLinkDto extends CreateSHLinkDto{
 export class SHLinkRequestDto {
     managementToken: string
     recipient: string
+    passcode?: string
 }
