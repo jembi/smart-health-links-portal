@@ -1,73 +1,105 @@
 /**
  * @jest-environment node
  */
+import { NextResponse } from "next/server";
+import { POST } from "./route";
+import { NOT_FOUND } from "@/app/constants/http-constants";
+import { handleApiValidationError } from "@/app/utils/error-handler";
+import { container, SHLinkAccessRepositoryToken, SHLinkRepositoryToken } from "@/container";
+import { SHLinkAccessModel } from "@/domain/models/shlink-access";
+import { mapModelToDto } from "@/mappers/shlink-mapper";
+import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
+import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { GET } from './route'; // Import your API route handler
-import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
-import { mapEntityToModel, mapModelToDto } from '@/mappers/shlink-mapper';
-import { NOT_FOUND } from '@/app/constants/http-constants';
-import { SHLinkDto } from '@/domain/dtos/shlink';
-import { SHLinkModel } from '@/domain/models/shlink';
-import { SHLinkEntity } from '@/entities/shlink';
-
-// Mocks
-jest.mock('@/usecases/shlinks/get-single-shlink', () => ({
+// Mock dependencies
+jest.mock("@/usecases/shlinks/get-single-shlink", () => ({
   getSingleSHLinkUseCase: jest.fn(),
 }));
 
-jest.mock('@/mappers/shlink-mapper', () => ({
-  mapEntityToModel: jest.fn(),
+jest.mock("@/usecases/shlink-access/log-shlink-access", () => ({
+  logSHLinkAccessUseCase: jest.fn(),
+}));
+
+jest.mock("@/mappers/shlink-mapper", () => ({
   mapModelToDto: jest.fn(),
 }));
 
-describe("GET /api/v1/share-link/[id]", () => {
+jest.mock("@/app/utils/error-handler", () => ({
+  handleApiValidationError: jest.fn(),
+}));
 
-  const mockEntity: SHLinkEntity = {
-    id: '1',
-    user_id: 'user-123456',
-    passcode_failures_remaining: 3,
-    active: true,
-    management_token: 'token-xyz12345',
-    config_passcode: 'passcode-abcde',
-    config_exp: new Date('2024-01-01T00:00:00Z'),
-  };
+jest.mock("next/server", () => ({
+  NextResponse: {
+    json: jest.fn(),
+  },
+}));
 
-  const mockModel = new SHLinkModel(
-    mockEntity.user_id,
-    mockEntity.passcode_failures_remaining,
-    mockEntity.active,
-    mockEntity.management_token,
-    mockEntity.config_passcode,
-    mockEntity.config_exp,
-    mockEntity.id
-  );
+describe('POST handler', () => {
+  const mockResponseJson = NextResponse.json as jest.Mock;
+  const mockHandleApiValidationError = handleApiValidationError as jest.Mock;
+  const mockGetSingleSHLinkUseCase = getSingleSHLinkUseCase as jest.Mock;
+  const mockLogSHLinkAccess = logSHLinkAccessUseCase as jest.Mock;
+  const mockMapModelToDto = mapModelToDto as jest.Mock;
 
-  const mockDto: SHLinkDto = {
-    id: '1',
-    userId: 'user-123456',
-    passcodeFailuresRemaining: 3,
-    active: true,
-    managementToken: 'token-xyz12345',
-    configPasscode: 'passcode-abcde',
-    configExp: new Date('2024-01-01T00:00:00Z')
-  };
-
-  it("should return SHLink DTO and status 200 when link is found", async () => {
-    // Mock implementations
-    (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockEntity);
-    (mapEntityToModel as jest.Mock).mockReturnValue(mockModel);
-    (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
-
-    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/1', { method: 'GET' });
-    const response = await GET(mockRequest, { params: { id: '1' } });
-
-    expect(response).toBeInstanceOf(NextResponse);
-    expect(response.status).toBe(200);
-
-    const json = await response.json();
-    json.configExp = new Date(json.configExp)
-    expect(json).toEqual(mockDto);
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
+  it('should return 404 if the SHLink is not found', async () => {
+    mockGetSingleSHLinkUseCase.mockResolvedValue(null);
+
+    const request = new Request('http://localhost/api/shlink/123', {
+      method: 'POST',
+      body: JSON.stringify({ recipient: 'test@example.com' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const params = { id: '123' };
+
+    const response = await POST(request, { params });
+
+    expect(mockGetSingleSHLinkUseCase).toHaveBeenCalledWith({ repo: container.get(SHLinkRepositoryToken) }, { id: '123' });
+    expect(mockLogSHLinkAccess).not.toHaveBeenCalled();
+    expect(mockMapModelToDto).not.toHaveBeenCalled();
+    expect(mockResponseJson).toHaveBeenCalledWith({ message: NOT_FOUND }, { status: 404 });
+  });
+
+  it('should log SHLink access and return the SHLink DTO on success', async () => {
+    const shlink = {
+      getId: jest.fn().mockReturnValue('123'),
+      // add other methods if needed
+    };
+    mockGetSingleSHLinkUseCase.mockResolvedValue(shlink);
+    mockMapModelToDto.mockReturnValue({ id: '123', someOtherProperty: 'value' });
+
+    const request = new Request('http://localhost/api/shlink/123', {
+      method: 'POST',
+      body: JSON.stringify({ recipient: 'test@example.com' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const params = { id: '123' };
+
+    const response = await POST(request, { params });
+
+    expect(mockGetSingleSHLinkUseCase).toHaveBeenCalledWith({ repo: container.get(SHLinkRepositoryToken) }, { id: '123' });
+    expect(mockLogSHLinkAccess).toHaveBeenCalled();
+    expect(mockMapModelToDto).toHaveBeenCalledWith(shlink);
+    expect(mockResponseJson).toHaveBeenCalledWith({ id: '123', someOtherProperty: 'value' }, { status: 200 });
+  });
+
+  it('should handle errors and call handleApiValidationError', async () => {
+    const error = new Error('Something went wrong');
+    mockGetSingleSHLinkUseCase.mockRejectedValue(error);
+
+    const request = new Request('http://localhost/api/shlink/123', {
+      method: 'POST',
+      body: JSON.stringify({ recipient: 'test@example.com' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const params = { id: '123' };
+
+    const response = await POST(request, { params });
+
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error);
+    expect(mockResponseJson).not.toHaveBeenCalled();
+  });
 });
