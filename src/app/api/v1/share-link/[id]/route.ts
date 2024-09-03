@@ -9,11 +9,9 @@ import { NextResponse } from "next/server";
 const repo = new SHLinkPrismaRepository(prisma);
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-    const url = new URL(request.url);
-    const managementToken = url.searchParams.get('management_token');
 
     try{
-        let shlink = await getSingleSHLinkUseCase({ repo}, {id: params.id, managementToken:managementToken})
+        let shlink = await getSingleSHLinkUseCase({ repo}, {id: params.id})
         if(!shlink && shlink === undefined) return NextResponse.json({message: NOT_FOUND}, { status: 404 });
         return NextResponse.json(mapModelToDto(shlink), { status: 200 });
     }

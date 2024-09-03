@@ -18,7 +18,7 @@ describe("getSingleSHLinkUseCase", () => {
 
     beforeEach(() => {
         mockRepo = {
-            findById: jest.fn(),
+            findOne: jest.fn(),
         };
 
         mockContext = { repo: mockRepo as ISHLinkRepository };
@@ -48,27 +48,27 @@ describe("getSingleSHLinkUseCase", () => {
         );
 
         // Set up mock implementations
-        (mockRepo.findById as jest.Mock).mockResolvedValue(mockSHLinkEntity);
+        (mockRepo.findOne as jest.Mock).mockResolvedValue(mockSHLinkEntity);
         (mapEntityToModel as jest.Mock).mockReturnValue(mockReturnedSHLinkModel);
     });
 
-    it("should call the repository's findById method with the correct id", async () => {
-        await getSingleSHLinkUseCase(mockContext, { id: mockId });
+    it("should call the repository's findOne method with the correct id", async () => {
+        await getSingleSHLinkUseCase(mockContext, { id: mockId , managementToken: mockSHLinkEntity.management_token});
 
-        expect(mockRepo.findById).toHaveBeenCalledWith(mockId);
+        expect(mockRepo.findOne).toHaveBeenCalledWith({ id: mockId , management_token: mockSHLinkEntity.management_token});
     });
 
     it("should map the SHLinkEntity to SHLinkModel", async () => {
-        const result = await getSingleSHLinkUseCase(mockContext, { id: mockId });
+        const result = await getSingleSHLinkUseCase(mockContext, { id: mockId, managementToken: mockSHLinkEntity.management_token });
 
         expect(mapEntityToModel).toHaveBeenCalledWith(mockSHLinkEntity);
         expect(result).toBe(mockReturnedSHLinkModel);
     });
 
-    it("should throw an error if the repository's findById method fails", async () => {
-        const errorMessage = "Repository findById failure";
-        (mockRepo.findById as jest.Mock).mockRejectedValue(new Error(errorMessage));
+    it("should throw an error if the repository's findOne method fails", async () => {
+        const errorMessage = "Repository findOne failure";
+        (mockRepo.findOne as jest.Mock).mockRejectedValue(new Error(errorMessage));
 
-        await expect(getSingleSHLinkUseCase(mockContext, { id: mockId })).rejects.toThrow(errorMessage);
+        await expect(getSingleSHLinkUseCase(mockContext, { id: mockId, managementToken: mockSHLinkEntity.management_token })).rejects.toThrow(errorMessage);
     });
 });

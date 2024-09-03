@@ -3,46 +3,33 @@
  */
 
 import { POST } from './route';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
 import { mapModelToDto as mapModelToDtoShlinkMapper } from '@/mappers/shlink-mapper';
 import { mapDtoToModel, mapModelToDto as mapModelToDtoEndpoint } from '@/mappers/shlink-endpoint-mapper';
 import { NOT_FOUND } from '@/app/constants/http-constants';
+import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
 
 // Mock dependencies
-jest.mock('@/app/utils/error-handler', () => ({
-  handleApiValidationError: jest.fn(),
-}));
+jest.mock('@/app/utils/error-handler');
+jest.mock('@/usecases/shlinks/get-single-shlink');
+jest.mock('@/usecases/shlink-endpoint/add-endpoint');
+jest.mock('@/usecases/server-configs/get-server-configs');
+jest.mock('@/mappers/shlink-mapper');
+jest.mock('@/mappers/shlink-endpoint-mapper');
 
-jest.mock('@/usecases/shlinks/get-single-shlink', () => ({
-  getSingleSHLinkUseCase: jest.fn(),
-}));
-
-jest.mock('@/usecases/shlink-endpoint/add-endpoint', () => ({
-  addEndpointUseCase: jest.fn(),
-}));
-
-jest.mock('@/mappers/shlink-mapper', () => ({
-  mapModelToDto: jest.fn(),
-}));
-
-jest.mock('@/mappers/shlink-endpoint-mapper', () => ({
-  mapDtoToModel: jest.fn(),
-  mapModelToDto: jest.fn(),
-}));
-
-describe('POST /api/v1/shlinks/[id]/endpoints', () => {
+describe('POST /api/v1/shlinks/[id]/endpoint', () => {
   const mockShlinkId = 'shlink-12345';
-  const mockServerConfigId = 'config-56789';
+  const mockServerConfigId = 'config-567890';
   const mockUrlPath = '/api/test';
   const mockEndpointId = 'endpoint-67890';
+  const mockManagementToken = 'token-xyz12345';
 
   const mockRequestBody = {
-    server_config_id: mockServerConfigId,
     url_path: mockUrlPath,
-    id: mockEndpointId,
+    management_token: mockManagementToken,
   };
 
   const mockShlink = {
@@ -50,10 +37,22 @@ describe('POST /api/v1/shlinks/[id]/endpoints', () => {
     userId: 'user-12345',
     passcodeFailuresRemaining: 3,
     active: true,
-    managementToken: 'token-xyz12345',
+    managementToken: mockManagementToken,
     configPasscode: 'passcode-abcde',
     configExp: new Date('2024-01-01T00:00:00Z'),
   };
+
+  const mockServerConfig = {
+    getId: jest.fn().mockReturnValue('server-config-id'),
+    getConfigKey: jest.fn().mockReturnValue('dto-config-key'),
+    getEndpointUrl: jest.fn().mockReturnValue('dto-endpoint-url'),
+    getClientSecret: jest.fn().mockReturnValue('dto-client-secret'),
+    getClientId: jest.fn().mockReturnValue('dto-client-id'),
+    getRefreshToken: jest.fn().mockReturnValue('dto-refresh-token'),
+    getRefreshTime: jest.fn().mockReturnValue(undefined),
+    getAccessTokenResponse: jest.fn().mockReturnValue(undefined),
+    getTokenEndpoint: jest.fn().mockReturnValue('dto-endpoint-url'),
+};
 
   const mockEndpointDto = {
     shlinkId: mockShlinkId,
@@ -67,6 +66,10 @@ describe('POST /api/v1/shlinks/[id]/endpoints', () => {
     getId: jest.fn().mockReturnValue(mockEndpointId),
   };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should return 200 and the created endpoint DTO if the shlink exists', async () => {
     // Mock the use case and mappers
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockShlink);
@@ -74,8 +77,9 @@ describe('POST /api/v1/shlinks/[id]/endpoints', () => {
     (mapDtoToModel as jest.Mock).mockReturnValue(mockEndpointModel);
     (addEndpointUseCase as jest.Mock).mockResolvedValue(mockEndpointModel);
     (mapModelToDtoEndpoint as jest.Mock).mockReturnValue(mockEndpointDto);
+    (getServerConfigsUseCase as jest.Mock).mockResolvedValue([mockServerConfig]);
 
-    const mockRequest = new Request('http://localhost/api/v1/shlinks/shlink-12345/endpoints', {
+    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/shlink-12345/endpoint', {
       method: 'POST',
       body: JSON.stringify(mockRequestBody),
     });
@@ -92,7 +96,7 @@ describe('POST /api/v1/shlinks/[id]/endpoints', () => {
   it('should return 404 if the shlink is not found', async () => {
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(null);
 
-    const mockRequest = new Request('http://localhost/api/v1/shlinks/non-existing-id/endpoints', {
+    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/non-existing-id/endpoint', {
       method: 'POST',
       body: JSON.stringify(mockRequestBody),
     });
@@ -111,9 +115,11 @@ describe('POST /api/v1/shlinks/[id]/endpoints', () => {
     (getSingleSHLinkUseCase as jest.Mock).mockImplementation(() => {
       throw mockError;
     });
-    (handleApiValidationError as jest.Mock).mockImplementation(() => NextResponse.json({ message: 'Validation failed' }, { status: 400 }));
+    (handleApiValidationError as jest.Mock).mockImplementation(() =>
+      NextResponse.json({ message: 'Validation failed' }, { status: 400 })
+    );
 
-    const mockRequest = new Request('http://localhost/api/v1/shlinks/shlink-12345/endpoints', {
+    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/shlink-12345/endpoint', {
       method: 'POST',
       body: JSON.stringify(mockRequestBody),
     });

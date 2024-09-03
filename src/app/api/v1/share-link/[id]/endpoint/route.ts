@@ -18,26 +18,21 @@ const shlEndpointRepo = new SHLinkEndpointPrismaRepository(prisma);
 const serverConfigRepo = new ServerConfigPrismaRepository(prisma);
 
   export async function POST(request: Request, { params }: { params: { id: string } }) {
-    let dto = await request.json();
+    let dto:CreateSHLinkEndpointDto = await request.json();
 
     try{
-        const serverConfig = await getServerConfigsUseCase({repo:serverConfigRepo})[0];
+        const serverConfig = (await getServerConfigsUseCase({repo:serverConfigRepo}))[0];
 
-        const result = await getSingleSHLinkUseCase({repo:shlRepo}, {id: params.id, managementToken:dto.managementToken});
-        if(!result || !serverConfig){
+        const shl = await getSingleSHLinkUseCase({repo:shlRepo}, {id: params.id, managementToken:dto.managementToken});
+
+        if(!shl || !serverConfig){
             return NextResponse.json({message: NOT_FOUND}, { status: 404});
         }
-
-        const shlinkData = mapModelToDtoShlinkMapper(result)
-        dto.server_config_id = serverConfig.getId()
-
-        const dataDto:SHLinkEndpointDto = {
-            shlinkId: shlinkData.id,
-            serverConfigId: dto.server_config_id,
-            urlPath: dto.url_path,
-            id: dto.id ?? undefined,
-        }
-        const endpoint = mapDtoToModel(dataDto as SHLinkEndpointDto)
+        
+        const shlinkData = mapModelToDtoShlinkMapper(shl);
+        dto.serverConfigId = serverConfig.getId();
+        dto.shlinkId = shlinkData.id
+        const endpoint = mapDtoToModel(dto as SHLinkEndpointDto);
         const endpointResult = await addEndpointUseCase({repo:shlEndpointRepo}, {endpoint:endpoint});
         
         return NextResponse.json(mapModelToDtoEndpoint(endpointResult), { status: 200 });
