@@ -59,7 +59,7 @@ model shlink {
 }
 
 model user {
-    id           String   @id @default(cuid()) 
+    id           String   @id @unique @default(cuid()) 
     user_id       String    @unique
     patient_id    String
     shlink       shlink[]
