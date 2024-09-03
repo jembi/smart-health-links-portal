@@ -1,4 +1,4 @@
-import { CodeableConcept } from "./../extensions/codeableConcept.tpes";
+import { CodeableConcept } from "./../extensions/codeableConcept.types";
 import { Gender } from "../codes/gender.types";
 import { Address } from "../extensions/address.types";
 import { Attachment } from "../extensions/attachment.types";

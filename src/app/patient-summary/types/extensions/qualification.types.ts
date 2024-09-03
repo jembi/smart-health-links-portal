@@ -1,5 +1,5 @@
 import { Organization } from "../resources/organisation.types";
-import { CodeableConcept } from "./codeableConcept.tpes";
+import { CodeableConcept } from "./codeableConcept.types";
 import { Identifier } from "./identifier.types";
 import { Period } from "./period.types";
 

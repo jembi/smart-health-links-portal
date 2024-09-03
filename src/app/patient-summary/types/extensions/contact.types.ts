@@ -1,5 +1,5 @@
 import { Address } from "./address.types";
-import { CodeableConcept } from "./codeableConcept.tpes";
+import { CodeableConcept } from "./codeableConcept.types";
 import { ContactPoint } from "./contactPoint.types";
 import { HumanName } from "./humanName.types";
 

@@ -1,5 +1,5 @@
 import { Address } from "../extensions/address.types";
-import { CodeableConcept } from "../extensions/codeableConcept.tpes";
+import { CodeableConcept } from "../extensions/codeableConcept.types";
 import { Contact } from "../extensions/contact.types";
 import { ContactPoint } from "../extensions/contactPoint.types";
 import { Endpoint } from "../extensions/endpoint.types";

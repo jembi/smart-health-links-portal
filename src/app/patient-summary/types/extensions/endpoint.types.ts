@@ -1,4 +1,4 @@
-import { CodeableConcept } from "./codeableConcept.tpes";
+import { CodeableConcept } from "./codeableConcept.types";
 import { Coding } from "./coding.types";
 import { ContactPoint } from "./contactPoint.types";
 import { Identifier } from "./identifier.types";

@@ -2,7 +2,7 @@ import { Practitioner } from "./practitioner.types";
 import { Period } from "../extensions/period.types";
 import { Identifier } from "./../extensions/identifier.types";
 import { Organization } from "./organisation.types";
-import { CodeableConcept } from "../extensions/codeableConcept.tpes";
+import { CodeableConcept } from "../extensions/codeableConcept.types";
 import { ContactPoint } from "../extensions/contactPoint.types";
 import {
   availableTime,
