@@ -17,7 +17,7 @@ const accessRepo = container.get<ISHLinkAccessRepository>(SHLinkAccessRepository
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     let requestDto: SHLinkRequestDto = await request.json();
     try{
-        let shlink = await getSingleSHLinkUseCase({ repo}, {id: params.id})
+        let shlink = await getSingleSHLinkUseCase({ repo}, { id: params.id, managementToken: requestDto.managementToken })
         if(!shlink) return NextResponse.json({message: NOT_FOUND}, { status: 404 });
 
         await validateSHLinkUseCase({shlink, passcode: requestDto.passcode});
