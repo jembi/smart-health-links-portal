@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TabPanel from './TabPanel';
 import { useState } from 'react';
+import Patient from './resources/Patient/Patient';
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
@@ -15,9 +16,14 @@ export default function PatientSummary({ fhirBundle }) {
     dataTabs.map((resourceType) => {
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-          <div>
-            Data of <b>{resourceType}</b> will be displayed here.
-          </div>
+          {/* TODO: Consider enhancing the conditional rendering of resources */}
+          {resourceType === 'Patient' ? (
+            <Patient data={fhirBundle} />
+          ) : (
+            <div>
+              Data of <b>{resourceType}</b> will be displayed here.
+            </div>
+          )}
         </TabPanel>
       );
     });
