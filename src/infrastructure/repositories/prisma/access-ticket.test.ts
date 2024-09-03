@@ -41,7 +41,7 @@ describe('AccessTicketPrismaRepository', () => {
   test('should call getModel and create many entities', async () => {
     const entities = [
       entity,
-      { id: '2', hash: 'Jane Doe', content: 'John Doe', ref_count: 0 },
+      { id: '2', shlink_id: '2' },
     ] as AccessTicketEntity[];
     prismaMock.access_ticket.createMany.mockResolvedValue(entities);
 
