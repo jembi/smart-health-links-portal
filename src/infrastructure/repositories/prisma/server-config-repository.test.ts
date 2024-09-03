@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { ServerConfigEntity } from "@/entities/server_config";
-import { ServerConfigPrismaRepository } from "./server-config-repository";
+import { PrismaClient } from '@prisma/client';
+import { ServerConfigEntity } from '@/entities/server_config';
+import { ServerConfigPrismaRepository } from './server-config-repository';
 
 // Create a mock for PrismaClient
 const prismaMock = {
@@ -14,14 +14,22 @@ const prismaMock = {
   },
 };
 
-const entity: ServerConfigEntity = { id: '1', config_client_id: 'unique', endpoint_url: 'hash', config_key: 'Doe', refresh_time: new Date()};
+const entity: ServerConfigEntity = {
+  id: '1',
+  config_client_id: 'unique',
+  endpoint_url: 'hash',
+  config_key: 'Doe',
+  refresh_time: new Date(),
+};
 
 describe('ServerConfigPrismaRepository', () => {
   let repository: ServerConfigPrismaRepository;
 
   beforeEach(() => {
     // Instantiate the repository before each test
-    repository = new ServerConfigPrismaRepository(prismaMock as unknown as PrismaClient);
+    repository = new ServerConfigPrismaRepository(
+      prismaMock as unknown as PrismaClient,
+    );
   });
 
   test('should call getModel and create a new entity', async () => {
@@ -29,17 +37,24 @@ describe('ServerConfigPrismaRepository', () => {
 
     const result = await repository.insert(entity);
 
-    expect(prismaMock.server_config.create).toHaveBeenCalledWith({ data: entity });
+    expect(prismaMock.server_config.create).toHaveBeenCalledWith({
+      data: entity,
+    });
     expect(result).toBe(entity);
   });
 
   test('should call getModel and create many entities', async () => {
-    const entities = [entity, { id: '2', hash: 'Jane Doe', content: 'John Doe', ref_count: 0 }] as ServerConfigEntity[];
+    const entities = [
+      entity,
+      { id: '2', hash: 'Jane Doe', content: 'John Doe', ref_count: 0 },
+    ] as ServerConfigEntity[];
     prismaMock.server_config.createMany.mockResolvedValue(entities);
 
     const result = await repository.insertMany(entities);
 
-    expect(prismaMock.server_config.createMany).toHaveBeenCalledWith({ data: entities });
+    expect(prismaMock.server_config.createMany).toHaveBeenCalledWith({
+      data: entities,
+    });
     expect(result).toEqual(entities);
   });
 
@@ -48,7 +63,9 @@ describe('ServerConfigPrismaRepository', () => {
 
     const result = await repository.findById('1');
 
-    expect(prismaMock.server_config.findFirst).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.server_config.findFirst).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 
@@ -58,7 +75,9 @@ describe('ServerConfigPrismaRepository', () => {
 
     const result = await repository.findOne(filter);
 
-    expect(prismaMock.server_config.findFirst).toHaveBeenCalledWith({ where: filter });
+    expect(prismaMock.server_config.findFirst).toHaveBeenCalledWith({
+      where: filter,
+    });
     expect(result).toBe(entity);
   });
 
@@ -69,7 +88,9 @@ describe('ServerConfigPrismaRepository', () => {
 
     const result = await repository.findMany(filters);
 
-    expect(prismaMock.server_config.findMany).toHaveBeenCalledWith({ where: filters });
+    expect(prismaMock.server_config.findMany).toHaveBeenCalledWith({
+      where: filters,
+    });
     expect(result).toEqual(entities);
   });
 
@@ -78,7 +99,10 @@ describe('ServerConfigPrismaRepository', () => {
 
     const result = await repository.update(entity);
 
-    expect(prismaMock.server_config.update).toHaveBeenCalledWith({ where: { id: '1' }, data: entity });
+    expect(prismaMock.server_config.update).toHaveBeenCalledWith({
+      where: { id: '1' },
+      data: entity,
+    });
     expect(result).toBe(entity);
   });
 
@@ -87,7 +111,9 @@ describe('ServerConfigPrismaRepository', () => {
 
     const result = await repository.delete(entity);
 
-    expect(prismaMock.server_config.delete).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.server_config.delete).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 });

@@ -7,15 +7,18 @@ import { POST, GET } from '@/app/api/v1/server-configs/route';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { CreateServerConfigDto, ServerConfigDto } from '@/domain/dtos/server-config';
+import {
+  CreateServerConfigDto,
+  ServerConfigDto,
+} from '@/domain/dtos/server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
 
 jest.mock('@/usecases/server-configs/add-server-config', () => ({
-    addServerConfigUseCase: jest.fn(),
+  addServerConfigUseCase: jest.fn(),
 }));
 
 jest.mock('@/usecases/server-configs/get-server-configs', () => ({
-    getServerConfigsUseCase: jest.fn(),
+  getServerConfigsUseCase: jest.fn(),
 }));
 
 jest.mock('@/mappers/server-config-mapper', () => ({
@@ -49,10 +52,11 @@ describe('POST /api/v1/server-configs', () => {
     endpointUrl: 'https://dto-endpoint-url.com',
   };
 
-  const mockRequest = (body: any) => new NextRequest('http://localhost/api/v1/server-configs', {
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+  const mockRequest = (body: any) =>
+    new NextRequest('http://localhost/api/v1/server-configs', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -60,7 +64,9 @@ describe('POST /api/v1/server-configs', () => {
 
   it('should return server config DTO and status 201 when server config is successfully created', async () => {
     (mapDtoToModel as jest.Mock).mockReturnValue(mockServerConfigModel);
-    (addServerConfigUseCase as jest.Mock).mockResolvedValue(mockServerConfigModel);
+    (addServerConfigUseCase as jest.Mock).mockResolvedValue(
+      mockServerConfigModel,
+    );
     (mapModelToDto as jest.Mock).mockReturnValue(mockServerConfigDto);
 
     const request = mockRequest(mockCreateServerConfigDto);
@@ -76,7 +82,9 @@ describe('POST /api/v1/server-configs', () => {
   it('should handle validation errors and return status 422', async () => {
     const error = new Error('Validation error');
     (addServerConfigUseCase as jest.Mock).mockRejectedValue(error);
-    (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Validation error' }, { status: 422 }));
+    (handleApiValidationError as jest.Mock).mockReturnValue(
+      NextResponse.json({ message: 'Validation error' }, { status: 422 }),
+    );
 
     const request = mockRequest(mockCreateServerConfigDto);
     const response = await POST(request);
@@ -92,7 +100,9 @@ describe('POST /api/v1/server-configs', () => {
   it('should handle unexpected errors and return status 500', async () => {
     const error = new Error('Unexpected error');
     (addServerConfigUseCase as jest.Mock).mockRejectedValue(error);
-    (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Unexpected error' }, { status: 500 }));
+    (handleApiValidationError as jest.Mock).mockReturnValue(
+      NextResponse.json({ message: 'Unexpected error' }, { status: 500 }),
+    );
 
     const request = mockRequest(mockCreateServerConfigDto);
     const response = await POST(request);
@@ -107,55 +117,58 @@ describe('POST /api/v1/server-configs', () => {
 });
 
 describe('GET /api/v1/server-configs', () => {
-    const mockServerConfigModel = {
-      getId: jest.fn().mockReturnValue('server-config-id'),
-      getConfigKey: jest.fn().mockReturnValue('dto-config-key'),
-      getEndpointUrl: jest.fn().mockReturnValue('dto-endpoint-url'),
-      getClientSecret: jest.fn().mockReturnValue('dto-client-secret'),
-      getClientId: jest.fn().mockReturnValue('dto-client-id'),
-      getRefreshToken: jest.fn().mockReturnValue('dto-refresh-token'),
-      getRefreshTime: jest.fn().mockReturnValue(undefined),
-      getAccessTokenResponse: jest.fn().mockReturnValue(undefined),
-      getTokenEndpoint: jest.fn().mockReturnValue('dto-endpoint-url'),
-    };
-  
-    const mockServerConfigDto: ServerConfigDto = {
-      id: 'server-config-id',
-      endpointUrl: 'https://dto-endpoint-url.com',
-    };
-  
-    const mockRequest = () => new NextRequest('http://localhost/api/v1/server-configs', {
+  const mockServerConfigModel = {
+    getId: jest.fn().mockReturnValue('server-config-id'),
+    getConfigKey: jest.fn().mockReturnValue('dto-config-key'),
+    getEndpointUrl: jest.fn().mockReturnValue('dto-endpoint-url'),
+    getClientSecret: jest.fn().mockReturnValue('dto-client-secret'),
+    getClientId: jest.fn().mockReturnValue('dto-client-id'),
+    getRefreshToken: jest.fn().mockReturnValue('dto-refresh-token'),
+    getRefreshTime: jest.fn().mockReturnValue(undefined),
+    getAccessTokenResponse: jest.fn().mockReturnValue(undefined),
+    getTokenEndpoint: jest.fn().mockReturnValue('dto-endpoint-url'),
+  };
+
+  const mockServerConfigDto: ServerConfigDto = {
+    id: 'server-config-id',
+    endpointUrl: 'https://dto-endpoint-url.com',
+  };
+
+  const mockRequest = () =>
+    new NextRequest('http://localhost/api/v1/server-configs', {
       method: 'GET',
     });
-  
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-  
-it('should return server config DTOs and status 200 when server configs are found', async () => {
-      (getServerConfigsUseCase as jest.Mock).mockResolvedValue([mockServerConfigModel]);
-      (mapModelToDto as jest.Mock).mockReturnValue(mockServerConfigDto);
-  
-      const request = mockRequest();
-      const response = await GET(request);
-  
-      expect(response).toBeInstanceOf(NextResponse);
-      expect(response.status).toBe(200);
-  
-      const json = await response.json();
-      expect(json).toEqual([mockServerConfigDto]);
-    });
 
-    it('should return an empty collection of server config DTOs and status 200 when no server configs are found', async () => {
-        (getServerConfigsUseCase as jest.Mock).mockResolvedValue([]);
-    
-        const request = mockRequest();
-        const response = await GET(request);
-    
-        expect(response).toBeInstanceOf(NextResponse);
-        expect(response.status).toBe(200);
-    
-        const json = await response.json();
-        expect(json).toEqual([]);
-      });
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
+
+  it('should return server config DTOs and status 200 when server configs are found', async () => {
+    (getServerConfigsUseCase as jest.Mock).mockResolvedValue([
+      mockServerConfigModel,
+    ]);
+    (mapModelToDto as jest.Mock).mockReturnValue(mockServerConfigDto);
+
+    const request = mockRequest();
+    const response = await GET(request);
+
+    expect(response).toBeInstanceOf(NextResponse);
+    expect(response.status).toBe(200);
+
+    const json = await response.json();
+    expect(json).toEqual([mockServerConfigDto]);
+  });
+
+  it('should return an empty collection of server config DTOs and status 200 when no server configs are found', async () => {
+    (getServerConfigsUseCase as jest.Mock).mockResolvedValue([]);
+
+    const request = mockRequest();
+    const response = await GET(request);
+
+    expect(response).toBeInstanceOf(NextResponse);
+    expect(response.status).toBe(200);
+
+    const json = await response.json();
+    expect(json).toEqual([]);
+  });
+});

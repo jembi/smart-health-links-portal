@@ -1,23 +1,23 @@
-"use client";
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import TabPanel from "./TabPanel";
-import { useState } from "react";
-import Patient from "./resources/Patient/Patient";
+'use client';
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import TabPanel from './TabPanel';
+import { useState } from 'react';
+import Patient from './resources/Patient/Patient';
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
-    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType))
+    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
   );
-  const [selectedTab, setSelectedTab] = useState(dataTabs[0] || "");
+  const [selectedTab, setSelectedTab] = useState(dataTabs[0] || '');
   const renderPanels = () =>
     dataTabs.map((resourceType) => {
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
           {/* TODO: Consider enhancing the conditional rendering of resources */}
-          {resourceType === "Patient" ? (
+          {resourceType === 'Patient' ? (
             <Patient data={fhirBundle} />
           ) : (
             <div>
@@ -36,8 +36,8 @@ export default function PatientSummary({ fhirBundle }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={selectedTab}
           onChange={handleChange}

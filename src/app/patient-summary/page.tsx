@@ -1,7 +1,7 @@
-import Box from "@mui/material/Box";
-import { Container } from "@mui/material";
-import PatientSummary from "./components/PatientSummary";
-import fhirBundleJson from "./sample/bundle.json";
+import Box from '@mui/material/Box';
+import { Container } from '@mui/material';
+import PatientSummary from './components/PatientSummary';
+import fhirBundleJson from './sample/bundle.json';
 
 export default function PatientSummaryPage() {
   return (

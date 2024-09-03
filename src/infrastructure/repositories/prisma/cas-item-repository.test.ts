@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { CasItemEntity } from "@/entities/cas-item";
-import { CasItemPrismaRepository } from "./cas-item-repository";
+import { PrismaClient } from '@prisma/client';
+import { CasItemEntity } from '@/entities/cas-item';
+import { CasItemPrismaRepository } from './cas-item-repository';
 
 // Create a mock for PrismaClient
 const prismaMock = {
@@ -14,14 +14,21 @@ const prismaMock = {
   },
 };
 
-const entity: CasItemEntity = { id: '1', hash: 'unique hash', content: 'Doe', ref_count: 0 };
+const entity: CasItemEntity = {
+  id: '1',
+  hash: 'unique hash',
+  content: 'Doe',
+  ref_count: 0,
+};
 
 describe('CasItemPrismaRepository', () => {
   let repository: CasItemPrismaRepository;
 
   beforeEach(() => {
     // Instantiate the repository before each test
-    repository = new CasItemPrismaRepository(prismaMock as unknown as PrismaClient);
+    repository = new CasItemPrismaRepository(
+      prismaMock as unknown as PrismaClient,
+    );
   });
 
   test('should call getModel and create a new entity', async () => {
@@ -34,12 +41,17 @@ describe('CasItemPrismaRepository', () => {
   });
 
   test('should call getModel and create many entities', async () => {
-    const entities = [entity, { id: '2', hash: 'Jane Doe', content: 'John Doe', ref_count: 0 }] as CasItemEntity[];
+    const entities = [
+      entity,
+      { id: '2', hash: 'Jane Doe', content: 'John Doe', ref_count: 0 },
+    ] as CasItemEntity[];
     prismaMock.cas_item.createMany.mockResolvedValue(entities);
 
     const result = await repository.insertMany(entities);
 
-    expect(prismaMock.cas_item.createMany).toHaveBeenCalledWith({ data: entities });
+    expect(prismaMock.cas_item.createMany).toHaveBeenCalledWith({
+      data: entities,
+    });
     expect(result).toEqual(entities);
   });
 
@@ -48,7 +60,9 @@ describe('CasItemPrismaRepository', () => {
 
     const result = await repository.findById('1');
 
-    expect(prismaMock.cas_item.findFirst).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.cas_item.findFirst).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 
@@ -58,7 +72,9 @@ describe('CasItemPrismaRepository', () => {
 
     const result = await repository.findOne(filter);
 
-    expect(prismaMock.cas_item.findFirst).toHaveBeenCalledWith({ where: filter });
+    expect(prismaMock.cas_item.findFirst).toHaveBeenCalledWith({
+      where: filter,
+    });
     expect(result).toBe(entity);
   });
 
@@ -69,7 +85,9 @@ describe('CasItemPrismaRepository', () => {
 
     const result = await repository.findMany(filters);
 
-    expect(prismaMock.cas_item.findMany).toHaveBeenCalledWith({ where: filters });
+    expect(prismaMock.cas_item.findMany).toHaveBeenCalledWith({
+      where: filters,
+    });
     expect(result).toEqual(entities);
   });
 
@@ -78,7 +96,10 @@ describe('CasItemPrismaRepository', () => {
 
     const result = await repository.update(entity);
 
-    expect(prismaMock.cas_item.update).toHaveBeenCalledWith({ where: { id: '1' }, data: entity });
+    expect(prismaMock.cas_item.update).toHaveBeenCalledWith({
+      where: { id: '1' },
+      data: entity,
+    });
     expect(result).toBe(entity);
   });
 
@@ -87,7 +108,9 @@ describe('CasItemPrismaRepository', () => {
 
     const result = await repository.delete(entity);
 
-    expect(prismaMock.cas_item.delete).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.cas_item.delete).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 });

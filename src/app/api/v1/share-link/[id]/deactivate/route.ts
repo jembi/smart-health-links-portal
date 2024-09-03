@@ -1,13 +1,12 @@
 import { handleApiValidationError } from "@/app/utils/error-handler";
-import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
-import prisma from "@/infrastructure/clients/prisma";
-import { SHLinkPrismaRepository } from "@/infrastructure/repositories/prisma/shlink-repository";
-import { mapDtoToModel, mapEntityToModel, mapModelToDto } from "@/mappers/shlink-mapper";
+import { mapModelToDto } from "@/mappers/shlink-mapper";
 import { deactivateSHLinksUseCase } from "@/usecases/shlinks/deactivate-shlink";
 import { NextResponse } from "next/server";
 import { NOT_FOUND } from "@/app/constants/http-constants";
+import { container, SHLinkRepositoryToken } from "@/container";
+import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
 
-const repo = new SHLinkPrismaRepository(prisma);
+const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
   export async function GET(request: Request, { params }: { params: { id: string } }) {
     try{
