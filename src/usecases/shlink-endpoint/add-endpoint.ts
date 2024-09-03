@@ -14,10 +14,7 @@ export const addEndpointUseCase = async (context: {repo: ISHLinkEndpointReposito
         newSHLinkEndpoint = await context.repo.insert(entity);
     } 
     else {
-        entity = {
-            ...entity,
-            id: oldSHLinkEndpoint.id
-        }
+        entity.id = oldSHLinkEndpoint.id
         newSHLinkEndpoint = await context.repo.update(entity);
     }
    
