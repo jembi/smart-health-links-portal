@@ -1,7 +1,7 @@
 import { SHLinkAccessModel } from "@/domain/models/shlink-access";
 import { ISHLinkAccessRepository } from "@/infrastructure/repositories/interfaces/shlink-access-repository";
 import { mapModelToEntity } from "@/mappers/shlink-access-mapper";
-import { logSHLinkAccess } from "./log-shlink-access";
+import { logSHLinkAccessUseCase } from "./log-shlink-access";
 
 // Mock the mapping function and repository
 jest.mock("@/mappers/shlink-access-mapper", () => ({
@@ -27,7 +27,7 @@ describe('logSHLinkAccess', () => {
     
     mockMapModelToEntity.mockReturnValue(accessEntity);
 
-    await logSHLinkAccess({ repo: mockRepo }, accessModel);
+    await logSHLinkAccessUseCase({ repo: mockRepo }, accessModel);
 
     // Assert that mapModelToEntity was called with the correct model
     expect(mockMapModelToEntity).toHaveBeenCalledWith(accessModel);
@@ -40,7 +40,7 @@ describe('logSHLinkAccess', () => {
     const accessModel = new SHLinkAccessModel('shlink-id', new Date(), 'recipient@example.com');
     mockMapModelToEntity.mockReturnValue(undefined);
 
-    await logSHLinkAccess({ repo: mockRepo }, accessModel);
+    await logSHLinkAccessUseCase({ repo: mockRepo }, accessModel);
 
     // Assert that mapModelToEntity was called with the correct model
     expect(mockMapModelToEntity).toHaveBeenCalledWith(accessModel);

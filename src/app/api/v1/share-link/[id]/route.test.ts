@@ -8,7 +8,7 @@ import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkAccessRepositoryToken, SHLinkRepositoryToken } from "@/container";
 import { SHLinkAccessModel } from "@/domain/models/shlink-access";
 import { mapModelToDto } from "@/mappers/shlink-mapper";
-import { logSHLinkAccess } from "@/usecases/shlink-access/log-shlink-access";
+import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
 
 // Mock dependencies
@@ -17,7 +17,7 @@ jest.mock("@/usecases/shlinks/get-single-shlink", () => ({
 }));
 
 jest.mock("@/usecases/shlink-access/log-shlink-access", () => ({
-  logSHLinkAccess: jest.fn(),
+  logSHLinkAccessUseCase: jest.fn(),
 }));
 
 jest.mock("@/mappers/shlink-mapper", () => ({
@@ -38,7 +38,7 @@ describe('POST handler', () => {
   const mockResponseJson = NextResponse.json as jest.Mock;
   const mockHandleApiValidationError = handleApiValidationError as jest.Mock;
   const mockGetSingleSHLinkUseCase = getSingleSHLinkUseCase as jest.Mock;
-  const mockLogSHLinkAccess = logSHLinkAccess as jest.Mock;
+  const mockLogSHLinkAccess = logSHLinkAccessUseCase as jest.Mock;
   const mockMapModelToDto = mapModelToDto as jest.Mock;
 
   beforeEach(() => {
