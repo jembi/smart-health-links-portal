@@ -1,5 +1,7 @@
-import { SHLinkDto } from "@/domain/dtos/shlink";
+import { EXTERNAL_URL } from "@/app/constants/http-constants";
+import { SHLinkDto, SHLinkMiniDto } from "@/domain/dtos/shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
+import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
 import { SHLinkEntity } from "@/entities/shlink";
 
 export const mapEntityToModel = (shlinkEntity: SHLinkEntity): SHLinkModel | undefined => {
@@ -36,6 +38,20 @@ export const mapModelToDto = (shlinkModel: SHLinkModel): SHLinkDto | undefined =
         configPasscode: shlinkModel.getConfigPasscode(),
         configExp: shlinkModel.getConfigExp(),
         userId: shlinkModel.getUserId()
+    } : undefined;
+}
+
+export const mapModelToMiniDto = (shlinkModel: SHLinkModel, files?: SHLinkEndpointModel[], ticket?: string): SHLinkMiniDto | undefined => {
+
+    return shlinkModel ? {
+        id: shlinkModel.getId(),
+        managementToken: shlinkModel.getManagementToken(),
+        expiryDate: shlinkModel.getConfigExp(),
+        files: files?.map(x=> {return{
+            location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
+            contentType: 'application/smart-api-access',
+            embedded: null
+        }})
     } : undefined;
 }
 

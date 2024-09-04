@@ -31,13 +31,24 @@ describe('getEndpointUseCase', () => {
         url_path: '/api/path',
     };
 
-    it('should return the mapped model when the entity is found', async () => {
+    it('should return the mapped model when the entity is found by id', async () => {
         (mockRepo.findOne as jest.Mock).mockResolvedValue(mockEntity);
         (mapEntityToModel as jest.Mock).mockReturnValue(mockEndpointModel);
 
         const result = await getEndpointUseCase({ repo: mockRepo }, { id: 'endpoint-123' });
 
         expect(mockRepo.findOne).toHaveBeenCalledWith({ id: 'endpoint-123' });
+        expect(mapEntityToModel).toHaveBeenCalledWith(mockEntity);
+        expect(result).toEqual(mockEndpointModel);
+    });
+
+    it('should return the mapped model when the entity is found by shlink id', async () => {
+        (mockRepo.findOne as jest.Mock).mockResolvedValue(mockEntity);
+        (mapEntityToModel as jest.Mock).mockReturnValue(mockEndpointModel);
+
+        const result = await getEndpointUseCase({ repo: mockRepo }, { shlinkId: 'shlink-123' });
+
+        expect(mockRepo.findOne).toHaveBeenCalledWith({ shlink_id: 'shlink-123' });
         expect(mapEntityToModel).toHaveBeenCalledWith(mockEntity);
         expect(result).toEqual(mockEndpointModel);
     });
