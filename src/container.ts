@@ -3,11 +3,15 @@ import { UserPrismaRepository } from './infrastructure/repositories/prisma/user-
 import prisma from './infrastructure/clients/prisma';
 import { SHLinkPrismaRepository } from './infrastructure/repositories/prisma/shlink-repository';
 import { SHLinkAccessPrismaRepository } from './infrastructure/repositories/prisma/shlink-access-repository';
+import { AccessTicketPrismaRepository } from './infrastructure/repositories/prisma/access-ticket-repository';
+import { SHLinkEndpointPrismaRepository } from './infrastructure/repositories/prisma/shlink-endpoint-repository';
 
 export const ServerConfigRepositoryToken = Symbol('ServerConfigPrismaRepository');
 export const UserRepositoryToken = Symbol('UserPrismaRepository');
 export const SHLinkRepositoryToken = Symbol('SHLinkRepository');
 export const SHLinkAccessRepositoryToken = Symbol('SHLinkAccessRepository');
+export const AccessTicketRepositoryToken = Symbol('AccessTicketRepository');
+export const SHLinkEndpointRepositoryToken = Symbol('SHLinkEndpointRepository');
 
 export class Container {
     private services = new Map<symbol, any>();
@@ -17,6 +21,8 @@ export class Container {
         this.services.set(UserRepositoryToken, new UserPrismaRepository(prisma));
         this.services.set(SHLinkRepositoryToken, new SHLinkPrismaRepository(prisma));
         this.services.set(SHLinkAccessRepositoryToken, new SHLinkAccessPrismaRepository(prisma));
+        this.services.set(AccessTicketRepositoryToken, new AccessTicketPrismaRepository(prisma));
+        this.services.set(SHLinkEndpointRepositoryToken, new SHLinkEndpointPrismaRepository(prisma));
     }
 
     public get<T>(token: symbol): T {
