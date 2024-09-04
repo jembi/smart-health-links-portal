@@ -7,7 +7,7 @@ export class CreateSHLinkDto {
 
 export class SHLinkFileDto {
     contentType: string;
-    embeded?: string;
+    embedded?: string;
     location: string;
 }
 
