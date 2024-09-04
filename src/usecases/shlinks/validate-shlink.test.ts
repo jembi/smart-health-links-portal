@@ -72,6 +72,20 @@ describe('validateSHLinkUseCase', () => {
     expect(result).toBe(true);
   });
 
+  it('should return true if no expiry date is required and the SHLink is valid', () => {
+    const validSHLink = new SHLinkModel(
+      'unique-user-id',
+      5,
+      true,
+      'management-token',
+      undefined,
+      undefined,
+      'link-id'
+    );
+    const result = validateSHLinkUseCase({ shlink: validSHLink });
+    expect(result).toBe(true);
+  });
+
   it('should throw SHLinkValidationError with correct message and code', () => {
     try {
       const invalidSHLink = new SHLinkModel(
@@ -87,7 +101,7 @@ describe('validateSHLinkUseCase', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(SHLinkValidationError);
       expect(error.message).toBe('Inactive share link access');
-      expect(error.code).toBe(403);
+      expect(error.code).toBe(410);
     }
   });
 });

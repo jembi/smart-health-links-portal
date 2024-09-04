@@ -9,7 +9,7 @@ export class SHLinkValidationError extends Error {
 
 export const validateSHLinkUseCase = (data: {shlink: SHLinkModel, passcode?: string}): boolean => {
     if(!data.shlink.getActive() || (data.shlink.getConfigExp() && data.shlink.getConfigExp() < new Date())){
-        throw new SHLinkValidationError('Inactive share link access');
+        throw new SHLinkValidationError('Inactive share link access', 410);
     }
 
     if(data.shlink.getPasscodeFailuresRemaining() < 1){
