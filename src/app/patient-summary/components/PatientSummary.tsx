@@ -9,6 +9,8 @@ import Patient from './resources/Patient/Patient';
 import { extractResourceInfo } from '@/app/utils/helpers';
 import { ResourceType } from '../types/resources.types';
 
+const COMPONENT_MAP = { Patient: Patient };
+
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
     new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
@@ -16,6 +18,7 @@ export default function PatientSummary({ fhirBundle }) {
   const [selectedTab, setSelectedTab] = useState(dataTabs[0] || '');
   const renderPanels = () =>
     dataTabs.map((resourceType) => {
+      const DynamicComponent = COMPONENT_MAP[resourceType];
       const resourceInfo = extractResourceInfo(
         ResourceType[resourceType],
         fhirBundle,
@@ -23,14 +26,7 @@ export default function PatientSummary({ fhirBundle }) {
 
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-          {/* TODO: Consider enhancing the conditional rendering of resources */}
-          {resourceType === 'Patient' ? (
-            <Patient patientInfo={resourceInfo} />
-          ) : (
-            <div>
-              Data of <b>{resourceType}</b> will be displayed here.
-            </div>
-          )}
+          {DynamicComponent && <DynamicComponent data={resourceInfo} />}
         </TabPanel>
       );
     });
