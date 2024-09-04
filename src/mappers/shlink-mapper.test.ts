@@ -1,7 +1,9 @@
-import { SHLinkDto } from "@/domain/dtos/shlink";
+import { SHLinkDto, SHLinkMiniDto } from "@/domain/dtos/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
-import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel } from "@/mappers/shlink-mapper";
+import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel, mapModelToMiniDto } from "@/mappers/shlink-mapper";
 import { SHLinkModel } from "@/domain/models/shlink";
+import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
+import { EXTERNAL_URL } from "@/app/constants/http-constants";
 
 describe("SHLink Mappers", () => {
   const shLinkEntity: SHLinkEntity = {
@@ -110,7 +112,117 @@ describe("SHLink Mappers", () => {
       const result = mapDtoToModel(undefined);
       expect(result).toBeUndefined();
     });
+  });
+});
 
-    
+describe('mapModelToMiniDto', () => {
+  it('should return correct SHLinkMiniDto when provided valid SHLinkModel and files', () => {
+    // Create a valid SHLinkModel instance
+    const date = new Date(Date.now() + 10000) // future date;
+    const shlinkModel = new SHLinkModel(
+      'unique-user-id',
+      5,
+      true,
+      'management-token',
+      'config-passcode',
+      date,
+      'link-id'
+    );
+
+    // Create valid SHLinkEndpointModel instances
+    const endpoint1 = new SHLinkEndpointModel('shlink-id-1', 'server-config-id-1', 'url-path-1', 'endpoint1-id');
+    const endpoint2 = new SHLinkEndpointModel('shlink-id-2', 'server-config-id-2', 'url-path-2', 'endpoint2-id');
+    const files = [endpoint1, endpoint2];
+    const ticket = 'sample-ticket';
+
+    // Execute the function
+    const result = mapModelToMiniDto(shlinkModel, files, ticket);
+
+    // Assert the expected result
+    expect(result).toEqual({
+      id: 'link-id',
+      managementToken: 'management-token',
+      expiryDate: date,
+      files: [
+        {
+          location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint1-id?ticket=${ticket}`,
+          contentType: 'application/smart-api-access',
+          embedded: null
+        },
+        {
+          location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint2-id?ticket=${ticket}`,
+          contentType: 'application/smart-api-access',
+          embedded: null
+        }
+      ]
+    });
+  });
+
+  it('should return correct SHLinkMiniDto with no files', () => {
+    // Create a valid SHLinkModel instance
+    const date = new Date(Date.now() + 10000) // future date;
+    const shlinkModel = new SHLinkModel(
+      'unique-user-id',
+      5,
+      true,
+      'management-token',
+      'config-passcode',
+      date,
+      'link-id'
+    );
+
+    // Execute the function
+    const result = mapModelToMiniDto(shlinkModel);
+
+    // Assert the expected result
+    expect(result).toEqual({
+      id: 'link-id',
+      managementToken: 'management-token',
+      expiryDate: date,
+      files: undefined
+    });
+  });
+
+  it('should return undefined if no SHLinkModel is provided', () => {
+    // Execute the function with undefined SHLinkModel
+    const result = mapModelToMiniDto(undefined as unknown as SHLinkModel);
+
+    // Assert the result is undefined
+    expect(result).toBeUndefined();
+  });
+
+  it('should return correct SHLinkMiniDto when ticket is not provided', () => {
+    // Create a valid SHLinkModel instance
+    const date = new Date(Date.now() + 10000) // future date;
+    const shlinkModel = new SHLinkModel(
+      'unique-user-id',
+      5,
+      true,
+      'management-token',
+      'config-passcode',
+      date,
+      'link-id'
+    );
+
+    // Create a valid SHLinkEndpointModel instance
+    const endpoint = new SHLinkEndpointModel('shlink-id', 'server-config-id', 'url-path', 'endpoint-id');
+    const files = [endpoint];
+
+    // Execute the function without a ticket
+    const result = mapModelToMiniDto(shlinkModel, files);
+
+    // Assert the expected result
+    expect(result).toEqual({
+      id: 'link-id',
+      managementToken: 'management-token',
+      expiryDate: date,
+      files: [
+        {
+          location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint-id?ticket=undefined`,
+          contentType: 'application/smart-api-access',
+          embedded: null,
+        }
+      ]
+    });
   });
 });

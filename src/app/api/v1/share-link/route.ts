@@ -4,7 +4,7 @@ import { container, SHLinkRepositoryToken } from "@/container";
 import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
-import { mapDtoToModel, mapEntityToModel, mapModelToDto } from "@/mappers/shlink-mapper";
+import { mapDtoToModel, mapEntityToModel, mapModelToDto, mapModelToMiniDto } from "@/mappers/shlink-mapper";
 import { addShlinkUseCase } from "@/usecases/shlinks/add-shlink";
 import { getSHLinkUseCase } from "@/usecases/shlinks/get-shlink";
 import { NextResponse } from "next/server";
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     try{
         const newShlink:SHLinkEntity[] = await getSHLinkUseCase({ repo}, {user_id: userId})
-        return NextResponse.json(newShlink.map(shlink => mapModelToDto(mapEntityToModel(shlink))), { status: 200 });
+        return NextResponse.json(newShlink.map(shlink => mapModelToMiniDto(mapEntityToModel(shlink))), { status: 200 });
     }
     catch(error){
         return handleApiValidationError(error);

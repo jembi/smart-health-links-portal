@@ -1,5 +1,11 @@
+import { Gender } from './codes/gender.types';
+import { Attachment } from './extensions/attachment.types';
+import { Organization } from './resources/organisation.types';
+import { Practitioner } from './resources/practitioner.types';
+import { PractitionerRole } from './resources/practitionerRole.types';
+
 type Identifier = {
-  use?: "usual" | "official" | "temp" | "secondary" | "old";
+  use?: 'usual' | 'official' | 'temp' | 'secondary' | 'old';
   type?: CodeableConcept;
   system?: string;
   value?: string;
@@ -9,13 +15,13 @@ type Identifier = {
 
 type HumanName = {
   use?:
-    | "usual"
-    | "official"
-    | "temp"
-    | "nickname"
-    | "anonymous"
-    | "old"
-    | "maiden"; // Name use
+    | 'usual'
+    | 'official'
+    | 'temp'
+    | 'nickname'
+    | 'anonymous'
+    | 'old'
+    | 'maiden';
   text?: string;
   family?: string;
   given?: string[];
@@ -25,16 +31,16 @@ type HumanName = {
 };
 
 type ContactPoint = {
-  system?: "phone" | "fax" | "email" | "pager" | "url" | "sms" | "other";
+  system?: 'phone' | 'fax' | 'email' | 'pager' | 'url' | 'sms' | 'other';
   value?: string;
-  use?: "home" | "work" | "temp" | "old" | "mobile";
+  use?: 'home' | 'work' | 'temp' | 'old' | 'mobile';
   rank?: number;
   period?: Period;
 };
 
 type Address = {
-  use?: "home" | "work" | "temp" | "old" | "billing";
-  type?: "postal" | "physical" | "both";
+  use?: 'home' | 'work' | 'temp' | 'old' | 'billing';
+  type?: 'postal' | 'physical' | 'both';
   text?: string;
   line?: string[];
   city?: string;
@@ -62,7 +68,7 @@ type PatientContact = {
   name?: HumanName;
   telecom?: ContactPoint[];
   address?: Address;
-  gender?: "male" | "female" | "other" | "unknown";
+  gender?: Gender;
   organization?: Organization;
   period?: Period;
 };
@@ -74,17 +80,8 @@ type PatientCommunication = {
 
 type PatientLink = {
   other: Patient;
-  type: "replaced-by" | "replaces" | "refer" | "seealso";
+  type: 'replaced-by' | 'replaces' | 'refer' | 'seealso';
 };
-
-//TODO:Complete the type definitions
-type Organization = {};
-
-type Attachment = {};
-
-type PractitionerRole = {};
-
-type Practitioner = {};
 
 export type Patient = {
   id?: string;
@@ -94,7 +91,7 @@ export type Patient = {
   active?: boolean;
   name?: HumanName[];
   telecom?: ContactPoint[];
-  gender?: "male" | "female" | "other" | "unknown";
+  gender?: Gender;
   birthDate?: string;
   deceasedBoolean?: boolean;
   deceasedDateTime?: string;
