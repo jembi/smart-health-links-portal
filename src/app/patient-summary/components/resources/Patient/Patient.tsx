@@ -1,9 +1,7 @@
-import { extractResourceInfo } from "@/app/utils/helpers";
-import InfoRow from "../../InfoRow";
-import { ResourceType } from "../../../types/resources.types";
-import ConnectionDetails from "./ConnectionDetails";
-import PatientIdentifiers from "./PatientIdentifiers";
-import { StyledSectionTypography } from "@/app/components/typography/StyledTypography";
+import InfoRow from '../../InfoRow';
+import ConnectionDetails from './ConnectionDetails';
+import PatientIdentifiers from './PatientIdentifiers';
+import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 
 export default function Patient({ patientInfo }) {
   return (
