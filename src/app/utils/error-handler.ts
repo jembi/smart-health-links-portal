@@ -6,6 +6,7 @@ import {
   SERVER_ERROR,
 } from '../constants/http-constants';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
+import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
 
 export function handleApiValidationError(error: unknown) {
   console.error('API route error:', error);
@@ -20,7 +21,13 @@ export function handleApiValidationError(error: unknown) {
       { error: PRECONDITION_FAILED, detail: error.message },
       { status: error.code },
     );
-  } else {
+  } else if(error instanceof SHLinkValidationError) {
+    return NextResponse.json(
+      { error: error.name, detail: error.message },
+      { status: error.code },
+    )
+  }
+  else {
     return NextResponse.json(
       { error: SERVER_ERROR, detail: error },
       { status: 500 },

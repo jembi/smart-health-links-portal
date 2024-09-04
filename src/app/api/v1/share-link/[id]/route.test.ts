@@ -5,8 +5,7 @@ import { NextResponse } from "next/server";
 import { POST } from "./route";
 import { NOT_FOUND } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
-import { container, SHLinkAccessRepositoryToken, SHLinkRepositoryToken } from "@/container";
-import { SHLinkAccessModel } from "@/domain/models/shlink-access";
+import { container, SHLinkRepositoryToken } from "@/container";
 import { mapModelToDto } from "@/mappers/shlink-mapper";
 import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
@@ -14,6 +13,10 @@ import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
 // Mock dependencies
 jest.mock("@/usecases/shlinks/get-single-shlink", () => ({
   getSingleSHLinkUseCase: jest.fn(),
+}));
+
+jest.mock("@/usecases/shlinks/validate-shlink", () => ({
+  validateSHLinkUseCase: jest.fn(),
 }));
 
 jest.mock("@/usecases/shlink-access/log-shlink-access", () => ({
