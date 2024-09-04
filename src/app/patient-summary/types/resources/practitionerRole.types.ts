@@ -1,14 +1,14 @@
-import { Practitioner } from "./practitioner.types";
-import { Period } from "../extensions/period.types";
-import { Identifier } from "./../extensions/identifier.types";
-import { Organization } from "./organisation.types";
-import { CodeableConcept } from "../extensions/codeableConcept.types";
-import { ContactPoint } from "../extensions/contactPoint.types";
+import { Practitioner } from './practitioner.types';
+import { Period } from '../extensions/period.types';
+import { Identifier } from './../extensions/identifier.types';
+import { Organization } from './organisation.types';
+import { CodeableConcept } from '../extensions/codeableConcept.types';
+import { ContactPoint } from '../extensions/contactPoint.types';
 import {
   availableTime,
   notAvailable,
-} from "../extensions/timaAvailability.types";
-import { Endpoint } from "../extensions/endpoint.types";
+} from '../extensions/timeAvailability.types';
+import { Endpoint } from '../extensions/endpoint.types';
 export type PractitionerRole = {
   identifier?: Identifier[];
   active?: boolean;
