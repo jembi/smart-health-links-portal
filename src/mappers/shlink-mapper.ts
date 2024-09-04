@@ -46,6 +46,7 @@ export const mapModelToMiniDto = (shlinkModel: SHLinkModel, files?: SHLinkEndpoi
     return shlinkModel ? {
         id: shlinkModel.getId(),
         managementToken: shlinkModel.getManagementToken(),
+        expiryDate: shlinkModel.getConfigExp(),
         files: files?.map(x=> {return{
             location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
             contentType: 'application/smart-api-access',

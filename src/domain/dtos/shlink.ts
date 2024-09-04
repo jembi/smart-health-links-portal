@@ -22,6 +22,7 @@ export class SHLinkMiniDto {
     id: string;
     managementToken: string;
     files?: SHLinkFileDto[];
+    expiryDate?: Date;
 }
 
 export class SHLinkRequestDto {

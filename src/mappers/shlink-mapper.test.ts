@@ -118,13 +118,14 @@ describe("SHLink Mappers", () => {
 describe('mapModelToMiniDto', () => {
   it('should return correct SHLinkMiniDto when provided valid SHLinkModel and files', () => {
     // Create a valid SHLinkModel instance
+    const date = new Date(Date.now() + 10000) // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
       5,
       true,
       'management-token',
       'config-passcode',
-      new Date(Date.now() + 10000), // future date
+      date,
       'link-id'
     );
 
@@ -141,6 +142,7 @@ describe('mapModelToMiniDto', () => {
     expect(result).toEqual({
       id: 'link-id',
       managementToken: 'management-token',
+      expiryDate: date,
       files: [
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint1-id?ticket=${ticket}`,
@@ -158,13 +160,14 @@ describe('mapModelToMiniDto', () => {
 
   it('should return correct SHLinkMiniDto with no files', () => {
     // Create a valid SHLinkModel instance
+    const date = new Date(Date.now() + 10000) // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
       5,
       true,
       'management-token',
       'config-passcode',
-      new Date(Date.now() + 10000), // future date
+      date,
       'link-id'
     );
 
@@ -175,6 +178,7 @@ describe('mapModelToMiniDto', () => {
     expect(result).toEqual({
       id: 'link-id',
       managementToken: 'management-token',
+      expiryDate: date,
       files: undefined
     });
   });
@@ -189,13 +193,14 @@ describe('mapModelToMiniDto', () => {
 
   it('should return correct SHLinkMiniDto when ticket is not provided', () => {
     // Create a valid SHLinkModel instance
+    const date = new Date(Date.now() + 10000) // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
       5,
       true,
       'management-token',
       'config-passcode',
-      new Date(Date.now() + 10000), // future date
+      date,
       'link-id'
     );
 
@@ -210,11 +215,12 @@ describe('mapModelToMiniDto', () => {
     expect(result).toEqual({
       id: 'link-id',
       managementToken: 'management-token',
+      expiryDate: date,
       files: [
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint-id?ticket=undefined`,
           contentType: 'application/smart-api-access',
-          embedded: null
+          embedded: null,
         }
       ]
     });
