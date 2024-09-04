@@ -1,10 +1,10 @@
 import { Patient } from "./patient.types";
 
 export enum ResourceType {
-  patient = "Patient",
-  composition = "Composition",
-  organization = "Organization",
-  allergyIntolerance = "AllergyIntolerance",
+  Patient = "Patient",
+  Composition = "Composition",
+  Organization = "Organization",
+  AllergyIntolerance = "AllergyIntolerance",
 }
 
 export interface ResourceMap {

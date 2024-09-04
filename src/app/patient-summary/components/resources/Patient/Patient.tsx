@@ -5,8 +5,7 @@ import ConnectionDetails from "./ConnectionDetails";
 import PatientIdentifiers from "./PatientIdentifiers";
 import { StyledSectionTypography } from "@/app/components/typography/StyledTypography";
 
-export default function Patient({ data }) {
-  const patientInfo = extractResourceInfo(ResourceType.patient, data);
+export default function Patient({ patientInfo }) {
   return (
     <>
       <StyledSectionTypography>Patient:</StyledSectionTypography>
