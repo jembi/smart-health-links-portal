@@ -5,7 +5,7 @@ import { mapEntityToModel } from "@/mappers/access-ticket-mapper";
 export const deleteAccessTicketUseCase = async (context: {repo: IAccessTicketRepository}, data: {id: string}): Promise<AccessTicketModel | undefined> => {
     const entity = await context.repo.findById(data.id);
 
-    if(!entity) return;
+    if(!entity) return undefined;
 
     await context.repo.delete(entity);
     return mapEntityToModel(entity);

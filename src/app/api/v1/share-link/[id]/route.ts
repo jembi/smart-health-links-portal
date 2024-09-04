@@ -10,6 +10,7 @@ import { ISHLinkEndpointRepository } from "@/infrastructure/repositories/interfa
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
 import { mapModelToMiniDto } from "@/mappers/shlink-mapper";
 import { addAccessTicketUseCase } from "@/usecases/access-tickets/add-access-ticket";
+import { deleteAccessTicketUseCase } from "@/usecases/access-tickets/delete-access-ticket";
 import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
 import { getEndpointUseCase } from "@/usecases/shlink-endpoint/get-endpoint";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
@@ -20,6 +21,7 @@ const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 const accessRepo = container.get<ISHLinkAccessRepository>(SHLinkAccessRepositoryToken);
 const ticketRepo = container.get<IAccessTicketRepository>(AccessTicketRepositoryToken);
 const shlinkRepo = container.get<ISHLinkEndpointRepository>(SHLinkEndpointRepositoryToken);
+const DELETE_DELAY = 60000;
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     let requestDto: SHLinkRequestDto = await request.json();
@@ -30,6 +32,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
         await validateSHLinkUseCase({shlink, passcode: requestDto.passcode});
         await logSHLinkAccessUseCase({repo: accessRepo}, new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient));
         const ticket = await addAccessTicketUseCase({repo: ticketRepo}, new AccessTicketModel(shlink.getId()));
+        setTimeout(()=> {
+            deleteAccessTicketUseCase({repo: ticketRepo}, {id: ticket.getId()});
+        }, DELETE_DELAY);
         const endpoint = await getEndpointUseCase({repo: shlinkRepo}, {shlinkId: shlink.getId()});
         return NextResponse.json(mapModelToMiniDto(shlink, [endpoint], ticket.getId()), { status: 200 });
     }
