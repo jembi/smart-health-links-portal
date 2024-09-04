@@ -1,3 +1,4 @@
+import { EXTERNAL_URL } from "@/app/constants/http-constants";
 import { SHLinkDto, SHLinkMiniDto } from "@/domain/dtos/shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
@@ -46,7 +47,7 @@ export const mapModelToMiniDto = (shlinkModel: SHLinkModel, files?: SHLinkEndpoi
         id: shlinkModel.getId(),
         managementToken: shlinkModel.getManagementToken(),
         files: files?.map(x=> {return{
-            location: `/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
+            location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
             contentType: 'application/smart-api-access',
             embedded: null
         }})
