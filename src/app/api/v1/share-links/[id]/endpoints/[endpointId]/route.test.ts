@@ -53,7 +53,7 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     const response = await GET(request, { params: mockParams });
 
     expect(response).toBeInstanceOf(NextResponse);
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(404);
     const responseBody = await response.json();
     expect(responseBody).toEqual({ message: NOT_FOUND });
   });
@@ -67,7 +67,7 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     const response = await GET(request, { params: mockParams });
 
     expect(response).toBeInstanceOf(NextResponse);
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(404);
     const responseBody = await response.json();
     expect(responseBody).toEqual({ message: NOT_FOUND });
   });
@@ -99,7 +99,7 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     const response = await GET(request, { params: mockParams });
 
     expect(response).toBeInstanceOf(NextResponse);
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(404);
     const responseBody = await response.json();
     expect(responseBody).toEqual({ message: NOT_FOUND });
   });
