@@ -1,4 +1,4 @@
-import { NOT_FOUND } from "@/app/constants/http-constants";
+import { INVALID_SHLINK_CREDS, NOT_FOUND } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { AccessTicketRepositoryToken, container, SHLinkAccessRepositoryToken, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from "@/container";
 import { SHLinkRequestDto } from "@/domain/dtos/shlink";
@@ -13,6 +13,7 @@ import { addAccessTicketUseCase } from "@/usecases/access-tickets/add-access-tic
 import { deleteAccessTicketUseCase } from "@/usecases/access-tickets/delete-access-ticket";
 import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
 import { getEndpointUseCase } from "@/usecases/shlink-endpoint/get-endpoint";
+import { decreasePasswordFailureCountUseCase } from "@/usecases/shlinks/decrease-password-failure";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
 import { validateSHLinkUseCase } from "@/usecases/shlinks/validate-shlink";
 import { NextResponse } from "next/server";
@@ -29,7 +30,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
         let shlink = await getSingleSHLinkUseCase({ repo}, { id: params.id, managementToken: requestDto.managementToken })
         if(!shlink) return NextResponse.json({message: NOT_FOUND}, { status: 404 });
 
-        await validateSHLinkUseCase({shlink, passcode: requestDto.passcode});
+        const valid = await validateSHLinkUseCase({shlink, passcode: requestDto.passcode});
+        if(!valid) {
+            await decreasePasswordFailureCountUseCase({repo}, shlink);
+            return NextResponse.json({message: INVALID_SHLINK_CREDS.replace(/%s/g, (shlink.getPasscodeFailuresRemaining()  - 1).toString())}, { status: 403 })
+        }
         await logSHLinkAccessUseCase({repo: accessRepo}, new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient));
         const ticket = await addAccessTicketUseCase({repo: ticketRepo}, new AccessTicketModel(shlink.getId()));
         setTimeout(()=> {
