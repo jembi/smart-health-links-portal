@@ -14,7 +14,7 @@ export default function Patient({ data }) {
       <InfoRow label="Gender" value={data.gender} />
       <InfoRow label="Birth Date" value={data.birthDate} />
       <PatientIdentifiers patientInfo={data} />
-      <ConnectionDetails patientInfo={data} />
+      <ConnectionDetails resourceInfo={data} />
     </>
   );
 }

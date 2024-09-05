@@ -8,8 +8,9 @@ import { useState } from 'react';
 import Patient from './resources/Patient/Patient';
 import { extractResourceInfo } from '@/app/utils/helpers';
 import { ResourceType } from '../types/resources.types';
+import Organization from './resources/Organization/Organization';
 
-const COMPONENT_MAP = { Patient: Patient };
+const COMPONENT_MAP = { Patient: Patient, Organization: Organization };
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
@@ -26,7 +27,15 @@ export default function PatientSummary({ fhirBundle }) {
 
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-          {DynamicComponent && <DynamicComponent data={resourceInfo} />}
+          {DynamicComponent && (
+            <DynamicComponent
+              data={
+                Array.isArray(resourceInfo) && resourceInfo.length === 1
+                  ? resourceInfo[0]
+                  : resourceInfo
+              }
+            />
+          )}
         </TabPanel>
       );
     });
