@@ -1,4 +1,5 @@
 import { NOT_FOUND,UNAUTHORIZED_REQUEST } from '@/app/constants/http-constants';
+import { handleApiValidationError } from '@/app/utils/error-handler';
 import { AccessTicketRepositoryToken, container, ServerConfigRepositoryToken, SHLinkRepositoryToken, UserRepositoryToken } from '@/container';
 import { AccessTicketModel } from '@/domain/models/access-ticket';
 import { IAccessTicketRepository } from '@/infrastructure/repositories/interfaces/access-ticket-repository.interface';
@@ -19,37 +20,33 @@ const serverConfigRepo = container.get<IServerConfigRepository>(ServerConfigRepo
 
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id:string, endpointId: string } },
-) {
-
+export async function GET(request: Request, {params}: {params: {id: string, endpointId: string} }) {
   const url = new URL(request.url);
+  
   const ticketId = url.searchParams.get('ticket');
   
   try{
-    
-    const ticket:AccessTicketModel = await getAccessTicketUseCase({repo:ticketRepo}, ticketId)
+    const ticket:AccessTicketModel = await getAccessTicketUseCase({repo: ticketRepo}, ticketId)
 
     if (!ticket) {
-      return NextResponse.json({message:UNAUTHORIZED_REQUEST}, { status: 401 });
+      return NextResponse.json({message: UNAUTHORIZED_REQUEST}, {status: 401});
     }
     
     if (ticket.getSHLinkId() !== params.id) {
-      return NextResponse.json({message:NOT_FOUND}, { status: 404 });
+      return NextResponse.json({message: NOT_FOUND}, {status: 404});
     }   
     
-    const shlink = await getSingleSHLinkUseCase({ repo:shlinkRepo}, { id: params.id });
+    const shlink = await getSingleSHLinkUseCase({repo: shlinkRepo}, {id: params.id});
 
-    const user = await getUserUseCase({ repo:userRepo }, { userId: shlink.getUserId() });
+    const user = await getUserUseCase({repo: userRepo}, {userId: shlink.getUserId()});
     
-    const patient = await getPatientDataUseCase({ repo:serverConfigRepo }, { user: user });
+    const patient = await getPatientDataUseCase({repo: serverConfigRepo}, {user: user});
 
-    return NextResponse.json(patient, { status: 200 });
-  }
-  catch{
-    return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
-  }
+    return NextResponse.json(patient, {status: 200});
 
+  }
+  catch(error){
+    return handleApiValidationError(error);
+  }
   
 }
