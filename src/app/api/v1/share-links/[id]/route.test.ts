@@ -2,15 +2,17 @@
  * @jest-environment node
  */
 import { NextResponse } from "next/server";
-import { POST } from "./route";
+import { POST, PUT } from "./route";
 import { NOT_FOUND } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkRepositoryToken, SHLinkAccessRepositoryToken, AccessTicketRepositoryToken, SHLinkEndpointRepositoryToken } from "@/container";
-import { mapModelToMiniDto } from "@/mappers/shlink-mapper";
+import { mapModelToMiniDto, mapModelToDto } from "@/mappers/shlink-mapper";
 import { addAccessTicketUseCase } from "@/usecases/access-tickets/add-access-ticket";
 import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
+import { deleteAccessTicketUseCase } from "@/usecases/access-tickets/delete-access-ticket";
 import { getEndpointUseCase } from "@/usecases/shlink-endpoint/get-endpoint";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
+import { updateSingleSHLinkUseCase } from "@/usecases/shlinks/update-single-shlink";
 import { validateSHLinkUseCase } from "@/usecases/shlinks/validate-shlink";
 import { AccessTicketModel } from "@/domain/models/access-ticket";
 import { SHLinkAccessModel } from "@/domain/models/shlink-access";
@@ -30,6 +32,10 @@ jest.mock("@/usecases/access-tickets/add-access-ticket", () => ({
   addAccessTicketUseCase: jest.fn(),
 }));
 
+jest.mock("@/usecases/access-tickets/delete-access-ticket", () => ({
+  deleteAccessTicketUseCase: jest.fn(),
+}));
+
 jest.mock("@/usecases/shlink-endpoint/get-endpoint", () => ({
   getEndpointUseCase: jest.fn(),
 }));
@@ -38,8 +44,13 @@ jest.mock("@/usecases/shlinks/validate-shlink", () => ({
   validateSHLinkUseCase: jest.fn(),
 }));
 
+jest.mock("@/usecases/shlinks/update-single-shlink", () => ({
+  updateSingleSHLinkUseCase: jest.fn(),
+}));
+
 jest.mock("@/mappers/shlink-mapper", () => ({
   mapModelToMiniDto: jest.fn(),
+  mapModelToDto: jest.fn(),
 }));
 
 jest.mock("@/app/utils/error-handler", () => ({
@@ -58,6 +69,7 @@ describe('POST handler', () => {
   const mockGetSingleSHLinkUseCase = getSingleSHLinkUseCase as jest.Mock;
   const mockLogSHLinkAccess = logSHLinkAccessUseCase as jest.Mock;
   const mockAddAccessTicketUseCase = addAccessTicketUseCase as jest.Mock;
+  const mockDeleteAccessTicketUseCase = deleteAccessTicketUseCase as jest.Mock;
   const mockGetEndpointUseCase = getEndpointUseCase as jest.Mock;
   const mockValidateSHLinkUseCase = validateSHLinkUseCase as jest.Mock;
   const mockMapModelToMiniDto = mapModelToMiniDto as jest.Mock;
@@ -180,6 +192,61 @@ describe('POST handler', () => {
     const params = { id: '123' };
 
     const response = await POST(request, { params });
+
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error);
+    expect(mockResponseJson).not.toHaveBeenCalled();
+  });
+});
+
+describe('PUT handler', () => {
+  const mockResponseJson = NextResponse.json as jest.Mock;
+  const mockHandleApiValidationError = handleApiValidationError as jest.Mock;
+  const mockGetSingleSHLinkUseCase = getSingleSHLinkUseCase as jest.Mock;
+  const mockUpdateSingleSHLinkUseCase = updateSingleSHLinkUseCase as jest.Mock;
+  const mockMapModelToDto = mapModelToDto as jest.Mock;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should return 404 if the SHLink is not found', async () => {
+    mockGetSingleSHLinkUseCase.mockResolvedValue(null);
+
+    const request = new Request('http://localhost/api/shlink/123', {
+      method: 'PUT',
+      body: JSON.stringify({ managementToken: 'token', passcode: '1234' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const params = { id: '123' };
+
+    const response = await PUT(request, { params });
+
+    expect(mockGetSingleSHLinkUseCase).toHaveBeenCalledWith(
+      { repo: container.get(SHLinkRepositoryToken) },
+      { id: '123', managementToken: 'token' }
+    );
+    expect(mockUpdateSingleSHLinkUseCase).not.toHaveBeenCalled();
+    expect(mockMapModelToDto).not.toHaveBeenCalled();
+    expect(mockResponseJson).toHaveBeenCalledWith(
+      { message: NOT_FOUND },
+      { status: 404 }
+    );
+  });
+
+  
+
+  it('should handle errors and call handleApiValidationError', async () => {
+    const error = new Error('Something went wrong');
+    mockGetSingleSHLinkUseCase.mockRejectedValue(error);
+
+    const request = new Request('http://localhost/api/shlink/123', {
+      method: 'PUT',
+      body: JSON.stringify({ managementToken: '123456token', passcode: '1234' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const params = { id: '123' };
+
+    const response = await PUT(request, { params });
 
     expect(mockHandleApiValidationError).toHaveBeenCalledWith(error);
     expect(mockResponseJson).not.toHaveBeenCalled();
