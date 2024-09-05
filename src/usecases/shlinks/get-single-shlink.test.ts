@@ -28,6 +28,7 @@ describe("getSingleSHLinkUseCase", () => {
         // Mock entity data
         mockSHLinkEntity = {
             id: mockId,
+            name: 'name',
             user_id: "user-123567",
             passcode_failures_remaining: 3,
             active: true,
@@ -39,6 +40,7 @@ describe("getSingleSHLinkUseCase", () => {
         // Mock model data
         mockReturnedSHLinkModel = new SHLinkModel(
             mockSHLinkEntity.user_id,
+            mockSHLinkEntity.name,
             mockSHLinkEntity.passcode_failures_remaining,
             mockSHLinkEntity.active,
             mockSHLinkEntity.management_token,

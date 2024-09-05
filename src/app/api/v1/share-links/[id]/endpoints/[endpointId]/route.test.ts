@@ -29,9 +29,8 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
   const mockParams = { id: '12356', endpointId: 'endpoint12345', ticket:"123456789" };
 
   const mockTicket = new AccessTicketModel('abc', 'ticket-123');
-  const mockShlink = new SHLinkModel('user-123456', 3, true, 'token-xydedz', 'passcode', new Date(), 'abc');
+  const mockShlink = new SHLinkModel('user-123456', 'name', 3, true, 'token-xydedz', 'passcode', new Date(), 'abc');
   const mockUser = new UserModel('user-123', 'patient-123', '12356');
-  let mockPatient:any;
 
   it('should return 401 if ticket is not found', async () => {
     (getAccessTicketUseCase as jest.Mock).mockResolvedValue(null);

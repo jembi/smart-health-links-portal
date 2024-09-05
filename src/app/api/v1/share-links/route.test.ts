@@ -33,6 +33,7 @@ jest.mock('@/usecases/shlinks/add-shlink', () => ({
 // Constants
 const dataDto = {
     userId: "1234567890",
+    name: 'name',
     passcodeFailuresRemaining: 3,
     active: true,
     managementToken: "token-xyz1234",
@@ -42,12 +43,14 @@ const dataDto = {
 
 const mockDto: CreateSHLinkDto = {
     userId: "1234567890",
+    name: 'name',
     configPasscode: "passcode-abcde",
     configExp: new Date("2024-01-01T00:00:00Z"),
 };
 
 const mockModel = new SHLinkModel(
     dataDto.userId,
+    dataDto.name,
     dataDto.passcodeFailuresRemaining,
     dataDto.active,
     dataDto.managementToken,
@@ -58,6 +61,7 @@ const mockModel = new SHLinkModel(
 
 const mockEntity: SHLinkEntity = {
     id: "1",
+    name: dataDto.name,
     user_id: dataDto.userId,
     passcode_failures_remaining: dataDto.passcodeFailuresRemaining,
     active: dataDto.active,

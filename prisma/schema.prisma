@@ -54,6 +54,7 @@ model shlink {
     shlink_endpoint             shlink_endpoint[]
     shlink_access               shlink_access[]
     access_ticket               access_ticket[]
+    name                       String           @default("nameless shlink")
     
 
     @@index([id], name: "idx_shlink_id")

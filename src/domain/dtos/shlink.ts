@@ -1,6 +1,7 @@
 
 export class CreateSHLinkDto {
     userId: string;
+    name: string;
     configPasscode?: string;
     configExp?: Date;
 }
@@ -23,6 +24,9 @@ export class SHLinkMiniDto {
     managementToken: string;
     files?: SHLinkFileDto[];
     expiryDate?: Date;
+    passwordRequired?: boolean;
+    name: string;
+    url: string;
 }
 
 export class SHLinkRequestDto {

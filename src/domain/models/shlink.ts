@@ -3,7 +3,8 @@ import z from 'zod';
 
 export class SHLinkModel extends BaseModel{
     
-    constructor(private userId: string, 
+    constructor(private userId: string,
+        private name: string, 
         private passcodeFailuresRemaining?: number, 
         private active?: boolean, 
         private managementToken?: string, 
@@ -17,9 +18,18 @@ export class SHLinkModel extends BaseModel{
             managementToken: z.string().min(10).optional(),
             configPasscode: z.string().min(4).optional().nullable(),
             configExp: z.date().optional().nullable(),
-            id: z.string().optional()
+            id: z.string().optional(),
+            name: z.string().default('unnamed shlink')
         }));
         this.validate();
+    }
+
+    getName(): string {
+        return this.name;
+    }
+
+    setName(name: string): void {
+        this.name = name;
     }
 
     getId(): string | undefined{
