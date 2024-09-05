@@ -5,7 +5,5 @@ import { mapEntityToModel } from "@/mappers/access-ticket-mapper";
 export const getAccessTicketUseCase = async (context: {repo: IAccessTicketRepository}, id: string): Promise<AccessTicketModel> => {
     const newEntity = await context.repo.findById(id);
 
-    console.log("entity", newEntity)
-
     return mapEntityToModel(newEntity);
 }
