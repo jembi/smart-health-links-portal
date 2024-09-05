@@ -32,20 +32,20 @@ const getPasswordErrorMessage = (shlink: SHLinkModel):string => {
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     let requestDto: SHLinkRequestDto = await request.json();
     try{
-        let shlink = await getSingleSHLinkUseCase({ repo}, { id: params.id, managementToken: requestDto.managementToken })
+        let shlink = await getSingleSHLinkUseCase({ repo }, { id: params.id, managementToken: requestDto.managementToken })
         if(!shlink) return NextResponse.json({message: NOT_FOUND}, { status: 404 });
 
-        const valid = await validateSHLinkUseCase({shlink, passcode: requestDto.passcode});
+        const valid = await validateSHLinkUseCase({ shlink, passcode: requestDto.passcode });
         if(!valid) {
-            await decreasePasswordFailureCountUseCase({repo}, shlink);
-            return NextResponse.json({message: getPasswordErrorMessage(shlink)}, { status: 403 })
+            await decreasePasswordFailureCountUseCase({ repo }, shlink);
+            return NextResponse.json({ message: getPasswordErrorMessage(shlink)}, { status: 403 })
         }
-        await logSHLinkAccessUseCase({repo: accessRepo}, new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient));
+        await logSHLinkAccessUseCase({ repo: accessRepo }, new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient));
         const ticket = await addAccessTicketUseCase({repo: ticketRepo}, new AccessTicketModel(shlink.getId()));
         setTimeout(()=> {
-            deleteAccessTicketUseCase({repo: ticketRepo}, {id: ticket.getId()});
+            deleteAccessTicketUseCase({ repo: ticketRepo }, {id: ticket.getId()});
         }, DELETE_DELAY);
-        const endpoint = await getEndpointUseCase({repo: shlinkRepo}, {shlinkId: shlink.getId()});
+        const endpoint = await getEndpointUseCase({ repo: shlinkRepo }, { shlinkId: shlink.getId() });
         return NextResponse.json(mapModelToMiniDto(shlink, [endpoint], ticket.getId()), { status: 200 });
     }
     catch(error){
