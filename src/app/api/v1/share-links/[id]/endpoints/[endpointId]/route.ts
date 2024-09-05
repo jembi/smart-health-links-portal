@@ -1,19 +1,18 @@
 import { NOT_FOUND,UNAUTHORIZED_REQUEST } from '@/app/constants/http-constants';
-import { container, ServerConfigRepositoryToken, UserRepositoryToken } from '@/container';
+import { AccessTicketRepositoryToken, container, ServerConfigRepositoryToken, SHLinkRepositoryToken, UserRepositoryToken } from '@/container';
 import { AccessTicketModel } from '@/domain/models/access-ticket';
-import prisma from '@/infrastructure/clients/prisma';
+import { IAccessTicketRepository } from '@/infrastructure/repositories/interfaces/access-ticket-repository.interface';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
+import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
-import { AccessTicketPrismaRepository } from '@/infrastructure/repositories/prisma/access-ticket-repository';
-import { SHLinkPrismaRepository } from '@/infrastructure/repositories/prisma/shlink-repository';
 import { getAccessTicketUseCase } from '@/usecases/access-tickets/get-access-ticket';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
 
-const shlinkRepo = new SHLinkPrismaRepository(prisma);
-const ticketRepo = new AccessTicketPrismaRepository(prisma);
+const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
+const ticketRepo = container.get<IAccessTicketRepository>(AccessTicketRepositoryToken);
 const userRepo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(ServerConfigRepositoryToken);
 
@@ -35,7 +34,7 @@ export async function GET(
   }
   
   if (ticket?.getSHLinkId() !== params.id) {
-    return NextResponse.json({message:NOT_FOUND}, { status: 401 });
+    return NextResponse.json({message:NOT_FOUND}, { status: 404 });
   }   
   
   const shlink = await getSingleSHLinkUseCase({ repo:shlinkRepo}, { id: params.id });
