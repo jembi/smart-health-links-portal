@@ -3,6 +3,7 @@ import { handleApiValidationError } from "@/app/utils/error-handler";
 import { AccessTicketRepositoryToken, container, SHLinkAccessRepositoryToken, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from "@/container";
 import { SHLinkRequestDto } from "@/domain/dtos/shlink";
 import { AccessTicketModel } from "@/domain/models/access-ticket";
+import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkAccessModel } from "@/domain/models/shlink-access";
 import { IAccessTicketRepository } from "@/infrastructure/repositories/interfaces/access-ticket-repository.interface";
 import { ISHLinkAccessRepository } from "@/infrastructure/repositories/interfaces/shlink-access-repository";
@@ -24,6 +25,10 @@ const ticketRepo = container.get<IAccessTicketRepository>(AccessTicketRepository
 const shlinkRepo = container.get<ISHLinkEndpointRepository>(SHLinkEndpointRepositoryToken);
 const DELETE_DELAY = 60000;
 
+const getPasswordErrorMessage = (shlink: SHLinkModel):string => {
+    return INVALID_SHLINK_CREDS.replace(/%s/g, (shlink.getPasscodeFailuresRemaining()  - 1).toString());
+}
+
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     let requestDto: SHLinkRequestDto = await request.json();
     try{
@@ -33,7 +38,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
         const valid = await validateSHLinkUseCase({shlink, passcode: requestDto.passcode});
         if(!valid) {
             await decreasePasswordFailureCountUseCase({repo}, shlink);
-            return NextResponse.json({message: INVALID_SHLINK_CREDS.replace(/%s/g, (shlink.getPasscodeFailuresRemaining()  - 1).toString())}, { status: 403 })
+            return NextResponse.json({message: getPasswordErrorMessage(shlink)}, { status: 403 })
         }
         await logSHLinkAccessUseCase({repo: accessRepo}, new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient));
         const ticket = await addAccessTicketUseCase({repo: ticketRepo}, new AccessTicketModel(shlink.getId()));
