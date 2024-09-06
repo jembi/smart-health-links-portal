@@ -6,7 +6,8 @@ import { SHLinkEntity } from "@/entities/shlink";
 
 export const mapEntityToModel = (shlinkEntity: SHLinkEntity): SHLinkModel | undefined => {
     return shlinkEntity ? new SHLinkModel(
-        shlinkEntity.user_id, 
+        shlinkEntity.user_id,
+        shlinkEntity.name,
         shlinkEntity.passcode_failures_remaining, 
         shlinkEntity.active, 
         shlinkEntity.management_token, 
@@ -19,6 +20,7 @@ export const mapEntityToModel = (shlinkEntity: SHLinkEntity): SHLinkModel | unde
 export const mapModelToEntity = (shlinkModel: SHLinkModel): SHLinkEntity | undefined => {
     return shlinkModel ? {
         id: shlinkModel.getId(),
+        name: shlinkModel.getName(),
         user_id: shlinkModel.getUserId(),
         passcode_failures_remaining: shlinkModel.getPasscodeFailuresRemaining(),
         active: shlinkModel.getActive(),
@@ -32,6 +34,7 @@ export const mapModelToDto = (shlinkModel: SHLinkModel): SHLinkDto | undefined =
 
     return shlinkModel ? {
         id: shlinkModel.getId(),
+        name: shlinkModel.getName(),
         passcodeFailuresRemaining: shlinkModel.getPasscodeFailuresRemaining(),
         active: shlinkModel.getActive(),
         managementToken: shlinkModel.getManagementToken(),
@@ -45,8 +48,11 @@ export const mapModelToMiniDto = (shlinkModel: SHLinkModel, files?: SHLinkEndpoi
 
     return shlinkModel ? {
         id: shlinkModel.getId(),
+        name: shlinkModel.getName(),
         managementToken: shlinkModel.getManagementToken(),
         expiryDate: shlinkModel.getConfigExp(),
+        passwordRequired: !!shlinkModel.getConfigPasscode(),
+        url: encodeSHLink(shlinkModel),
         files: files?.map(x=> {return{
             location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
             contentType: 'application/smart-api-access',
@@ -57,7 +63,8 @@ export const mapModelToMiniDto = (shlinkModel: SHLinkModel, files?: SHLinkEndpoi
 
 export const mapDtoToModel = (shlinkDto: SHLinkDto): SHLinkModel | undefined => {
     return shlinkDto ? new SHLinkModel(
-        shlinkDto.userId, 
+        shlinkDto.userId,
+        shlinkDto.name,
         shlinkDto.passcodeFailuresRemaining, 
         shlinkDto.active, 
         shlinkDto.managementToken, 
@@ -65,4 +72,15 @@ export const mapDtoToModel = (shlinkDto: SHLinkDto): SHLinkModel | undefined => 
         shlinkDto.configExp ? new Date(shlinkDto.configExp) : null, 
         shlinkDto.id
     ) : undefined;
+}
+
+const encodeSHLink = (shlink: SHLinkModel): string => {
+    const result = {
+        label: shlink.getName(),
+        url: `${EXTERNAL_URL}/api/v1/share-links/${shlink.getId()}`,
+        flag: `${!shlink.getConfigExp() ? 'L': ''}${shlink.getConfigPasscode()? 'P': ''}`,
+    };
+    const data = Buffer.from(JSON.stringify(result), 'utf8').toString('base64');
+    
+    return `${EXTERNAL_URL}/viewer#shlink:/${data}`;
 }

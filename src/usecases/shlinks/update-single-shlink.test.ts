@@ -18,6 +18,7 @@ describe('updateSingleSHLinkUseCase', () => {
     // Setup mock data
     const mockDto = {
       userId: "1234567890",
+      name:"shlink",
       passcodeFailuresRemaining: 3,
       active: true,
       managementToken: "token-xyz1234",
@@ -27,6 +28,7 @@ describe('updateSingleSHLinkUseCase', () => {
 
     mockSHLinkModel = new SHLinkModel(
       mockDto.userId,
+      mockDto.name,
       mockDto.passcodeFailuresRemaining,
       mockDto.active,
       mockDto.managementToken,
@@ -37,6 +39,7 @@ describe('updateSingleSHLinkUseCase', () => {
 
     mockSHLinkEntity = {
       id: "1",
+      name:mockDto.name,
       user_id: mockDto.userId,
       passcode_failures_remaining: mockDto.passcodeFailuresRemaining,
       active: mockDto.active,
@@ -85,6 +88,7 @@ describe('updateSingleSHLinkUseCase', () => {
   it('should not update config_passcode or config_exp if they are not set in the data', async () => {
     const mockSHLinkModelWithoutFields = new SHLinkModel(
       mockSHLinkModel.getUserId(),
+      mockSHLinkModel.getName(),
       mockSHLinkModel.getPasscodeFailuresRemaining(),
       mockSHLinkModel.getActive(),
       mockSHLinkModel.getManagementToken(),

@@ -5,6 +5,7 @@ describe('validateSHLinkUseCase', () => {
   it('should return true for a valid active SHLink with matching passcode', () => {
     const validSHLink = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -19,6 +20,7 @@ describe('validateSHLinkUseCase', () => {
   it('should throw SHLinkValidationError if the SHLink is inactive', () => {
     const invalidSHLink = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       false,
       'management-token',
@@ -33,6 +35,7 @@ describe('validateSHLinkUseCase', () => {
   it('should throw SHLinkValidationError if the SHLink is expired', () => {
     const expiredSHLink = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -47,6 +50,7 @@ describe('validateSHLinkUseCase', () => {
   it('should return false if the passcode does not match', () => {
     const validSHLink = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -61,6 +65,7 @@ describe('validateSHLinkUseCase', () => {
   it('should return true if no passcode is required and the SHLink is valid', () => {
     const validSHLink = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -75,6 +80,7 @@ describe('validateSHLinkUseCase', () => {
   it('should return true if no expiry date is required and the SHLink is valid', () => {
     const validSHLink = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -90,6 +96,7 @@ describe('validateSHLinkUseCase', () => {
     try {
       const invalidSHLink = new SHLinkModel(
         'unique-user-id',
+        'name',
         5,
         true,
         'management-token',

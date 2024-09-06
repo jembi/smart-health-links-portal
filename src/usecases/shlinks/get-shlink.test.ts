@@ -22,6 +22,7 @@ describe("getSHLinkUseCase", () => {
         mockSHLinkEntity = [
             {
                 id: "1",
+                name: 'name 1',
                 user_id: mockUserId,
                 passcode_failures_remaining: 3,
                 active: true,
@@ -31,6 +32,7 @@ describe("getSHLinkUseCase", () => {
             },
             {
                 id: "2",
+                name: 'name 2',
                 user_id: mockUserId,
                 passcode_failures_remaining: 1,
                 active: false,

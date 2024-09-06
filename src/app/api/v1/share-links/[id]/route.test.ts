@@ -107,8 +107,7 @@ describe('POST handler', () => {
   it('should log SHLink access, add access ticket, retrieve endpoint, and return the DTO on success', async () => {
     const shlink = {
       getId: jest.fn().mockReturnValue('123'),
-      getManagementToken: jest.fn().mockReturnValue('token'),
-      getActive: jest.fn().mockReturnValue(true),
+      getPasscodeFailuresRemaining: jest.fn().mockReturnValue(3),
     } as unknown as SHLinkModel;
 
     const ticket = {

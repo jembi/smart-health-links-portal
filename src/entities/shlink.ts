@@ -7,4 +7,5 @@ export class SHLinkEntity extends BaseEntity {
   management_token: string;
   user_id: string;
   active: boolean;
+  name: string;
 }
