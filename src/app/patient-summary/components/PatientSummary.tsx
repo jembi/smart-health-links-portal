@@ -27,15 +27,7 @@ export default function PatientSummary({ fhirBundle }) {
 
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-          {DynamicComponent && (
-            <DynamicComponent
-              data={
-                Array.isArray(resourceInfo) && resourceInfo.length === 1
-                  ? resourceInfo[0]
-                  : resourceInfo
-              }
-            />
-          )}
+          {DynamicComponent && <DynamicComponent data={resourceInfo} />}
         </TabPanel>
       );
     });
