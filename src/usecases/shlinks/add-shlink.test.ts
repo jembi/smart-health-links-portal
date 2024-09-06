@@ -29,6 +29,7 @@ describe("addShlinkUseCase", () => {
         // Constants
 const mockDto = {
     userId: "1234567890",
+    name: 'name',
     passcodeFailuresRemaining: 3,
     active: true,
     managementToken: "token-xyz1234",
@@ -38,6 +39,7 @@ const mockDto = {
 
 const mockModel = new SHLinkModel(
     mockDto.userId,
+    mockDto.name,
     mockDto.passcodeFailuresRemaining,
     mockDto.active,
     mockDto.managementToken,
@@ -48,6 +50,7 @@ const mockModel = new SHLinkModel(
 
 const mockEntity: SHLinkEntity = {
     id: "1",
+    name: 'name',
     user_id: mockDto.userId,
     passcode_failures_remaining: mockDto.passcodeFailuresRemaining,
     active: mockDto.active,

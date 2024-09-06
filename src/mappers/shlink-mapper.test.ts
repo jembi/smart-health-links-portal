@@ -8,6 +8,7 @@ import { EXTERNAL_URL } from "@/app/constants/http-constants";
 describe("SHLink Mappers", () => {
   const shLinkEntity: SHLinkEntity = {
     id: "1",
+    name: 'name',
     user_id: "1234567890",
     passcode_failures_remaining: 3,
     active: true,
@@ -18,6 +19,7 @@ describe("SHLink Mappers", () => {
 
   const shLinkModel = new SHLinkModel(
     "1234567890",
+    'name',
     3,
     true,
     "tokenxyz123",
@@ -28,6 +30,7 @@ describe("SHLink Mappers", () => {
 
   const shLinkDto: SHLinkDto = {
     id: "1",
+    name: 'name',
     userId: "1234567890",
     passcodeFailuresRemaining: 3,
     active: true,
@@ -60,6 +63,7 @@ describe("SHLink Mappers", () => {
       const result = mapModelToEntity(shLinkModel);
       expect(result).toEqual({
         id: shLinkModel.getId(),
+        name: shLinkModel.getName(),
         user_id: shLinkModel.getUserId(),
         passcode_failures_remaining: shLinkModel.getPasscodeFailuresRemaining(),
         active: shLinkModel.getActive(),
@@ -80,6 +84,7 @@ describe("SHLink Mappers", () => {
       const result = mapModelToDto(shLinkModel);
       expect(result).toEqual({
         id: shLinkModel.getId(),
+        name: shLinkModel.getName(),
         userId: shLinkModel.getUserId(),
         passcodeFailuresRemaining: shLinkModel.getPasscodeFailuresRemaining(),
         active: shLinkModel.getActive(),
@@ -121,6 +126,7 @@ describe('mapModelToMiniDto', () => {
     const date = new Date(Date.now() + 10000) // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -143,6 +149,9 @@ describe('mapModelToMiniDto', () => {
       id: 'link-id',
       managementToken: 'management-token',
       expiryDate: date,
+      passwordRequired: true,
+      url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
+      name: 'name',
       files: [
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint1-id?ticket=${ticket}`,
@@ -163,6 +172,7 @@ describe('mapModelToMiniDto', () => {
     const date = new Date(Date.now() + 10000) // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -178,8 +188,11 @@ describe('mapModelToMiniDto', () => {
     expect(result).toEqual({
       id: 'link-id',
       managementToken: 'management-token',
+      passwordRequired: true,
+      name: 'name',
       expiryDate: date,
-      files: undefined
+      files: undefined,
+      url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
     });
   });
 
@@ -196,6 +209,7 @@ describe('mapModelToMiniDto', () => {
     const date = new Date(Date.now() + 10000) // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
+      'name',
       5,
       true,
       'management-token',
@@ -215,6 +229,9 @@ describe('mapModelToMiniDto', () => {
     expect(result).toEqual({
       id: 'link-id',
       managementToken: 'management-token',
+      passwordRequired: true,
+      name: 'name',
+      url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
       expiryDate: date,
       files: [
         {

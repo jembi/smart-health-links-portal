@@ -31,7 +31,7 @@ describe('decreasePasswordFailureCountUseCase', () => {
   it('should decrease passcode failure count and update the repository', async () => {
     const initialFailures = 5;
     const updatedFailures = initialFailures - 1;
-    const shlinkModel = new SHLinkModel('unique-user-123', initialFailures, true);
+    const shlinkModel = new SHLinkModel('unique-user-123', 'name', initialFailures, true);
     const entity = {
       passcode_failures_remaining: initialFailures,
     };
@@ -54,7 +54,7 @@ describe('decreasePasswordFailureCountUseCase', () => {
 
   it('should handle the case when passcode_failures_remaining is 0', async () => {
     const initialFailures = 0;
-    const shlinkModel = new SHLinkModel('unique-user-123', initialFailures, true);
+    const shlinkModel = new SHLinkModel('unique-user-123','name', initialFailures, true);
     const entity = {
       passcode_failures_remaining: initialFailures,
     };
