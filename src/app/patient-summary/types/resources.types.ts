@@ -1,10 +1,11 @@
-import { Patient } from "./patient.types";
+import { Patient } from './patient.types';
 
 export enum ResourceType {
-  Patient = "Patient",
-  Composition = "Composition",
-  Organization = "Organization",
-  AllergyIntolerance = "AllergyIntolerance",
+  Patient = 'Patient',
+  Composition = 'Composition',
+  Organization = 'Organization',
+  AllergyIntolerance = 'AllergyIntolerance',
+  Condition = 'Condition',
 }
 
 export interface ResourceMap {
