@@ -4,21 +4,23 @@ import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shli
 import { mapEntityToModel } from '@/mappers/shlink-mapper';
 
 export const updateSingleSHLinkUseCase = async (
-  context: { repo: ISHLinkRepository },
-  data: { id: string; shlink: SHLinkModel },
+  context: { repo: ISHLinkRepository, validator: ({ shlink, passcode }: { shlink: SHLinkModel, passcode?: string }) => boolean  },
+  data: {id: string, passcode?:string, expiryDate?: Date },
 ): Promise<SHLinkModel> => {
-  let newShlink: SHLinkEntity;
+  let updateShlink: SHLinkEntity;
 
   let entity = await context.repo.findOne({ id: data.id });
 
-  if (data.shlink.getConfigPasscode()) {
-    entity.config_passcode = data.shlink.getConfigPasscode();
+  if (data.passcode) {
+    entity.config_passcode = data.passcode;
   }
-  if (data.shlink.getConfigExp()) {
-    entity.config_exp = data.shlink.getConfigExp();
+  if (data.expiryDate) {
+    entity.config_exp = data.expiryDate;
   }
 
-  newShlink = await context.repo.update(entity);
+  await context.validator({shlink: mapEntityToModel(entity), passcode: entity.config_passcode})
 
-  return mapEntityToModel(newShlink);
+  updateShlink = await context.repo.update(entity);
+
+  return mapEntityToModel(updateShlink);
 };

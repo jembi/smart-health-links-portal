@@ -1,4 +1,4 @@
-import { NOT_FOUND } from "@/app/constants/http-constants";
+import { NOT_FOUND, UNAUTHORIZED_REQUEST } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { AccessTicketRepositoryToken, container, SHLinkAccessRepositoryToken, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from "@/container";
 import { SHLinkRequestDto, SHLinkUpdateDto } from "@/domain/dtos/shlink";
@@ -51,20 +51,18 @@ export async function PUT(request: Request,  {params}: {params: {id: string}}) {
 
     try{
         let shlink = await getSingleSHLinkUseCase({repo}, {id: params.id, managementToken: requestDto.managementToken});
+
         if(!shlink) return NextResponse.json({message: NOT_FOUND}, {status: 404});
 
-        if(requestDto.expiryDate){
-            shlink.setConfigExp(requestDto.expiryDate)
+        const valid:boolean = await validateSHLinkUseCase({shlink, passcode: requestDto.oldPasscode});
+
+        if(!valid){
+            return NextResponse.json({message: UNAUTHORIZED_REQUEST}, {status: 401  })
         }
-        if(requestDto.passcode){
-            shlink.setConfigPasscode(requestDto.passcode)
-        }
 
-        await validateSHLinkUseCase({shlink});
+        let updateShlink = await updateSingleSHLinkUseCase({repo, validator:validateSHLinkUseCase}, {id: params.id, passcode: requestDto.passcode, expiryDate: requestDto.expiryDate && new Date(requestDto.expiryDate)});
 
-        let updateShlink = await updateSingleSHLinkUseCase({repo}, {id: params.id, shlink: shlink});
-
-        if(updateShlink) return NextResponse.json(mapModelToDto(updateShlink), { status: 200 });
+        if(updateShlink) return NextResponse.json(mapModelToDto(updateShlink), {status: 200});
         
     }
     catch(error){

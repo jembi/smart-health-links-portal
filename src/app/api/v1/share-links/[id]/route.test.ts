@@ -3,7 +3,7 @@
  */
 import { NextResponse } from "next/server";
 import { POST, PUT } from "./route";
-import { NOT_FOUND } from "@/app/constants/http-constants";
+import { NOT_FOUND, UNAUTHORIZED_REQUEST } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkRepositoryToken, SHLinkAccessRepositoryToken, AccessTicketRepositoryToken, SHLinkEndpointRepositoryToken } from "@/container";
 import { mapModelToMiniDto, mapModelToDto } from "@/mappers/shlink-mapper";
@@ -128,7 +128,7 @@ describe('POST handler', () => {
       managementToken: 'token',
       files: [
         {
-          location: `http://external.url/api/v1/share-links/123/endpoints/endpoint-id?ticket=ticket-id`,
+          location: 'http://external.url/api/v1/share-links/123/endpoints/endpoint-id?ticket=ticket-id',
           contentType: 'application/smart-api-access',
           embedded: null
         }
@@ -170,7 +170,7 @@ describe('POST handler', () => {
         managementToken: 'token',
         files: [
           {
-            location: `http://external.url/api/v1/share-links/123/endpoints/endpoint-id?ticket=ticket-id`,
+            location: 'http://external.url/api/v1/share-links/123/endpoints/endpoint-id?ticket=ticket-id',
             contentType: 'application/smart-api-access',
             embedded: null
           }
@@ -204,13 +204,19 @@ describe('PUT handler', () => {
   const mockGetSingleSHLinkUseCase = getSingleSHLinkUseCase as jest.Mock;
   const mockUpdateSingleSHLinkUseCase = updateSingleSHLinkUseCase as jest.Mock;
   const mockMapModelToDto = mapModelToDto as jest.Mock;
+  const mockValidateSHLinkUseCase = jest.fn(); // Explicitly mock here
+  let context: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    context = {
+      validator: mockValidateSHLinkUseCase, // Set validator to mock function
+    };
   });
 
   it('should return 404 if the SHLink is not found', async () => {
     mockGetSingleSHLinkUseCase.mockResolvedValue(null);
+    context.validator.mockResolvedValue(true);
 
     const request = new Request('http://localhost/api/shlink/123', {
       method: 'PUT',
@@ -233,15 +239,67 @@ describe('PUT handler', () => {
     );
   });
 
-  
+  it('should update the SHLink and return the DTO on success', async () => {
+    const shlink = {
+      getId: jest.fn().mockReturnValue('123'),
+      getManagementToken: jest.fn().mockReturnValue('token'),
+      getActive: jest.fn().mockReturnValue(true),
+    } as unknown as SHLinkModel;
+
+    const updatedSHLink = {
+      ...shlink,
+      getId: jest.fn().mockReturnValue('123'),
+      getManagementToken: jest.fn().mockReturnValue('token'),
+      getActive: jest.fn().mockReturnValue(true),
+    } as unknown as SHLinkModel;
+
+    const expectedDto = {
+      id: '123',
+      managementToken: 'token',
+      files: []
+    };
+
+    // Mock behavior
+    mockGetSingleSHLinkUseCase.mockResolvedValue(shlink);
+    mockUpdateSingleSHLinkUseCase.mockResolvedValue(shlink);
+    mockMapModelToDto.mockReturnValue(expectedDto);
+
+    const request = new Request('http://localhost/api/shlink/123', {
+      method: 'PUT',
+      body: JSON.stringify({ managementToken: 'token', passcode: '1234' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const params = { id: '123' };
+
+    // Call the PUT handler
+    const response = await PUT(request, { params });
+
+    // Verify calls
+    expect(mockGetSingleSHLinkUseCase).toHaveBeenCalledWith(
+      { repo: container.get(SHLinkRepositoryToken) },
+      { id: '123', managementToken: 'token' }
+    );
+
+    expect(mockUpdateSingleSHLinkUseCase).toHaveBeenCalledWith(
+      { repo: container.get(SHLinkRepositoryToken), validator: expect.any(Function) }, // Adjusted to match actual arguments
+      { id: '123', passcode: '1234' }
+    );
+
+    expect(mockMapModelToDto).toHaveBeenCalledWith(shlink);
+    expect(mockResponseJson).toHaveBeenCalledWith(
+      expectedDto,
+      { status: 200 }
+    );
+  }); 
 
   it('should handle errors and call handleApiValidationError', async () => {
     const error = new Error('Something went wrong');
     mockGetSingleSHLinkUseCase.mockRejectedValue(error);
+    context.validator.mockResolvedValue(true);
 
     const request = new Request('http://localhost/api/shlink/123', {
       method: 'PUT',
-      body: JSON.stringify({ managementToken: '123456token', passcode: '1234' }),
+      body: JSON.stringify({ managementToken: 'token', passcode: '1234' }),
       headers: { 'Content-Type': 'application/json' },
     });
     const params = { id: '123' };
@@ -252,3 +310,4 @@ describe('PUT handler', () => {
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });
+

@@ -11,13 +11,12 @@ jest.mock('@/mappers/shlink-mapper', () => ({
 
 describe('updateSingleSHLinkUseCase', () => {
   let mockRepo: jest.Mocked<ISHLinkRepository>;
-  let mockDto: any;
   let mockSHLinkModel: SHLinkModel;
   let mockSHLinkEntity: SHLinkEntity;
 
   beforeEach(() => {
     // Setup mock data
-    mockDto = {
+    const mockDto = {
       userId: "1234567890",
       passcodeFailuresRemaining: 3,
       active: true,
@@ -59,9 +58,6 @@ describe('updateSingleSHLinkUseCase', () => {
       config_exp: new Date("2024-01-01T00:00:00Z"),
     };
 
-    // Spy on getConfigPasscode to return new passcode
-    jest.spyOn(mockSHLinkModel, 'getConfigPasscode').mockReturnValue('new-passcode');
-
     // Mock repository behavior
     mockRepo.findOne.mockResolvedValue(mockSHLinkEntity);
     mockRepo.update.mockResolvedValue(updatedSHLinkEntity);
@@ -69,8 +65,8 @@ describe('updateSingleSHLinkUseCase', () => {
 
     // Call the use case
     const result = await updateSingleSHLinkUseCase(
-      { repo: mockRepo },
-      { id: '1', shlink: mockSHLinkModel }
+      { repo: mockRepo, validator: jest.fn().mockResolvedValue(true) }, // Mock validator
+      { id: '1', passcode: 'new-passcode', expiryDate: new Date("2024-01-01T00:00:00Z") }
     );
 
     // Verify repository interactions
@@ -86,12 +82,12 @@ describe('updateSingleSHLinkUseCase', () => {
     expect(result).toEqual(mockSHLinkModel);
   });
 
-  it('should not update config_passcode or config_exp if they are not set in the SHLinkModel', async () => {
+  it('should not update config_passcode or config_exp if they are not set in the data', async () => {
     const mockSHLinkModelWithoutFields = new SHLinkModel(
-      mockDto.userId,
-      mockDto.passcodeFailuresRemaining,
-      mockDto.active,
-      mockDto.managementToken,
+      mockSHLinkModel.getUserId(),
+      mockSHLinkModel.getPasscodeFailuresRemaining(),
+      mockSHLinkModel.getActive(),
+      mockSHLinkModel.getManagementToken(),
       undefined, // No configPasscode
       undefined, // No configExp
       "1"
@@ -99,19 +95,19 @@ describe('updateSingleSHLinkUseCase', () => {
 
     const entityWithoutConfig: SHLinkEntity = {
       ...mockSHLinkEntity,
-      config_passcode: undefined,
-      config_exp: undefined,
+      config_passcode: mockSHLinkEntity.config_passcode, // Should remain unchanged
+      config_exp: mockSHLinkEntity.config_exp, // Should remain unchanged
     };
 
     // Mock repository behavior
-    mockRepo.findOne.mockResolvedValue(entityWithoutConfig);
+    mockRepo.findOne.mockResolvedValue(mockSHLinkEntity);
     mockRepo.update.mockResolvedValue(entityWithoutConfig);
     (mapEntityToModel as jest.Mock).mockReturnValue(mockSHLinkModelWithoutFields);
 
     // Call the use case
     const result = await updateSingleSHLinkUseCase(
-      { repo: mockRepo },
-      { id: '1', shlink: mockSHLinkModelWithoutFields }
+      { repo: mockRepo, validator: jest.fn().mockResolvedValue(true) }, // Mock validator
+      { id: '1' } // No passcode or expiryDate provided
     );
 
     // Verify repository interactions
@@ -122,5 +118,21 @@ describe('updateSingleSHLinkUseCase', () => {
     expect(result).toEqual(mockSHLinkModelWithoutFields);
   });
 
-  
+  it('should call validator before updating', async () => {
+    const mockValidator = jest.fn().mockResolvedValue(true);
+
+    // Mock repository behavior
+    mockRepo.findOne.mockResolvedValue(mockSHLinkEntity);
+    mockRepo.update.mockResolvedValue(mockSHLinkEntity);
+    (mapEntityToModel as jest.Mock).mockReturnValue(mockSHLinkModel);
+
+    // Call the use case
+    await updateSingleSHLinkUseCase(
+      { repo: mockRepo, validator: mockValidator },
+      { id: '1', passcode: 'new-passcode' }
+    );
+
+    // Verify validator call
+    expect(mockValidator).toHaveBeenCalledWith({ shlink: mockSHLinkModel, passcode: 'new-passcode' });
+  });
 });
