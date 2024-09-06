@@ -34,3 +34,11 @@ export class SHLinkRequestDto {
     recipient: string;
     passcode?: string;
 }
+
+export class SHLinkUpdateDto {
+    id: string;
+    managementToken: string;
+    oldPasscode: string;
+    passcode?: string;
+    expiryDate?: Date;
+}

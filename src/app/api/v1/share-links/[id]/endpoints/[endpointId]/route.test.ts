@@ -11,10 +11,8 @@ import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 import { getUserUseCase } from '@/usecases/users/get-user';
 import { SHLinkModel } from '@/domain/models/shlink';
 import { UserModel } from '@/domain/models/user';
-// import { PatientModel } from '@/domain/models/patient';
 import { NextRequest, NextResponse } from 'next/server';
 
-// Mocks
 jest.mock('@/usecases/access-tickets/get-access-ticket');
 jest.mock('@/usecases/patient/get-patient-data');
 jest.mock('@/usecases/shlinks/get-single-shlink');
