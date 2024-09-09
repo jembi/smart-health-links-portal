@@ -9,7 +9,6 @@ import {
   Observation,
   Bundle,
   FhirResource,
-  CodeableConcept,
 } from 'fhir/r4';
 
 export enum EResourceType {
@@ -21,7 +20,6 @@ export enum EResourceType {
   Medication = 'Medication',
   AllergyIntolerance = 'AllergyIntolerance',
   Observation = 'Observation',
-  CodeableConcept = 'CodeableConcept',
 }
 
 //TODO: this type need to be extended with extra Resources type if needed
@@ -34,7 +32,6 @@ export interface IResourceType {
   [EResourceType.Medication]: Medication;
   [EResourceType.AllergyIntolerance]: AllergyIntolerance;
   [EResourceType.Observation]: Observation;
-  [EResourceType.CodeableConcept]: CodeableConcept;
 }
 
 export type TType<TParam extends keyof IResourceType> = IResourceType[TParam];

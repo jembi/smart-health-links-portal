@@ -7,7 +7,7 @@ import { IResourceType } from '@/types/fhir.types';
 export default function Practitioner({
   data,
 }: {
-  data: IResourceType['Practitioner'][];
+  data: IResourceType['Practitioner'];
 }) {
   return data.map((practitionerInfo, index) => (
     <React.Fragment key={index}>
