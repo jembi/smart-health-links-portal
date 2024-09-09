@@ -1,13 +1,15 @@
-import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
-import InfoRow from '../../InfoRow';
 import React from 'react';
-import QualificationDetails from './QualificationsDetails';
+
+import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import { IResourceType } from '@/types/fhir.types';
+
+import QualificationDetails from './QualificationsDetails';
+import InfoRow from '../../InfoRow';
 
 export default function Practitioner({
   data,
 }: {
-  data: IResourceType['Practitioner'];
+  data: IResourceType['Practitioner'][];
 }) {
   return data.map((practitionerInfo, index) => (
     <React.Fragment key={index}>
