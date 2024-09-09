@@ -4,7 +4,11 @@ import ConnectionDetails from './ConnectionDetails';
 import PatientIdentifiers from './PatientIdentifiers';
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import { IResourceType } from '@/app/patient-summary/types/fhir.types';
-export default function Patient({ data }: { data: IResourceType['Patient'] }) {
+export default function Patient({
+  data,
+}: {
+  data: IResourceType['Patient'][];
+}) {
   return (
     <>
       <StyledSectionTypography>Patient</StyledSectionTypography>
