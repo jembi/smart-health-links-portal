@@ -1,5 +1,5 @@
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { Condition } from '@/app/patient-summary/types/resources/condition.types';
+import { IResourceType } from '@/app/patient-summary/types/fhir.types';
 import {
   Paper,
   Table,
@@ -13,7 +13,7 @@ import {
 export default function ConditionDetails({
   conditionDetails,
 }: {
-  conditionDetails: Condition;
+  conditionDetails: IResourceType['Condition'];
 }) {
   return (
     <TableContainer component={Paper}>
