@@ -9,8 +9,9 @@ import Patient from './resources/Patient/Patient';
 import { extractResourceInfo } from '@/app/utils/helpers';
 import { ResourceType } from '../types/resources.types';
 import Organization from './resources/Organization/Organization';
+import Condition from './resources/Condition/Condition';
 
-const COMPONENT_MAP = { Patient, Organization };
+const COMPONENT_MAP = { Patient, Organization, Condition };
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
@@ -24,7 +25,6 @@ export default function PatientSummary({ fhirBundle }) {
         ResourceType[resourceType],
         fhirBundle,
       );
-
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
           {DynamicComponent && <DynamicComponent data={resourceInfo} />}
