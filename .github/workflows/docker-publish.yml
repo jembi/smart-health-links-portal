@@ -6,7 +6,6 @@ on:
     types: [completed]
     branches:
       - 'main'
-      - 'fix/broken-production-docker-build'
 
 jobs:
   build-and-push:
