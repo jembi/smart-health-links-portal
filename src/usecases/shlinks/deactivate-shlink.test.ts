@@ -2,11 +2,12 @@
  * @jest-environment node
  */
 
-import { deactivateSHLinksUseCase } from "./deactivate-shlink";
+import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
-import { SHLinkModel } from "@/domain/models/shlink";
 import { mapEntityToModel } from "@/mappers/shlink-mapper";
+
+import { deactivateSHLinksUseCase } from "./deactivate-shlink";
 
 // Mock the dependencies
 jest.mock('@/mappers/shlink-mapper', () => ({

@@ -1,4 +1,5 @@
 import { getToken } from "next-auth/jwt";
+
 import { UNAUTHORIZED_REQUEST } from "../constants/http-constants";
 
 export interface UserProfile{

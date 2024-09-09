@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 import { ModelValidationError } from '@/domain/models/base-model';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
-import { AuthenticationError } from './authentication';
 
+import { AuthenticationError } from './authentication';
 import {
   BAD_REQUEST,
   PRECONDITION_FAILED,

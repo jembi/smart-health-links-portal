@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
+import { validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   container,
@@ -11,7 +12,6 @@ import { IServerConfigRepository } from '@/infrastructure/repositories/interface
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getUserUseCase } from '@/usecases/users/get-user';
-import { validateUser } from '@/app/utils/authentication';
 
 const userRepo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(

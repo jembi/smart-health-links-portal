@@ -1,6 +1,8 @@
+import { NextResponse } from "next/server";
+
 import { NOT_FOUND } from "@/app/constants/http-constants";
-import { handleApiValidationError } from "@/app/utils/error-handler";
 import { validateUser } from "@/app/utils/authentication";
+import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkRepositoryToken } from "@/container";
 import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
@@ -13,7 +15,6 @@ import {
 } from "@/mappers/shlink-mapper";
 import { addShlinkUseCase } from "@/usecases/shlinks/add-shlink";
 import { getSHLinkUseCase } from "@/usecases/shlinks/get-shlink";
-import { NextResponse } from "next/server";
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 

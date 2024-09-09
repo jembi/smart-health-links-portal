@@ -1,9 +1,6 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthOptions } from "next-auth";
+import KeycloakProvider from "next-auth/providers/keycloak";
 
-import { authOptions } from '../authOptions';
-
-<<<<<<< HEAD
-=======
 export const authOptions: AuthOptions = {
   providers: [
     KeycloakProvider({
@@ -28,7 +25,6 @@ export const authOptions: AuthOptions = {
     }
   }
 };
->>>>>>> 1276d6f (Added middleware to handle api authentication. Updated unit tests. Updated jest config file.)
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

@@ -4,9 +4,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-import { mapModelToDto } from '@/mappers/shlink-mapper';
 import { getUserProfile } from '@/app/utils/authentication';
+import { mapModelToDto } from '@/mappers/shlink-mapper';
 import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
+
 import { GET } from './route';
 
 jest.mock('@/usecases/shlinks/deactivate-shlink', () => ({

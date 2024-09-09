@@ -2,13 +2,13 @@
  * @jest-environment node
  */
 
-import { validateUser } from '@/app/utils/authentication';
-import { NOT_FOUND } from '@/app/constants/http-constants';
 import { NextRequest, NextResponse } from 'next/server';
-import { mapModelToDto } from '@/mappers/user-mapper';
-import { handleApiValidationError } from '@/app/utils/error-handler';
 
 import { GET } from '@/app/api/v1/users/[id]/route';
+import { NOT_FOUND } from '@/app/constants/http-constants';
+import { validateUser } from '@/app/utils/authentication';
+import { handleApiValidationError } from '@/app/utils/error-handler';
+import { mapModelToDto } from '@/mappers/user-mapper';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
 jest.mock('@/usecases/users/get-user', () => ({
