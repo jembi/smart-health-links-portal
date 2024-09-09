@@ -8,8 +8,9 @@ import { useState } from 'react';
 import Patient from './resources/Patient/Patient';
 import { extractResourceInfo } from '@/app/utils/helpers';
 import { ResourceType } from '../types/resources.types';
+import Organization from './resources/Organization/Organization';
 
-const COMPONENT_MAP = { Patient: Patient };
+const COMPONENT_MAP = { Patient, Organization };
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
