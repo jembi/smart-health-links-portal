@@ -1,10 +1,16 @@
-import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
-import InfoRow from '../../InfoRow';
-import ConnectionDetails from '../Patient/ConnectionDetails';
-import { Organization as OrganizationType } from '@/app/patient-summary/types/resources/organisation.types';
 import React from 'react';
 
-export default function Organization({ data }: { data: OrganizationType[] }) {
+import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
+import { IResourceType } from '@/types/fhir.types';
+
+import InfoRow from '../../InfoRow';
+import ConnectionDetails from '../Patient/ConnectionDetails';
+
+export default function Organization({
+  data,
+}: {
+  data: IResourceType['Organization'][];
+}) {
   return data.map((organizationInfo, index) => (
     <React.Fragment key={index}>
       <StyledSectionTypography key={index}>

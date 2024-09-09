@@ -1,5 +1,5 @@
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { Qualification } from '@/app/patient-summary/types/extensions/qualification.types';
+import { IResourceType } from '@/types/fhir.types';
 import {
   Paper,
   Table,
@@ -13,7 +13,7 @@ import {
 export default function QualificationDetails({
   qualificationDetails,
 }: {
-  qualificationDetails: Qualification[];
+  qualificationDetails: IResourceType['Practitioner'];
 }) {
   return (
     <>

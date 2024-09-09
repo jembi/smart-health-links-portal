@@ -1,90 +1,94 @@
-import { BaseModel } from "./base-model";
 import z from 'zod';
 
-export class SHLinkModel extends BaseModel{
-    
-    constructor(private userId: string,
-        private name: string, 
-        private passcodeFailuresRemaining?: number, 
-        private active?: boolean, 
-        private managementToken?: string, 
-        private configPasscode?: string, 
-        private configExp?: Date, 
-        private id?: string){
-        super(z.object({
-            userId: z.string().min(10),
-            passcodeFailuresRemaining: z.number().default(5).optional(),
-            active: z.boolean().optional(),
-            managementToken: z.string().min(10).optional(),
-            configPasscode: z.string().min(4).optional().nullable(),
-            configExp: z.date().optional().nullable(),
-            id: z.string().optional(),
-            name: z.string().default('unnamed shlink')
-        }));
-        this.validate();
-    }
+import { BaseModel } from './base-model';
 
-    getName(): string {
-        return this.name;
-    }
+export class SHLinkModel extends BaseModel {
+  constructor(
+    private userId: string,
+    private name: string,
+    private passcodeFailuresRemaining?: number,
+    private active?: boolean,
+    private managementToken?: string,
+    private configPasscode?: string,
+    private configExp?: Date,
+    private id?: string,
+  ) {
+    super(
+      z.object({
+        userId: z.string().min(10),
+        passcodeFailuresRemaining: z.number().default(5).optional(),
+        active: z.boolean().optional(),
+        managementToken: z.string().min(10).optional(),
+        configPasscode: z.string().min(4).optional().nullable(),
+        configExp: z.date().optional().nullable(),
+        id: z.string().optional(),
+        name: z.string().default('unnamed shlink'),
+      }),
+    );
+    this.validate();
+  }
 
-    setName(name: string): void {
-        this.name = name;
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    getId(): string | undefined{
-        return this.id;
-    }
+  setName(name: string): void {
+    this.name = name;
+  }
 
-    setId(id: string): void {
-        this.id = id;
-    }
+  getId(): string | undefined {
+    return this.id;
+  }
 
-    getPasscodeFailuresRemaining(): number {
-        return this.passcodeFailuresRemaining;
-    }
+  setId(id: string): void {
+    this.id = id;
+  }
 
-    setPasscodeFailuresRemaining(passcodeFailuresRemaining: number): void {
-        this.passcodeFailuresRemaining  = passcodeFailuresRemaining
-    }
+  getPasscodeFailuresRemaining(): number {
+    return this.passcodeFailuresRemaining;
+  }
 
-    getConfigPasscode(): string | undefined {
-        return this.configPasscode;
-    }
+  setPasscodeFailuresRemaining(passcodeFailuresRemaining: number): void {
+    this.passcodeFailuresRemaining = passcodeFailuresRemaining;
+  }
 
-    setConfigPasscode(configPasscode: string | undefined): void {
-        this.configPasscode  = configPasscode
-    }
+  getConfigPasscode(): string | undefined {
+    return this.configPasscode;
+  }
 
-    getConfigExp(): Date | undefined {
-        return this.configExp;
-    }
+  setConfigPasscode(configPasscode: string | undefined): void {
+    this.configPasscode = configPasscode;
+  }
 
-    setConfigExp(configExp: Date | undefined): void {
-        this.configExp  = configExp
-    }
+  getConfigExp(): Date | undefined {
+    return this.configExp;
+  }
 
-    getActive(): boolean {
-        return this.active;
-    }
+  setConfigExp(configExp: Date | undefined): void {
+    this.configExp = configExp;
+  }
 
-    setActive(active: boolean): void {
-        this.active  = active
-    }
+  getActive(): boolean {
+    return this.active;
+  }
 
-    getManagementToken(): string {
-        return this.managementToken;
-    }
+  setActive(active: boolean): void {
+    this.active = active;
+  }
 
-    setManagementToken(managementToken: string): void {
-        this.managementToken  = managementToken
-    }
+  getManagementToken(): string {
+    return this.managementToken;
+  }
 
-    getUserId(): string {
-        return this.userId;
-    }
+  setManagementToken(managementToken: string): void {
+    this.managementToken = managementToken;
+  }
 
-    setUserId(userId: string): void {
-        this.userId  = userId
-    }
+  getUserId(): string {
+    return this.userId;
+  }
+
+  setUserId(userId: string): void {
+    this.userId = userId;
+  }
 }

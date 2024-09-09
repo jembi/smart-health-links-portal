@@ -3,14 +3,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import { POST, GET } from '@/app/api/v1/server-configs/route';
-import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
-import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   CreateServerConfigDto,
   ServerConfigDto,
 } from '@/domain/dtos/server-config';
+import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
+import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
 
 jest.mock('@/usecases/server-configs/add-server-config', () => ({

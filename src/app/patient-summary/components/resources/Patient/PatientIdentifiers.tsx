@@ -1,4 +1,3 @@
-import { ArrayCaption } from "@/app/components/typography/ArrayCaption";
 import {
   Paper,
   Table,
@@ -7,7 +6,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@mui/material";
+} from '@mui/material';
+
+import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
 
 export default function PatientIdentifiers({ patientInfo }) {
   const identifierRows = patientInfo.identifier.map((patientIdentifier) => {
