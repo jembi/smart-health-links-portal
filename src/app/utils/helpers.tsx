@@ -1,15 +1,11 @@
-import {
-  ResourceType,
-  ResourceMap,
-} from "../patient-summary/types/resources.types";
+import { TType, TBundle, IDynamicProps } from '../../types/fhir.types';
 
-export const extractResourceInfo = <T extends ResourceType>(
-  resourceType: T,
-  data: any
-): T extends keyof ResourceMap ? ResourceMap[T] : undefined => {
-  const resource = data.entry?.find(
-    (entry: any) => entry.resource.resourceType === resourceType
-  )?.resource;
-
-  return resource;
-};
+export const extractResourceInfo = <
+  TResource extends IDynamicProps['resource'],
+>(
+  resourceType: TResource,
+  bundle: TBundle,
+) =>
+  bundle.entry
+    ?.filter(({ resource }) => resource.resourceType === resourceType)
+    .map(({ resource }) => resource) as TType<TResource>[];

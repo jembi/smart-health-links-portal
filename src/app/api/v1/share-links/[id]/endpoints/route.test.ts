@@ -2,15 +2,20 @@
  * @jest-environment node
  */
 
-import { POST } from './route';
 import { NextRequest, NextResponse } from 'next/server';
-import { handleApiValidationError } from '@/app/utils/error-handler';
-import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
-import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
-import { mapModelToDto as mapModelToDtoShlinkMapper } from '@/mappers/shlink-mapper';
-import { mapDtoToModel, mapModelToDto as mapModelToDtoEndpoint } from '@/mappers/shlink-endpoint-mapper';
+
 import { NOT_FOUND } from '@/app/constants/http-constants';
+import { handleApiValidationError } from '@/app/utils/error-handler';
+import {
+  mapDtoToModel,
+  mapModelToDto as mapModelToDtoEndpoint,
+} from '@/mappers/shlink-endpoint-mapper';
+import { mapModelToDto as mapModelToDtoShlinkMapper } from '@/mappers/shlink-mapper';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
+import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
+import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
+
+import { POST } from './route';
 
 // Mock dependencies
 jest.mock('@/app/utils/error-handler');
@@ -52,7 +57,7 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
     getRefreshTime: jest.fn().mockReturnValue(undefined),
     getAccessTokenResponse: jest.fn().mockReturnValue(undefined),
     getTokenEndpoint: jest.fn().mockReturnValue('dto-endpoint-url'),
-};
+  };
 
   const mockEndpointDto = {
     shlinkId: mockShlinkId,
@@ -77,12 +82,17 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
     (mapDtoToModel as jest.Mock).mockReturnValue(mockEndpointModel);
     (addEndpointUseCase as jest.Mock).mockResolvedValue(mockEndpointModel);
     (mapModelToDtoEndpoint as jest.Mock).mockReturnValue(mockEndpointDto);
-    (getServerConfigsUseCase as jest.Mock).mockResolvedValue([mockServerConfig]);
+    (getServerConfigsUseCase as jest.Mock).mockResolvedValue([
+      mockServerConfig,
+    ]);
 
-    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/shlink-12345/endpoint', {
-      method: 'POST',
-      body: JSON.stringify(mockRequestBody),
-    });
+    const mockRequest = new NextRequest(
+      'http://localhost/api/v1/share-link/shlink-12345/endpoint',
+      {
+        method: 'POST',
+        body: JSON.stringify(mockRequestBody),
+      },
+    );
 
     const response = await POST(mockRequest, { params: { id: mockShlinkId } });
 
@@ -96,12 +106,17 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
   it('should return 404 if the shlink is not found', async () => {
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(null);
 
-    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/non-existing-id/endpoint', {
-      method: 'POST',
-      body: JSON.stringify(mockRequestBody),
-    });
+    const mockRequest = new NextRequest(
+      'http://localhost/api/v1/share-link/non-existing-id/endpoint',
+      {
+        method: 'POST',
+        body: JSON.stringify(mockRequestBody),
+      },
+    );
 
-    const response = await POST(mockRequest, { params: { id: 'non-existing-id' } });
+    const response = await POST(mockRequest, {
+      params: { id: 'non-existing-id' },
+    });
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(404);
@@ -116,13 +131,16 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
       throw mockError;
     });
     (handleApiValidationError as jest.Mock).mockImplementation(() =>
-      NextResponse.json({ message: 'Validation failed' }, { status: 400 })
+      NextResponse.json({ message: 'Validation failed' }, { status: 400 }),
     );
 
-    const mockRequest = new NextRequest('http://localhost/api/v1/share-link/shlink-12345/endpoint', {
-      method: 'POST',
-      body: JSON.stringify(mockRequestBody),
-    });
+    const mockRequest = new NextRequest(
+      'http://localhost/api/v1/share-link/shlink-12345/endpoint',
+      {
+        method: 'POST',
+        body: JSON.stringify(mockRequestBody),
+      },
+    );
 
     const response = await POST(mockRequest, { params: { id: mockShlinkId } });
 

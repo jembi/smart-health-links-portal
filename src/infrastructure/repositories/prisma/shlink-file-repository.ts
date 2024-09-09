@@ -1,6 +1,8 @@
-import { SHLinkFileEntity } from '@/entities/shlink-file';
-import { BasePrismaRepository } from './base-repository';
 import { PrismaClient } from '@prisma/client';
+
+import { SHLinkFileEntity } from '@/entities/shlink-file';
+
+import { BasePrismaRepository } from './base-repository';
 import { ISHLinkFileRepository } from '../interfaces/shlink-file-repository';
 
 export class SHLinkFilePrismaRepository

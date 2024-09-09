@@ -3,10 +3,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import { GET } from '@/app/api/v1/users/[id]/route'; // Import your API route handler
-import { getUserUseCase } from '@/usecases/users/get-user';
-import { mapModelToDto } from '@/mappers/user-mapper';
 import { NOT_FOUND } from '@/app/constants/http-constants';
+import { mapModelToDto } from '@/mappers/user-mapper';
+import { getUserUseCase } from '@/usecases/users/get-user';
 
 jest.mock('@/usecases/users/get-user', () => ({
   getUserUseCase: jest.fn(),

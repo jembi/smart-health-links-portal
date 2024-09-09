@@ -3,6 +3,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import { GET } from './route'; // Import your API route handler
 
 // Mock the NextRequest object (optional, but useful for more complex tests)
