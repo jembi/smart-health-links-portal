@@ -1,3 +1,4 @@
+import { Practitioner } from './resources/practitioner.types';
 import { Patient } from './patient.types';
 import { Condition } from './resources/condition.types';
 import { Organization } from './resources/organisation.types';
@@ -8,6 +9,7 @@ export enum ResourceType {
   Organization = 'Organization',
   AllergyIntolerance = 'AllergyIntolerance',
   Condition = 'Condition',
+  Practitioner = 'Practitioner',
 }
 
 export interface ResourceMap {

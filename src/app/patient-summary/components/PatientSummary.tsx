@@ -10,8 +10,9 @@ import { extractResourceInfo } from '@/app/utils/helpers';
 import { ResourceType } from '../types/resources.types';
 import Organization from './resources/Organization/Organization';
 import Condition from './resources/Condition/Condition';
+import Practitioner from './resources/Practitioner/Practitioner';
 
-const COMPONENT_MAP = { Patient, Organization, Condition };
+const COMPONENT_MAP = { Patient, Organization, Condition, Practitioner };
 
 export default function PatientSummary({ fhirBundle }) {
   const dataTabs: string[] = Array.from(
