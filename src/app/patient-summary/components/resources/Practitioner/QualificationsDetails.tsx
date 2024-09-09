@@ -1,5 +1,3 @@
-import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { IResourceType } from '@/types/fhir.types';
 import {
   Paper,
   Table,
@@ -10,10 +8,13 @@ import {
   TableRow,
 } from '@mui/material';
 
+import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
+import { IResourceType } from '@/types/fhir.types';
+
 export default function QualificationDetails({
   qualificationDetails,
 }: {
-  qualificationDetails: IResourceType['Practitioner'];
+  qualificationDetails: IResourceType['CodeableConcept'][];
 }) {
   return (
     <>
@@ -28,16 +29,16 @@ export default function QualificationDetails({
           </TableHead>
           <TableBody>
             {qualificationDetails.map((qualificationDetail, index) => {
-              const qualificationDetailCodes = qualificationDetail.code?.coding;
+              const qualificationDetailCodes = qualificationDetail?.coding;
               return (
                 <TableRow key={index}>
                   <TableCell>
-                    {qualificationDetailCodes.map(
+                    {qualificationDetailCodes?.map(
                       (coding) => `${coding?.code} (${coding?.display})`,
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    {qualificationDetailCodes.map((coding) => coding?.system)}
+                    {qualificationDetailCodes?.map((coding) => coding?.system)}
                   </TableCell>
                 </TableRow>
               );
