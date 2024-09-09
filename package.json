@@ -19,6 +19,7 @@
     "@mui/icons-material": "^5.16.6",
     "@mui/material": "^5.16.6",
     "@mui/material-nextjs": "^5.16.6",
+    "@types/fhir": "^0.0.41",
     "axios": "^1.7.5",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
