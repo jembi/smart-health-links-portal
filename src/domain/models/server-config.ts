@@ -1,5 +1,6 @@
-import { BaseModel } from './base-model';
 import z from 'zod';
+
+import { BaseModel } from './base-model';
 
 const urlRegex = /^(https?:\/\/)[^\s$.?#].[^\s]*$/i;
 const urlErrorMessage = 'Invalid URL. URL must start with http:// or https://';

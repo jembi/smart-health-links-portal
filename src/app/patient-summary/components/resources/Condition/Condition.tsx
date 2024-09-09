@@ -1,9 +1,16 @@
-import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import React from 'react';
-import InfoRow from '../../InfoRow';
-import { Condition as ConditionType } from '@/app/patient-summary/types/resources/condition.types';
+
+import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
+import { IResourceType } from '@/types/fhir.types';
+
 import ConditionDetails from './ConditionDetails';
-export default function Condition({ data }: { data: ConditionType[] }) {
+import InfoRow from '../../InfoRow';
+
+export default function Condition({
+  data,
+}: {
+  data: IResourceType['Condition'][];
+}) {
   return data.map((conditionInfo, index) => (
     <React.Fragment key={index}>
       <StyledSectionTypography key={index}>

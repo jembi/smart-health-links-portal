@@ -1,30 +1,37 @@
 'use client';
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import TabPanel from './TabPanel';
-import { useState } from 'react';
-import Patient from './resources/Patient/Patient';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import * as React from 'react';
+import { ElementType, useState } from 'react';
+
 import { extractResourceInfo } from '@/app/utils/helpers';
-import { ResourceType } from '../types/resources.types';
-import Organization from './resources/Organization/Organization';
+
 import Condition from './resources/Condition/Condition';
+import Organization from './resources/Organization/Organization';
+import Patient from './resources/Patient/Patient';
+import TabPanel from './TabPanel';
+import { IResourceType, TBundle } from '../../../types/fhir.types';
 
-const COMPONENT_MAP = { Patient, Organization, Condition };
+const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {
+  Patient,
+  Organization,
+  Condition,
+};
 
-export default function PatientSummary({ fhirBundle }) {
+export default function PatientSummary({
+  fhirBundle,
+}: {
+  fhirBundle: TBundle;
+}) {
   const dataTabs: string[] = Array.from(
     new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
   );
-  const [selectedTab, setSelectedTab] = useState(dataTabs[0] || '');
+  const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>
-    dataTabs.map((resourceType) => {
+    dataTabs.map((resourceType: keyof IResourceType) => {
       const DynamicComponent = COMPONENT_MAP[resourceType];
-      const resourceInfo = extractResourceInfo(
-        ResourceType[resourceType],
-        fhirBundle,
-      );
+      const resourceInfo = extractResourceInfo(resourceType, fhirBundle);
       return (
         <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
           {DynamicComponent && <DynamicComponent data={resourceInfo} />}

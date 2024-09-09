@@ -1,9 +1,10 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+
+import { BaseEntity } from '@/entities/base-entity';
 import {
   IRepository,
   QueryFilter,
 } from '@/infrastructure/repositories/interfaces/repository.interface';
-import { BaseEntity } from '@/entities/base-entity';
 
 const getPrismaFilters = (filters?: QueryFilter) => {
   return filters as any;

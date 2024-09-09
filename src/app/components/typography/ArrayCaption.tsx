@@ -1,4 +1,4 @@
-import { StyledTableCaptionTypography } from "./StyledTypography";
+import { StyledTableCaptionTypography } from './StyledTypography';
 
 export const ArrayCaption = ({ caption }) => {
   return (

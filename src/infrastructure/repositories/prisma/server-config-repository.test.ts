@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+
 import { ServerConfigEntity } from '@/entities/server_config';
+
 import { ServerConfigPrismaRepository } from './server-config-repository';
 
 // Create a mock for PrismaClient

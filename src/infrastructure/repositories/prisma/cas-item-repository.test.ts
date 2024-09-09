@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+
 import { CasItemEntity } from '@/entities/cas-item';
+
 import { CasItemPrismaRepository } from './cas-item-repository';
 
 // Create a mock for PrismaClient

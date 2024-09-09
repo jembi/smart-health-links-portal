@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-import { SHLinkAccessPrismaRepository } from './shlink-access-repository';
+
 import { SHLinkAccessEntity } from '@/entities/shlink-access';
+
+import { SHLinkAccessPrismaRepository } from './shlink-access-repository';
 
 // Create a mock for PrismaClient
 const prismaMock = {

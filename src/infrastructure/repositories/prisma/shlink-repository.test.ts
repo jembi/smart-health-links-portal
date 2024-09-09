@@ -1,5 +1,7 @@
-import { SHLinkEntity } from '@/entities/shlink';
 import { PrismaClient } from '@prisma/client';
+
+import { SHLinkEntity } from '@/entities/shlink';
+
 import { SHLinkPrismaRepository } from './shlink-repository';
 
 // Create a mock for PrismaClient

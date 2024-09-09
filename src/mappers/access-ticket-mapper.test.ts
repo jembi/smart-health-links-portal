@@ -1,9 +1,9 @@
-import { AccessTicketModel } from "@/domain/models/access-ticket";
-import { AccessTicketEntity } from "@/entities/access-ticket";
-import { mapEntityToModel, mapModelToEntity } from "./access-ticket-mapper";
+import { AccessTicketModel } from '@/domain/models/access-ticket';
+import { AccessTicketEntity } from '@/entities/access-ticket';
+
+import { mapEntityToModel, mapModelToEntity } from './access-ticket-mapper';
 
 describe('Mapping functions', () => {
-  
   describe('mapEntityToModel', () => {
     it('should map a valid AccessTicketEntity to AccessTicketModel', () => {
       const entity: AccessTicketEntity = {

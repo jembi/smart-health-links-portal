@@ -1,12 +1,13 @@
 import { UserDto } from '@/domain/dtos/user';
+import { UserModel } from '@/domain/models/user';
 import { UserEntity } from '@/entities/user';
+
 import {
   mapEntityToModel,
   mapModelToEntity,
   mapModelToDto,
   mapDtoToModel,
 } from './user-mapper';
-import { UserModel } from '@/domain/models/user';
 
 describe('User Mappers', () => {
   const userEntity: UserEntity = {
