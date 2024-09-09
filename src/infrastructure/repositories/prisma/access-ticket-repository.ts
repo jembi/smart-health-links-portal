@@ -1,6 +1,8 @@
-import { BasePrismaRepository } from './base-repository';
 import { PrismaClient } from '@prisma/client';
+
 import { AccessTicketEntity } from '@/entities/access-ticket';
+
+import { BasePrismaRepository } from './base-repository';
 import { IAccessTicketRepository } from '../interfaces/access-ticket-repository.interface';
 
 export class AccessTicketPrismaRepository

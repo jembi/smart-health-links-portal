@@ -1,4 +1,3 @@
-import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
 import {
   TableContainer,
   Paper,
@@ -8,6 +7,8 @@ import {
   TableCell,
   TableBody,
 } from '@mui/material';
+
+import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
 
 export default function ConnectionDetails({ resourceInfo }) {
   const addressRows = resourceInfo?.address?.map((addressInfo) => {

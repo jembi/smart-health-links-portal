@@ -1,8 +1,11 @@
-import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import React from 'react';
-import InfoRow from '../../InfoRow';
-import ConditionDetails from './ConditionDetails';
+
+import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import { IResourceType } from '@/types/fhir.types';
+
+import ConditionDetails from './ConditionDetails';
+import InfoRow from '../../InfoRow';
+
 export default function Condition({
   data,
 }: {

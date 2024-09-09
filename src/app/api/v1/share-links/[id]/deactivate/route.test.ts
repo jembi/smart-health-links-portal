@@ -3,9 +3,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { GET } from './route';
-import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
+
 import { mapModelToDto } from '@/mappers/shlink-mapper';
+import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
+
+import { GET } from './route';
 
 jest.mock('@/usecases/shlinks/deactivate-shlink', () => ({
   deactivateSHLinksUseCase: jest.fn(),
@@ -20,7 +22,7 @@ jest.mock('@/app/utils/error-handler', () => ({
 }));
 
 describe('GET /api/v1/share-link/[id]/deactivate', () => {
-  const mockId:string = '1';
+  const mockId: string = '1';
 
   const mockModel = {
     getId: jest.fn().mockReturnValue('1'),
@@ -49,13 +51,13 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
     active: false,
     managementToken: 'token-xyzabcde',
     configPasscode: 'passcode-abcde',
-    configExp: '2024-01-01T00:00:00Z'
+    configExp: '2024-01-01T00:00:00Z',
   };
 
-  const mockRequest = () => new NextRequest(
-    'http://localhost/api/share-link/1/deactivate', {
-    method: 'GET'
-  });
+  const mockRequest = () =>
+    new NextRequest('http://localhost/api/share-link/1/deactivate', {
+      method: 'GET',
+    });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -66,7 +68,7 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
     (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
     const request = mockRequest();
-    const response = await GET(request, {params: {id: mockId}});
+    const response = await GET(request, { params: { id: mockId } });
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(200);
@@ -74,6 +76,4 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
     const json = await response.json();
     expect(json).toEqual(mockResult);
   });
-
-  
 });

@@ -1,12 +1,12 @@
-import { NOT_FOUND } from "@/app/constants/http-constants";
-import { container, UserRepositoryToken } from "@/container";
-import { IUserRepository } from "@/infrastructure/repositories/interfaces/user-repository";
-import { mapModelToDto } from "@/mappers/user-mapper";
-import { getUserUseCase } from "@/usecases/users/get-user";
+import { NextResponse } from 'next/server';
+
+import { NOT_FOUND } from '@/app/constants/http-constants';
+import { container, UserRepositoryToken } from '@/container';
+import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { mapModelToDto } from '@/mappers/user-mapper';
+import { getUserUseCase } from '@/usecases/users/get-user';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
-
-import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,

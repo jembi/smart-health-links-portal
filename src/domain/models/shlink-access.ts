@@ -1,5 +1,6 @@
-import { BaseModel } from './base-model';
 import z from 'zod';
+
+import { BaseModel } from './base-model';
 
 export class SHLinkAccessModel extends BaseModel {
   constructor(
@@ -13,7 +14,7 @@ export class SHLinkAccessModel extends BaseModel {
         shlinkId: z.string().min(1),
         id: z.string().optional(),
         access_time: z.date().default(new Date()),
-        recipient: z.string().min(1)
+        recipient: z.string().min(1),
       }),
     );
     this.validate();

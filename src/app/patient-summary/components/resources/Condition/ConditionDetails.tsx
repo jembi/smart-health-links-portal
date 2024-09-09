@@ -1,5 +1,3 @@
-import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { IResourceType } from '@/types/fhir.types';
 import {
   Paper,
   Table,
@@ -9,6 +7,9 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+
+import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
+import { IResourceType } from '@/types/fhir.types';
 
 export default function ConditionDetails({
   conditionDetails,

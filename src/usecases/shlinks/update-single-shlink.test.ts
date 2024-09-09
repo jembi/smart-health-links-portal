@@ -1,8 +1,9 @@
-import { updateSingleSHLinkUseCase } from './update-single-shlink';
 import { SHLinkModel } from '@/domain/models/shlink';
 import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { mapEntityToModel } from '@/mappers/shlink-mapper';
+
+import { updateSingleSHLinkUseCase } from './update-single-shlink';
 
 // Mock the repository and mapper
 jest.mock('@/mappers/shlink-mapper', () => ({
@@ -17,13 +18,13 @@ describe('updateSingleSHLinkUseCase', () => {
   beforeEach(() => {
     // Setup mock data
     const mockDto = {
-      userId: "1234567890",
-      name:"shlink",
+      userId: '1234567890',
+      name: 'shlink',
       passcodeFailuresRemaining: 3,
       active: true,
-      managementToken: "token-xyz1234",
-      configPasscode: "passcode-abcde",
-      configExp: new Date("2024-01-01T00:00:00Z"),
+      managementToken: 'token-xyz1234',
+      configPasscode: 'passcode-abcde',
+      configExp: new Date('2024-01-01T00:00:00Z'),
     };
 
     mockSHLinkModel = new SHLinkModel(
@@ -34,12 +35,12 @@ describe('updateSingleSHLinkUseCase', () => {
       mockDto.managementToken,
       mockDto.configPasscode,
       mockDto.configExp,
-      "1"
+      '1',
     );
 
     mockSHLinkEntity = {
-      id: "1",
-      name:mockDto.name,
+      id: '1',
+      name: mockDto.name,
       user_id: mockDto.userId,
       passcode_failures_remaining: mockDto.passcodeFailuresRemaining,
       active: mockDto.active,
@@ -58,7 +59,7 @@ describe('updateSingleSHLinkUseCase', () => {
     const updatedSHLinkEntity: SHLinkEntity = {
       ...mockSHLinkEntity,
       config_passcode: 'new-passcode',
-      config_exp: new Date("2024-01-01T00:00:00Z"),
+      config_exp: new Date('2024-01-01T00:00:00Z'),
     };
 
     // Mock repository behavior
@@ -69,7 +70,11 @@ describe('updateSingleSHLinkUseCase', () => {
     // Call the use case
     const result = await updateSingleSHLinkUseCase(
       { repo: mockRepo, validator: jest.fn().mockResolvedValue(true) }, // Mock validator
-      { id: '1', passcode: 'new-passcode', expiryDate: new Date("2024-01-01T00:00:00Z") }
+      {
+        id: '1',
+        passcode: 'new-passcode',
+        expiryDate: new Date('2024-01-01T00:00:00Z'),
+      },
     );
 
     // Verify repository interactions
@@ -77,7 +82,7 @@ describe('updateSingleSHLinkUseCase', () => {
     expect(mockRepo.update).toHaveBeenCalledWith({
       ...mockSHLinkEntity,
       config_passcode: 'new-passcode',
-      config_exp: new Date("2024-01-01T00:00:00Z"),
+      config_exp: new Date('2024-01-01T00:00:00Z'),
     });
 
     // Verify mapper and result
@@ -94,7 +99,7 @@ describe('updateSingleSHLinkUseCase', () => {
       mockSHLinkModel.getManagementToken(),
       undefined, // No configPasscode
       undefined, // No configExp
-      "1"
+      '1',
     );
 
     const entityWithoutConfig: SHLinkEntity = {
@@ -106,12 +111,14 @@ describe('updateSingleSHLinkUseCase', () => {
     // Mock repository behavior
     mockRepo.findOne.mockResolvedValue(mockSHLinkEntity);
     mockRepo.update.mockResolvedValue(entityWithoutConfig);
-    (mapEntityToModel as jest.Mock).mockReturnValue(mockSHLinkModelWithoutFields);
+    (mapEntityToModel as jest.Mock).mockReturnValue(
+      mockSHLinkModelWithoutFields,
+    );
 
     // Call the use case
     const result = await updateSingleSHLinkUseCase(
       { repo: mockRepo, validator: jest.fn().mockResolvedValue(true) }, // Mock validator
-      { id: '1' } // No passcode or expiryDate provided
+      { id: '1' }, // No passcode or expiryDate provided
     );
 
     // Verify repository interactions
@@ -133,10 +140,13 @@ describe('updateSingleSHLinkUseCase', () => {
     // Call the use case
     await updateSingleSHLinkUseCase(
       { repo: mockRepo, validator: mockValidator },
-      { id: '1', passcode: 'new-passcode' }
+      { id: '1', passcode: 'new-passcode' },
     );
 
     // Verify validator call
-    expect(mockValidator).toHaveBeenCalledWith({ shlink: mockSHLinkModel, passcode: 'new-passcode' });
+    expect(mockValidator).toHaveBeenCalledWith({
+      shlink: mockSHLinkModel,
+      passcode: 'new-passcode',
+    });
   });
 });

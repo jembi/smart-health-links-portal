@@ -1,52 +1,54 @@
-import { BaseModel } from "./base-model";
 import z from 'zod';
 
-export class SHLinkEndpointModel extends BaseModel{
-    
-    constructor(private shlinkId: string, 
-        private serverConfigId: string, 
-        private urlPath: string,
-        private id?: string){
-        super(z.object({
-            shlinkId: z.string(),
-            serverConfigId: z.string(),
-            urlPath: z.string(),
-            id: z.string().optional()
-        }));
-        this.validate();
-    }
+import { BaseModel } from './base-model';
 
-    getId(): string | undefined{
-        return this.id;
-    }
+export class SHLinkEndpointModel extends BaseModel {
+  constructor(
+    private shlinkId: string,
+    private serverConfigId: string,
+    private urlPath: string,
+    private id?: string,
+  ) {
+    super(
+      z.object({
+        shlinkId: z.string(),
+        serverConfigId: z.string(),
+        urlPath: z.string(),
+        id: z.string().optional(),
+      }),
+    );
+    this.validate();
+  }
 
-    setId(id: string): void {
-        this.id = id;
-    }
+  getId(): string | undefined {
+    return this.id;
+  }
 
-    getShlinkId(): string {
-        return this.shlinkId;
-    }
+  setId(id: string): void {
+    this.id = id;
+  }
 
-    setShlinkId(shlinkId: string): void {
-        this.shlinkId  = shlinkId
-    }
+  getShlinkId(): string {
+    return this.shlinkId;
+  }
 
-    getServerConfigId(): string {
-        return this.serverConfigId;
-    }
+  setShlinkId(shlinkId: string): void {
+    this.shlinkId = shlinkId;
+  }
 
-    setServerConfigId(serverConfigId: string): void {
-        this.serverConfigId  = serverConfigId
-    }
+  getServerConfigId(): string {
+    return this.serverConfigId;
+  }
 
-    getUrlPath(): string {
-        return this.urlPath;
-    }
+  setServerConfigId(serverConfigId: string): void {
+    this.serverConfigId = serverConfigId;
+  }
 
-    setUrlPath(urlPath: string): void {
-        this.urlPath  = urlPath
-    }
+  getUrlPath(): string {
+    return this.urlPath;
+  }
 
-    
+  setUrlPath(urlPath: string): void {
+    this.urlPath = urlPath;
+  }
 }
