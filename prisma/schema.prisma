@@ -44,7 +44,7 @@ model shlink_access {
 model shlink {
     id                         String           @id @unique @default(cuid()) @db.VarChar(43)
     passcode_failures_remaining Int             @default(5)
-    config_passcode            String?
+    config_passcode            String?          /// @encrypted
     config_exp                 DateTime?
     active                     Boolean          @default(true)
     management_token           String           @db.VarChar(43) @unique @default(cuid())
@@ -77,7 +77,7 @@ model server_config {
     endpoint_url          String
     config_key            String?  @db.VarChar(43)
     config_client_id      String?
-    config_client_secret  String?
+    config_client_secret  String?   /// @encrypted
     config_token_endpoint String?
     config_refresh_token  String?
     refresh_time          DateTime @default(now())
