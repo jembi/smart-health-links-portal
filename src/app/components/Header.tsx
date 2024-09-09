@@ -6,7 +6,7 @@ import { Box, Grid, MenuItem } from "@mui/material";
 import NextLink from "next/link";
 import Logout from "./Logout";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/authOptions";
 import Login from "./Login";
 
 export default async function Header() {
