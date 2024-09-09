@@ -12,11 +12,13 @@ import Organization from './resources/Organization/Organization';
 import Patient from './resources/Patient/Patient';
 import TabPanel from './TabPanel';
 import { IResourceType, TBundle } from '../../../types/fhir.types';
+import Practitioner from './resources/Practitioner/Practitioner';
 
 const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {
   Patient,
   Organization,
   Condition,
+  Practitioner,
 };
 
 export default function PatientSummary({
