@@ -1,5 +1,5 @@
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { IResourceType } from '@/app/patient-summary/types/fhir.types';
+import { IResourceType } from '@/types/fhir.types';
 import {
   Paper,
   Table,

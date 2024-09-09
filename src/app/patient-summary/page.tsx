@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
 import PatientSummary from './components/PatientSummary';
 import fhirBundleJson from './sample/bundle.json';
-import { TBundle } from './types/fhir.types';
+import { TBundle } from '../../types/fhir.types';
 
 export default function PatientSummaryPage() {
   return (

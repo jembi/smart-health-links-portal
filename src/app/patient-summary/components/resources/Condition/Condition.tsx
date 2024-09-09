@@ -2,7 +2,7 @@ import { StyledSectionTypography } from '@/app/components/typography/StyledTypog
 import React from 'react';
 import InfoRow from '../../InfoRow';
 import ConditionDetails from './ConditionDetails';
-import { IResourceType } from '@/app/patient-summary/types/fhir.types';
+import { IResourceType } from '@/types/fhir.types';
 export default function Condition({
   data,
 }: {

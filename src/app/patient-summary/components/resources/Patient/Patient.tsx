@@ -3,7 +3,7 @@ import InfoRow from '../../InfoRow';
 import ConnectionDetails from './ConnectionDetails';
 import PatientIdentifiers from './PatientIdentifiers';
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
-import { IResourceType } from '@/app/patient-summary/types/fhir.types';
+import { IResourceType } from '@/types/fhir.types';
 export default function Patient({
   data,
 }: {

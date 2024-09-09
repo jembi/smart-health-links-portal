@@ -9,7 +9,7 @@ import Patient from './resources/Patient/Patient';
 import { extractResourceInfo } from '@/app/utils/helpers';
 import Organization from './resources/Organization/Organization';
 import Condition from './resources/Condition/Condition';
-import { IResourceType, TBundle } from '../types/fhir.types';
+import { IResourceType, TBundle } from '../../../types/fhir.types';
 
 const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {
   Patient,
