@@ -1,9 +1,12 @@
-import { SHLinkModel } from '@/domain/models/shlink';
-import { SHLinkEntity } from '@/entities/shlink';
-import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
-import { mapEntityToModel } from '@/mappers/shlink-mapper';
+/**
+ * @jest-environment node
+ */
 
-import { deactivateSHLinksUseCase } from './deactivate-shlink';
+import { deactivateSHLinksUseCase } from "./deactivate-shlink";
+import { SHLinkEntity } from "@/entities/shlink";
+import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
+import { SHLinkModel } from "@/domain/models/shlink";
+import { mapEntityToModel } from "@/mappers/shlink-mapper";
 
 // Mock the dependencies
 jest.mock('@/mappers/shlink-mapper', () => ({
@@ -62,20 +65,20 @@ describe('deactivateSHLinksUseCase', () => {
     (mapEntityToModel as jest.Mock).mockReturnValue(mockReturnedSHLinkModel);
   });
 
-  it("should call the repository's findById method with the correct id", async () => {
-    await deactivateSHLinksUseCase(mockContext, { id: mockId });
+    it("should call the repository's findById method with the correct id", async () => {
+        await deactivateSHLinksUseCase(mockContext, { id: mockId, user: { id: 'user-123567', name: '', email: ''} });
 
     expect(mockRepo.findById).toHaveBeenCalledWith(mockId);
   });
 
-  it('should deactivate the SHLinkEntity and update it in the repository', async () => {
-    await deactivateSHLinksUseCase(mockContext, { id: mockId });
+    it("should deactivate the SHLinkEntity and update it in the repository", async () => {
+        await deactivateSHLinksUseCase(mockContext, { id: mockId, user: { id: 'user-123567', name: '', email: ''}  });
 
     expect(mockRepo.update).toHaveBeenCalledWith(mockUpdatedSHLinkEntity);
   });
 
-  it('should map the updated SHLinkEntity back to SHLinkModel', async () => {
-    const result = await deactivateSHLinksUseCase(mockContext, { id: mockId });
+    it("should map the updated SHLinkEntity back to SHLinkModel", async () => {
+        const result = await deactivateSHLinksUseCase(mockContext, { id: mockId, user: { id: 'user-123567', name: '', email: ''}  });
 
     expect(mapEntityToModel).toHaveBeenCalledWith(mockUpdatedSHLinkEntity);
     expect(result).toBe(mockReturnedSHLinkModel);
@@ -85,10 +88,11 @@ describe('deactivateSHLinksUseCase', () => {
     const error = new Error('Test error');
     mockRepo.findById.mockRejectedValue(error);
 
-    await expect(
-      deactivateSHLinksUseCase(mockContext, { id: mockId }),
-    ).rejects.toThrow(error);
 
+
+    await expect(deactivateSHLinksUseCase(mockContext, { id: mockId, user: { id: 'user-123567', name: '', email: ''}  })).rejects
+    .toThrow(error);
+  
     expect(mockRepo.findById).toHaveBeenCalledWith(mockId);
   });
 });
