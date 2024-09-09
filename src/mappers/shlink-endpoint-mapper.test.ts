@@ -2,29 +2,33 @@ import { SHLinkEndpointDto } from '@/domain/dtos/shlink-endpoint';
 import { SHLinkEndpointModel } from '@/domain/models/shlink-endpoint';
 import { SHLinkEndpointEntity } from '@/entities/shlink-endpoint';
 
-import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel } from './shlink-endpoint-mapper';
+import {
+  mapEntityToModel,
+  mapModelToEntity,
+  mapModelToDto,
+  mapDtoToModel,
+} from './shlink-endpoint-mapper';
 
 describe('SHLinkEndpoint Mappers', () => {
-  
   const mockEntity: SHLinkEndpointEntity = {
     id: 'endpoint-123',
     shlink_id: 'shlink-456',
     server_config_id: 'config-789',
-    url_path: '/api/path'
+    url_path: '/api/path',
   };
 
   const mockModel = new SHLinkEndpointModel(
     'shlink-456',
     'config-789',
     '/api/path',
-    'endpoint-123'
+    'endpoint-123',
   );
 
   const mockDto: SHLinkEndpointDto = {
     id: 'endpoint-123',
     shlinkId: 'shlink-456',
     serverConfigId: 'config-789',
-    urlPath: '/api/path'
+    urlPath: '/api/path',
   };
 
   describe('mapEntityToModel', () => {

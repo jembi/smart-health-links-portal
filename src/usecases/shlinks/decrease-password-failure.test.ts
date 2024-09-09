@@ -1,14 +1,14 @@
 /**
  * @jest-environment node
  */
-import { SHLinkModel } from "@/domain/models/shlink";
-import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
-import { mapModelToEntity } from "@/mappers/shlink-mapper";
+import { SHLinkModel } from '@/domain/models/shlink';
+import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { mapModelToEntity } from '@/mappers/shlink-mapper';
 
-import { decreasePasswordFailureCountUseCase } from "./decrease-password-failure";
+import { decreasePasswordFailureCountUseCase } from './decrease-password-failure';
 
 // Mock dependencies
-jest.mock("@/mappers/shlink-mapper", () => ({
+jest.mock('@/mappers/shlink-mapper', () => ({
   mapModelToEntity: jest.fn(),
 }));
 
@@ -32,7 +32,12 @@ describe('decreasePasswordFailureCountUseCase', () => {
   it('should decrease passcode failure count and update the repository', async () => {
     const initialFailures = 5;
     const updatedFailures = initialFailures - 1;
-    const shlinkModel = new SHLinkModel('unique-user-123', 'name', initialFailures, true);
+    const shlinkModel = new SHLinkModel(
+      'unique-user-123',
+      'name',
+      initialFailures,
+      true,
+    );
     const entity = {
       passcode_failures_remaining: initialFailures,
     };
@@ -55,7 +60,12 @@ describe('decreasePasswordFailureCountUseCase', () => {
 
   it('should handle the case when passcode_failures_remaining is 0', async () => {
     const initialFailures = 0;
-    const shlinkModel = new SHLinkModel('unique-user-123','name', initialFailures, true);
+    const shlinkModel = new SHLinkModel(
+      'unique-user-123',
+      'name',
+      initialFailures,
+      true,
+    );
     const entity = {
       passcode_failures_remaining: initialFailures,
     };

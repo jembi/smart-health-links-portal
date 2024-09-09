@@ -1,65 +1,73 @@
-import { EXTERNAL_URL } from "@/app/constants/http-constants";
-import { SHLinkDto, SHLinkMiniDto } from "@/domain/dtos/shlink";
-import { SHLinkModel } from "@/domain/models/shlink";
-import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
-import { SHLinkEntity } from "@/entities/shlink";
-import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel, mapModelToMiniDto } from "@/mappers/shlink-mapper";
+import { EXTERNAL_URL } from '@/app/constants/http-constants';
+import { SHLinkDto, SHLinkMiniDto } from '@/domain/dtos/shlink';
+import { SHLinkModel } from '@/domain/models/shlink';
+import { SHLinkEndpointModel } from '@/domain/models/shlink-endpoint';
+import { SHLinkEntity } from '@/entities/shlink';
+import {
+  mapEntityToModel,
+  mapModelToEntity,
+  mapModelToDto,
+  mapDtoToModel,
+  mapModelToMiniDto,
+} from '@/mappers/shlink-mapper';
 
-describe("SHLink Mappers", () => {
+describe('SHLink Mappers', () => {
   const shLinkEntity: SHLinkEntity = {
-    id: "1",
+    id: '1',
     name: 'name',
-    user_id: "1234567890",
+    user_id: '1234567890',
     passcode_failures_remaining: 3,
     active: true,
-    management_token: "tokenxyz123",
-    config_passcode: "passcodeabc",
-    config_exp: new Date("2024-01-01T00:00:00Z"),
+    management_token: 'tokenxyz123',
+    config_passcode: 'passcodeabc',
+    config_exp: new Date('2024-01-01T00:00:00Z'),
   };
 
   const shLinkModel = new SHLinkModel(
-    "1234567890",
+    '1234567890',
     'name',
     3,
     true,
-    "tokenxyz123",
-    "passcodeabc",
-    new Date("2024-01-01T00:00:00Z"),
-    "1"
+    'tokenxyz123',
+    'passcodeabc',
+    new Date('2024-01-01T00:00:00Z'),
+    '1',
   );
 
   const shLinkDto: SHLinkDto = {
-    id: "1",
+    id: '1',
     name: 'name',
-    userId: "1234567890",
+    userId: '1234567890',
     passcodeFailuresRemaining: 3,
     active: true,
-    managementToken: "tokenxyz123",
-    configPasscode: "passcodeabc",
-    configExp: new Date("2024-01-01T00:00:00Z"),
+    managementToken: 'tokenxyz123',
+    configPasscode: 'passcodeabc',
+    configExp: new Date('2024-01-01T00:00:00Z'),
   };
 
-  describe("mapEntityToModel", () => {
-    it("should map a SHLinkEntity to a SHLinkModel", () => {
+  describe('mapEntityToModel', () => {
+    it('should map a SHLinkEntity to a SHLinkModel', () => {
       const result = mapEntityToModel(shLinkEntity);
       expect(result).toBeInstanceOf(SHLinkModel);
       expect(result?.getId()).toBe(shLinkEntity.id);
       expect(result?.getUserId()).toBe(shLinkEntity.user_id);
-      expect(result?.getPasscodeFailuresRemaining()).toBe(shLinkEntity.passcode_failures_remaining);
+      expect(result?.getPasscodeFailuresRemaining()).toBe(
+        shLinkEntity.passcode_failures_remaining,
+      );
       expect(result?.getActive()).toBe(shLinkEntity.active);
       expect(result?.getManagementToken()).toBe(shLinkEntity.management_token);
       expect(result?.getConfigPasscode()).toBe(shLinkEntity.config_passcode);
       expect(result?.getConfigExp()).toBe(shLinkEntity.config_exp);
     });
 
-    it("should return undefined if SHLinkEntity is undefined", () => {
+    it('should return undefined if SHLinkEntity is undefined', () => {
       const result = mapEntityToModel(undefined);
       expect(result).toBeUndefined();
     });
   });
 
-  describe("mapModelToEntity", () => {
-    it("should map a SHLinkModel to a SHLinkEntity", () => {
+  describe('mapModelToEntity', () => {
+    it('should map a SHLinkModel to a SHLinkEntity', () => {
       const result = mapModelToEntity(shLinkModel);
       expect(result).toEqual({
         id: shLinkModel.getId(),
@@ -73,14 +81,14 @@ describe("SHLink Mappers", () => {
       });
     });
 
-    it("should return undefined if SHLinkModel is undefined", () => {
+    it('should return undefined if SHLinkModel is undefined', () => {
       const result = mapModelToEntity(undefined);
       expect(result).toBeUndefined();
     });
   });
 
-  describe("mapModelToDto", () => {
-    it("should map a SHLinkModel to a SHLinkDto", () => {
+  describe('mapModelToDto', () => {
+    it('should map a SHLinkModel to a SHLinkDto', () => {
       const result = mapModelToDto(shLinkModel);
       expect(result).toEqual({
         id: shLinkModel.getId(),
@@ -94,26 +102,28 @@ describe("SHLink Mappers", () => {
       });
     });
 
-    it("should return undefined if SHLinkModel is undefined", () => {
+    it('should return undefined if SHLinkModel is undefined', () => {
       const result = mapModelToDto(undefined);
       expect(result).toBeUndefined();
     });
   });
 
-  describe("mapDtoToModel", () => {
-    it("should map a SHLinkDto to a SHLinkModel", () => {
+  describe('mapDtoToModel', () => {
+    it('should map a SHLinkDto to a SHLinkModel', () => {
       const result = mapDtoToModel(shLinkDto);
       expect(result).toBeInstanceOf(SHLinkModel);
       expect(result?.getId()).toBe(shLinkDto.id);
       expect(result?.getUserId()).toBe(shLinkDto.userId);
-      expect(result?.getPasscodeFailuresRemaining()).toBe(shLinkDto.passcodeFailuresRemaining);
+      expect(result?.getPasscodeFailuresRemaining()).toBe(
+        shLinkDto.passcodeFailuresRemaining,
+      );
       expect(result?.getActive()).toBe(shLinkDto.active);
       expect(result?.getManagementToken()).toBe(shLinkDto.managementToken);
       expect(result?.getConfigPasscode()).toBe(shLinkDto.configPasscode);
       expect(result?.getConfigExp()).toEqual(shLinkDto.configExp);
     });
 
-    it("should return undefined if SHLinkDto is undefined", () => {
+    it('should return undefined if SHLinkDto is undefined', () => {
       const result = mapDtoToModel(undefined);
       expect(result).toBeUndefined();
     });
@@ -123,7 +133,7 @@ describe("SHLink Mappers", () => {
 describe('mapModelToMiniDto', () => {
   it('should return correct SHLinkMiniDto when provided valid SHLinkModel and files', () => {
     // Create a valid SHLinkModel instance
-    const date = new Date(Date.now() + 10000) // future date;
+    const date = new Date(Date.now() + 10000); // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
       'name',
@@ -132,12 +142,22 @@ describe('mapModelToMiniDto', () => {
       'management-token',
       'config-passcode',
       date,
-      'link-id'
+      'link-id',
     );
 
     // Create valid SHLinkEndpointModel instances
-    const endpoint1 = new SHLinkEndpointModel('shlink-id-1', 'server-config-id-1', 'url-path-1', 'endpoint1-id');
-    const endpoint2 = new SHLinkEndpointModel('shlink-id-2', 'server-config-id-2', 'url-path-2', 'endpoint2-id');
+    const endpoint1 = new SHLinkEndpointModel(
+      'shlink-id-1',
+      'server-config-id-1',
+      'url-path-1',
+      'endpoint1-id',
+    );
+    const endpoint2 = new SHLinkEndpointModel(
+      'shlink-id-2',
+      'server-config-id-2',
+      'url-path-2',
+      'endpoint2-id',
+    );
     const files = [endpoint1, endpoint2];
     const ticket = 'sample-ticket';
 
@@ -156,20 +176,20 @@ describe('mapModelToMiniDto', () => {
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint1-id?ticket=${ticket}`,
           contentType: 'application/smart-api-access',
-          embedded: null
+          embedded: null,
         },
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint2-id?ticket=${ticket}`,
           contentType: 'application/smart-api-access',
-          embedded: null
-        }
-      ]
+          embedded: null,
+        },
+      ],
     });
   });
 
   it('should return correct SHLinkMiniDto with no files', () => {
     // Create a valid SHLinkModel instance
-    const date = new Date(Date.now() + 10000) // future date;
+    const date = new Date(Date.now() + 10000); // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
       'name',
@@ -178,7 +198,7 @@ describe('mapModelToMiniDto', () => {
       'management-token',
       'config-passcode',
       date,
-      'link-id'
+      'link-id',
     );
 
     // Execute the function
@@ -206,7 +226,7 @@ describe('mapModelToMiniDto', () => {
 
   it('should return correct SHLinkMiniDto when ticket is not provided', () => {
     // Create a valid SHLinkModel instance
-    const date = new Date(Date.now() + 10000) // future date;
+    const date = new Date(Date.now() + 10000); // future date;
     const shlinkModel = new SHLinkModel(
       'unique-user-id',
       'name',
@@ -215,11 +235,16 @@ describe('mapModelToMiniDto', () => {
       'management-token',
       'config-passcode',
       date,
-      'link-id'
+      'link-id',
     );
 
     // Create a valid SHLinkEndpointModel instance
-    const endpoint = new SHLinkEndpointModel('shlink-id', 'server-config-id', 'url-path', 'endpoint-id');
+    const endpoint = new SHLinkEndpointModel(
+      'shlink-id',
+      'server-config-id',
+      'url-path',
+      'endpoint-id',
+    );
     const files = [endpoint];
 
     // Execute the function without a ticket
@@ -238,8 +263,8 @@ describe('mapModelToMiniDto', () => {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint-id?ticket=undefined`,
           contentType: 'application/smart-api-access',
           embedded: null,
-        }
-      ]
+        },
+      ],
     });
   });
 });

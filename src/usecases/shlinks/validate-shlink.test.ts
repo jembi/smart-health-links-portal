@@ -1,6 +1,9 @@
-import { SHLinkModel } from "@/domain/models/shlink";
+import { SHLinkModel } from '@/domain/models/shlink';
 
-import { SHLinkValidationError, validateSHLinkUseCase } from "./validate-shlink";
+import {
+  SHLinkValidationError,
+  validateSHLinkUseCase,
+} from './validate-shlink';
 
 describe('validateSHLinkUseCase', () => {
   it('should return true for a valid active SHLink with matching passcode', () => {
@@ -12,9 +15,12 @@ describe('validateSHLinkUseCase', () => {
       'management-token',
       'valid-passcode',
       new Date(Date.now() + 10000), // future date
-      'link-id'
+      'link-id',
     );
-    const result = validateSHLinkUseCase({ shlink: validSHLink, passcode: 'valid-passcode' });
+    const result = validateSHLinkUseCase({
+      shlink: validSHLink,
+      passcode: 'valid-passcode',
+    });
     expect(result).toBe(true);
   });
 
@@ -27,10 +33,14 @@ describe('validateSHLinkUseCase', () => {
       'management-token',
       'valid-passcode',
       new Date(Date.now() + 10000), // future date
-      'link-id'
+      'link-id',
     );
-    expect(() => validateSHLinkUseCase({ shlink: invalidSHLink, passcode: 'valid-passcode' }))
-      .toThrow(SHLinkValidationError);
+    expect(() =>
+      validateSHLinkUseCase({
+        shlink: invalidSHLink,
+        passcode: 'valid-passcode',
+      }),
+    ).toThrow(SHLinkValidationError);
   });
 
   it('should throw SHLinkValidationError if the SHLink is expired', () => {
@@ -42,10 +52,14 @@ describe('validateSHLinkUseCase', () => {
       'management-token',
       'valid-passcode',
       new Date(Date.now() - 10000), // past date
-      'link-id'
+      'link-id',
     );
-    expect(() => validateSHLinkUseCase({ shlink: expiredSHLink, passcode: 'valid-passcode' }))
-      .toThrow(SHLinkValidationError);
+    expect(() =>
+      validateSHLinkUseCase({
+        shlink: expiredSHLink,
+        passcode: 'valid-passcode',
+      }),
+    ).toThrow(SHLinkValidationError);
   });
 
   it('should return false if the passcode does not match', () => {
@@ -57,9 +71,12 @@ describe('validateSHLinkUseCase', () => {
       'management-token',
       'correct-passcode',
       new Date(Date.now() + 10000), // future date
-      'link-id'
+      'link-id',
     );
-    const result = validateSHLinkUseCase({ shlink: validSHLink, passcode: 'wrong-passcode' });
+    const result = validateSHLinkUseCase({
+      shlink: validSHLink,
+      passcode: 'wrong-passcode',
+    });
     expect(result).toBe(false);
   });
 
@@ -72,7 +89,7 @@ describe('validateSHLinkUseCase', () => {
       'management-token',
       undefined,
       new Date(Date.now() + 10000), // future date
-      'link-id'
+      'link-id',
     );
     const result = validateSHLinkUseCase({ shlink: validSHLink });
     expect(result).toBe(true);
@@ -87,7 +104,7 @@ describe('validateSHLinkUseCase', () => {
       'management-token',
       undefined,
       undefined,
-      'link-id'
+      'link-id',
     );
     const result = validateSHLinkUseCase({ shlink: validSHLink });
     expect(result).toBe(true);
@@ -103,9 +120,12 @@ describe('validateSHLinkUseCase', () => {
         'management-token',
         'passcode',
         new Date(Date.now() - 10000), // past date
-        'link-id'
+        'link-id',
       );
-      validateSHLinkUseCase({ shlink: invalidSHLink, passcode: 'wrong-passcode' });
+      validateSHLinkUseCase({
+        shlink: invalidSHLink,
+        passcode: 'wrong-passcode',
+      });
     } catch (error) {
       expect(error).toBeInstanceOf(SHLinkValidationError);
       expect(error.message).toBe('Inactive share link access');

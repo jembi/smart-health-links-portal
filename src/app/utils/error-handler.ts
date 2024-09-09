@@ -23,13 +23,12 @@ export function handleApiValidationError(error: unknown) {
       { error: PRECONDITION_FAILED, detail: error.message },
       { status: error.code },
     );
-  } else if(error instanceof SHLinkValidationError) {
+  } else if (error instanceof SHLinkValidationError) {
     return NextResponse.json(
       { error: error.name, detail: error.message },
       { status: error.code },
-    )
-  }
-  else {
+    );
+  } else {
     return NextResponse.json(
       { error: SERVER_ERROR, detail: error },
       { status: 500 },

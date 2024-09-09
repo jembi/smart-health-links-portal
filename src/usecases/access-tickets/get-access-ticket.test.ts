@@ -30,11 +30,13 @@ describe('getAccessTicketUseCase', () => {
     mockRepo.findById.mockResolvedValue(mockEntity);
     (mapEntityToModel as jest.Mock).mockReturnValue(mockModel);
 
-    const result = await getAccessTicketUseCase({ repo: mockRepo }, 'ticket-123');
+    const result = await getAccessTicketUseCase(
+      { repo: mockRepo },
+      'ticket-123',
+    );
 
     expect(mockRepo.findById).toHaveBeenCalledWith('ticket-123');
     expect(mapEntityToModel).toHaveBeenCalledWith(mockEntity);
     expect(result).toEqual(mockModel);
   });
 });
-

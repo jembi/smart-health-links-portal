@@ -1,5 +1,5 @@
-import { AccessTicketModel } from "@/domain/models/access-ticket";
-import { AccessTicketEntity } from "@/entities/access-ticket";
+import { AccessTicketModel } from '@/domain/models/access-ticket';
+import { AccessTicketEntity } from '@/entities/access-ticket';
 
 export const mapEntityToModel = (
   accessTicketEntity: AccessTicketEntity,

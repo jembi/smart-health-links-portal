@@ -6,7 +6,6 @@ import { IResourceType } from '@/types/fhir.types';
 import ConditionDetails from './ConditionDetails';
 import InfoRow from '../../InfoRow';
 
-
 export default function Condition({
   data,
 }: {

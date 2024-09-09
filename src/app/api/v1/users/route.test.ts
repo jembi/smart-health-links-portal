@@ -49,10 +49,11 @@ describe('POST /api/users', () => {
     patientId: 'dto-patient-id',
   };
 
-  const mockRequest = (body: any) => new NextRequest('http://localhost/api/users', {
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+  const mockRequest = (body: any) =>
+    new NextRequest('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
   let mockService: jest.Mocked<IHapiFhirService>;
 
   HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);

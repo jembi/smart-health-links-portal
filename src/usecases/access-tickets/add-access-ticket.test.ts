@@ -1,11 +1,14 @@
-import { AccessTicketModel } from "@/domain/models/access-ticket";
-import { IAccessTicketRepository } from "@/infrastructure/repositories/interfaces/access-ticket-repository.interface";
-import { mapEntityToModel, mapModelToEntity } from "@/mappers/access-ticket-mapper";
+import { AccessTicketModel } from '@/domain/models/access-ticket';
+import { IAccessTicketRepository } from '@/infrastructure/repositories/interfaces/access-ticket-repository.interface';
+import {
+  mapEntityToModel,
+  mapModelToEntity,
+} from '@/mappers/access-ticket-mapper';
 
-import { addAccessTicketUseCase } from "./add-access-ticket";
+import { addAccessTicketUseCase } from './add-access-ticket';
 
 // Mock the mapping functions
-jest.mock("@/mappers/access-ticket-mapper", () => ({
+jest.mock('@/mappers/access-ticket-mapper', () => ({
   mapEntityToModel: jest.fn(),
   mapModelToEntity: jest.fn(),
 }));
@@ -18,7 +21,7 @@ const mockRepo: jest.Mocked<IAccessTicketRepository> = {
   findById: jest.fn(),
   findMany: jest.fn(),
   findOne: jest.fn(),
-  update: jest.fn()
+  update: jest.fn(),
 };
 
 describe('addAccessTicketUseCase', () => {
@@ -39,7 +42,7 @@ describe('addAccessTicketUseCase', () => {
 
     // Assert that mapModelToEntity was called with the correct argument
     expect(mapModelToEntity).toHaveBeenCalledWith(testModel);
-    
+
     // Assert that repo.insert was called with the correct entity
     expect(mockRepo.insert).toHaveBeenCalledWith(testEntity);
 
@@ -60,7 +63,7 @@ describe('addAccessTicketUseCase', () => {
 
     // Assert that mapModelToEntity was called with the correct argument
     expect(mapModelToEntity).toHaveBeenCalledWith(testModel);
-    
+
     // Assert that repo.insert was called with the correct entity
     expect(mockRepo.insert).toHaveBeenCalledWith(testEntity);
 

@@ -1,24 +1,31 @@
-import { EXTERNAL_URL } from "@/app/constants/http-constants";
-import { SHLinkDto, SHLinkMiniDto } from "@/domain/dtos/shlink";
-import { SHLinkModel } from "@/domain/models/shlink";
-import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
-import { SHLinkEntity } from "@/entities/shlink";
+import { EXTERNAL_URL } from '@/app/constants/http-constants';
+import { SHLinkDto, SHLinkMiniDto } from '@/domain/dtos/shlink';
+import { SHLinkModel } from '@/domain/models/shlink';
+import { SHLinkEndpointModel } from '@/domain/models/shlink-endpoint';
+import { SHLinkEntity } from '@/entities/shlink';
 
-export const mapEntityToModel = (shlinkEntity: SHLinkEntity): SHLinkModel | undefined => {
-    return shlinkEntity ? new SHLinkModel(
+export const mapEntityToModel = (
+  shlinkEntity: SHLinkEntity,
+): SHLinkModel | undefined => {
+  return shlinkEntity
+    ? new SHLinkModel(
         shlinkEntity.user_id,
         shlinkEntity.name,
-        shlinkEntity.passcode_failures_remaining, 
-        shlinkEntity.active, 
-        shlinkEntity.management_token, 
-        shlinkEntity.config_passcode, 
-        shlinkEntity.config_exp, 
-        shlinkEntity.id
-    ) : undefined;
-}
+        shlinkEntity.passcode_failures_remaining,
+        shlinkEntity.active,
+        shlinkEntity.management_token,
+        shlinkEntity.config_passcode,
+        shlinkEntity.config_exp,
+        shlinkEntity.id,
+      )
+    : undefined;
+};
 
-export const mapModelToEntity = (shlinkModel: SHLinkModel): SHLinkEntity | undefined => {
-    return shlinkModel ? {
+export const mapModelToEntity = (
+  shlinkModel: SHLinkModel,
+): SHLinkEntity | undefined => {
+  return shlinkModel
+    ? {
         id: shlinkModel.getId(),
         name: shlinkModel.getName(),
         user_id: shlinkModel.getUserId(),
@@ -27,12 +34,15 @@ export const mapModelToEntity = (shlinkModel: SHLinkModel): SHLinkEntity | undef
         management_token: shlinkModel.getManagementToken(),
         config_passcode: shlinkModel.getConfigPasscode(),
         config_exp: shlinkModel.getConfigExp(),
-    } : undefined;
-}
+      }
+    : undefined;
+};
 
-export const mapModelToDto = (shlinkModel: SHLinkModel): SHLinkDto | undefined => {
-
-    return shlinkModel ? {
+export const mapModelToDto = (
+  shlinkModel: SHLinkModel,
+): SHLinkDto | undefined => {
+  return shlinkModel
+    ? {
         id: shlinkModel.getId(),
         name: shlinkModel.getName(),
         passcodeFailuresRemaining: shlinkModel.getPasscodeFailuresRemaining(),
@@ -40,47 +50,59 @@ export const mapModelToDto = (shlinkModel: SHLinkModel): SHLinkDto | undefined =
         managementToken: shlinkModel.getManagementToken(),
         configPasscode: shlinkModel.getConfigPasscode(),
         configExp: shlinkModel.getConfigExp(),
-        userId: shlinkModel.getUserId()
-    } : undefined;
-}
+        userId: shlinkModel.getUserId(),
+      }
+    : undefined;
+};
 
-export const mapModelToMiniDto = (shlinkModel: SHLinkModel, files?: SHLinkEndpointModel[], ticket?: string): SHLinkMiniDto | undefined => {
-
-    return shlinkModel ? {
+export const mapModelToMiniDto = (
+  shlinkModel: SHLinkModel,
+  files?: SHLinkEndpointModel[],
+  ticket?: string,
+): SHLinkMiniDto | undefined => {
+  return shlinkModel
+    ? {
         id: shlinkModel.getId(),
         name: shlinkModel.getName(),
         managementToken: shlinkModel.getManagementToken(),
         expiryDate: shlinkModel.getConfigExp(),
         passwordRequired: !!shlinkModel.getConfigPasscode(),
         url: encodeSHLink(shlinkModel),
-        files: files?.map(x=> {return{
+        files: files?.map((x) => {
+          return {
             location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
             contentType: 'application/smart-api-access',
-            embedded: null
-        }})
-    } : undefined;
-}
+            embedded: null,
+          };
+        }),
+      }
+    : undefined;
+};
 
-export const mapDtoToModel = (shlinkDto: SHLinkDto): SHLinkModel | undefined => {
-    return shlinkDto ? new SHLinkModel(
+export const mapDtoToModel = (
+  shlinkDto: SHLinkDto,
+): SHLinkModel | undefined => {
+  return shlinkDto
+    ? new SHLinkModel(
         shlinkDto.userId,
         shlinkDto.name,
-        shlinkDto.passcodeFailuresRemaining, 
-        shlinkDto.active, 
-        shlinkDto.managementToken, 
-        shlinkDto.configPasscode, 
-        shlinkDto.configExp ? new Date(shlinkDto.configExp) : null, 
-        shlinkDto.id
-    ) : undefined;
-}
+        shlinkDto.passcodeFailuresRemaining,
+        shlinkDto.active,
+        shlinkDto.managementToken,
+        shlinkDto.configPasscode,
+        shlinkDto.configExp ? new Date(shlinkDto.configExp) : null,
+        shlinkDto.id,
+      )
+    : undefined;
+};
 
 const encodeSHLink = (shlink: SHLinkModel): string => {
-    const result = {
-        label: shlink.getName(),
-        url: `${EXTERNAL_URL}/api/v1/share-links/${shlink.getId()}`,
-        flag: `${!shlink.getConfigExp() ? 'L': ''}${shlink.getConfigPasscode()? 'P': ''}`,
-    };
-    const data = Buffer.from(JSON.stringify(result), 'utf8').toString('base64');
-    
-    return `${EXTERNAL_URL}/viewer#shlink:/${data}`;
-}
+  const result = {
+    label: shlink.getName(),
+    url: `${EXTERNAL_URL}/api/v1/share-links/${shlink.getId()}`,
+    flag: `${!shlink.getConfigExp() ? 'L' : ''}${shlink.getConfigPasscode() ? 'P' : ''}`,
+  };
+  const data = Buffer.from(JSON.stringify(result), 'utf8').toString('base64');
+
+  return `${EXTERNAL_URL}/viewer#shlink:/${data}`;
+};

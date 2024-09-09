@@ -4,7 +4,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-import { NOT_FOUND, UNAUTHORIZED_REQUEST } from '@/app/constants/http-constants';
+import {
+  NOT_FOUND,
+  UNAUTHORIZED_REQUEST,
+} from '@/app/constants/http-constants';
 import { AccessTicketModel } from '@/domain/models/access-ticket';
 import { SHLinkModel } from '@/domain/models/shlink';
 import { UserModel } from '@/domain/models/user';
@@ -15,7 +18,6 @@ import { getUserUseCase } from '@/usecases/users/get-user';
 
 import { GET } from './route';
 
-
 jest.mock('@/usecases/access-tickets/get-access-ticket');
 jest.mock('@/usecases/patient/get-patient-data');
 jest.mock('@/usecases/shlinks/get-single-shlink');
@@ -23,14 +25,29 @@ jest.mock('@/usecases/users/get-user');
 
 describe('GET /api/v1/[id]/[endpointId]', () => {
   const mockRequest = (ticketId: string | null) => {
-    const url = new URL('http://localhost/api/v1/123/endpoint?ticket=' + ticketId);
+    const url = new URL(
+      'http://localhost/api/v1/123/endpoint?ticket=' + ticketId,
+    );
     return new NextRequest(url.toString(), { method: 'GET' });
   };
 
-  const mockParams = { id: '12356', endpointId: 'endpoint12345', ticket:"123456789" };
+  const mockParams = {
+    id: '12356',
+    endpointId: 'endpoint12345',
+    ticket: '123456789',
+  };
 
   const mockTicket = new AccessTicketModel('abc', 'ticket-123');
-  const mockShlink = new SHLinkModel('user-123456', 'name', 3, true, 'token-xydedz', 'passcode', new Date(), 'abc');
+  const mockShlink = new SHLinkModel(
+    'user-123456',
+    'name',
+    3,
+    true,
+    'token-xydedz',
+    'passcode',
+    new Date(),
+    'abc',
+  );
   const mockUser = new UserModel('user-123', 'patient-123', '12356');
 
   it('should return 401 if ticket is not found', async () => {
@@ -76,12 +93,16 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     (getAccessTicketUseCase as jest.Mock).mockResolvedValue(mockTicket);
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockShlink);
     (getUserUseCase as jest.Mock).mockResolvedValue(mockUser);
-    (getPatientDataUseCase as jest.Mock).mockResolvedValue({ data: "patient data" });
+    (getPatientDataUseCase as jest.Mock).mockResolvedValue({
+      data: 'patient data',
+    });
 
-    const mockPatientData = { data: "patient data" };
+    const mockPatientData = { data: 'patient data' };
 
     const request = mockRequest('123456789');
-    const response = await GET(request, { params: { id: 'abc', endpointId: 'endpoint12345' } });
+    const response = await GET(request, {
+      params: { id: 'abc', endpointId: 'endpoint12345' },
+    });
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(200);

@@ -11,7 +11,9 @@
     "test": "jest",
     "prisma:dev": "prisma migrate dev --schema=./prisma/schema.prisma",
     "prisma:test": "prisma migrate dev --schema=./prisma/schema.test.prisma",
-    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
+    "prettier": "prettier 'src/**/*.{ts,tsx}' --write",
+    "prettier:check": "prettier --check 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",

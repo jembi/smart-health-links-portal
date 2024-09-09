@@ -18,7 +18,7 @@ const prismaMock = {
 
 const entity: AccessTicketEntity = {
   id: '1',
-  shlink_id: '1'
+  shlink_id: '1',
 };
 
 describe('AccessTicketPrismaRepository', () => {
@@ -36,7 +36,9 @@ describe('AccessTicketPrismaRepository', () => {
 
     const result = await repository.insert(entity);
 
-    expect(prismaMock.access_ticket.create).toHaveBeenCalledWith({ data: entity });
+    expect(prismaMock.access_ticket.create).toHaveBeenCalledWith({
+      data: entity,
+    });
     expect(result).toBe(entity);
   });
 

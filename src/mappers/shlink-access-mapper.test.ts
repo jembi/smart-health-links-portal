@@ -1,19 +1,23 @@
-import { SHLinkAccessModel } from "@/domain/models/shlink-access";
-import { SHLinkAccessEntity } from "@/entities/shlink-access";
+import { SHLinkAccessModel } from '@/domain/models/shlink-access';
+import { SHLinkAccessEntity } from '@/entities/shlink-access';
 
-import { mapModelToEntity } from "./shlink-access-mapper";
+import { mapModelToEntity } from './shlink-access-mapper';
 
 // Mock the SHLinkAccessModel class
-jest.mock("@/domain/models/shlink-access", () => {
+jest.mock('@/domain/models/shlink-access', () => {
   return {
-    SHLinkAccessModel: jest.fn().mockImplementation((shlinkId: string, accessTime: Date, recipient: string, id: string) => {
-      return {
-        getAccessTime: jest.fn(() => accessTime),
-        getRecipient: jest.fn(() => recipient),
-        getSHLinkId: jest.fn(() => shlinkId),
-        getId: jest.fn(() => id),
-      };
-    }),
+    SHLinkAccessModel: jest
+      .fn()
+      .mockImplementation(
+        (shlinkId: string, accessTime: Date, recipient: string, id: string) => {
+          return {
+            getAccessTime: jest.fn(() => accessTime),
+            getRecipient: jest.fn(() => recipient),
+            getSHLinkId: jest.fn(() => shlinkId),
+            getId: jest.fn(() => id),
+          };
+        },
+      ),
   };
 });
 
