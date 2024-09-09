@@ -1,7 +1,8 @@
-import { getPatientDataUseCase } from "./get-patient-data";
+import { UserModel } from "@/domain/models/user";
 import { IServerConfigRepository } from "@/infrastructure/repositories/interfaces/server-config-repository";
 import { ExternalDataFetchError, HapiFhirService } from "@/services/hapi-fhir.service";
-import { UserModel } from "@/domain/models/user";
+
+import { getPatientDataUseCase } from "./get-patient-data";
 
 // Mock the HapiFhirService and ExternalDataFetchError
 jest.mock('@/services/hapi-fhir.service', () => ({

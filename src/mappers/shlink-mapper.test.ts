@@ -1,9 +1,9 @@
+import { EXTERNAL_URL } from "@/app/constants/http-constants";
 import { SHLinkDto, SHLinkMiniDto } from "@/domain/dtos/shlink";
-import { SHLinkEntity } from "@/entities/shlink";
-import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel, mapModelToMiniDto } from "@/mappers/shlink-mapper";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
-import { EXTERNAL_URL } from "@/app/constants/http-constants";
+import { SHLinkEntity } from "@/entities/shlink";
+import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel, mapModelToMiniDto } from "@/mappers/shlink-mapper";
 
 describe("SHLink Mappers", () => {
   const shLinkEntity: SHLinkEntity = {

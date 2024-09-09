@@ -2,15 +2,17 @@
  * @jest-environment node
  */
 
-import { POST } from './route';
 import { NextRequest, NextResponse } from 'next/server';
-import { handleApiValidationError } from '@/app/utils/error-handler';
-import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
-import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
-import { mapModelToDto as mapModelToDtoShlinkMapper } from '@/mappers/shlink-mapper';
-import { mapDtoToModel, mapModelToDto as mapModelToDtoEndpoint } from '@/mappers/shlink-endpoint-mapper';
+
 import { NOT_FOUND } from '@/app/constants/http-constants';
+import { handleApiValidationError } from '@/app/utils/error-handler';
+import { mapDtoToModel, mapModelToDto as mapModelToDtoEndpoint } from '@/mappers/shlink-endpoint-mapper';
+import { mapModelToDto as mapModelToDtoShlinkMapper } from '@/mappers/shlink-mapper';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
+import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
+import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
+
+import { POST } from './route';
 
 // Mock dependencies
 jest.mock('@/app/utils/error-handler');

@@ -2,22 +2,24 @@
  * @jest-environment node
  */
 import { NextResponse } from "next/server";
-import { POST, PUT } from "./route";
+
 import { NOT_FOUND, UNAUTHORIZED_REQUEST } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkRepositoryToken, SHLinkAccessRepositoryToken, AccessTicketRepositoryToken, SHLinkEndpointRepositoryToken } from "@/container";
+import { AccessTicketModel } from "@/domain/models/access-ticket";
+import { SHLinkModel } from "@/domain/models/shlink";
+import { SHLinkAccessModel } from "@/domain/models/shlink-access";
+import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
 import { mapModelToMiniDto, mapModelToDto } from "@/mappers/shlink-mapper";
 import { addAccessTicketUseCase } from "@/usecases/access-tickets/add-access-ticket";
-import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
 import { deleteAccessTicketUseCase } from "@/usecases/access-tickets/delete-access-ticket";
+import { logSHLinkAccessUseCase } from "@/usecases/shlink-access/log-shlink-access";
 import { getEndpointUseCase } from "@/usecases/shlink-endpoint/get-endpoint";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
 import { updateSingleSHLinkUseCase } from "@/usecases/shlinks/update-single-shlink";
 import { validateSHLinkUseCase } from "@/usecases/shlinks/validate-shlink";
-import { AccessTicketModel } from "@/domain/models/access-ticket";
-import { SHLinkAccessModel } from "@/domain/models/shlink-access";
-import { SHLinkModel } from "@/domain/models/shlink";
-import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
+
+import { POST, PUT } from "./route";
 
 // Mock dependencies
 jest.mock("@/usecases/shlinks/get-single-shlink", () => ({

@@ -1,8 +1,9 @@
-import { getEndpointUseCase } from './get-endpoint'; 
 import { SHLinkEndpointModel } from "@/domain/models/shlink-endpoint";
 import { SHLinkEndpointEntity } from "@/entities/shlink-endpoint";
 import { ISHLinkEndpointRepository } from "@/infrastructure/repositories/interfaces/shlink-endpoint-repository";
 import { mapEntityToModel } from "@/mappers/shlink-endpoint-mapper";
+
+import { getEndpointUseCase } from './get-endpoint'; 
 
 // Mock the repository
 let mockRepo: jest.Mocked<ISHLinkEndpointRepository>;

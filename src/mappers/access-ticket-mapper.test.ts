@@ -1,5 +1,6 @@
 import { AccessTicketModel } from "@/domain/models/access-ticket";
 import { AccessTicketEntity } from "@/entities/access-ticket";
+
 import { mapEntityToModel, mapModelToEntity } from "./access-ticket-mapper";
 
 describe('Mapping functions', () => {

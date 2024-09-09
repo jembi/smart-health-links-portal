@@ -1,6 +1,7 @@
 import { SHLinkAccessModel } from "@/domain/models/shlink-access";
 import { ISHLinkAccessRepository } from "@/infrastructure/repositories/interfaces/shlink-access-repository";
 import { mapModelToEntity } from "@/mappers/shlink-access-mapper";
+
 import { logSHLinkAccessUseCase } from "./log-shlink-access";
 
 // Mock the mapping function and repository

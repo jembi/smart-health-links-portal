@@ -1,7 +1,8 @@
-import { getAccessTicketUseCase } from './get-access-ticket';
+import { AccessTicketModel } from '@/domain/models/access-ticket';
 import { IAccessTicketRepository } from '@/infrastructure/repositories/interfaces/access-ticket-repository.interface';
 import { mapEntityToModel } from '@/mappers/access-ticket-mapper';
-import { AccessTicketModel } from '@/domain/models/access-ticket';
+
+import { getAccessTicketUseCase } from './get-access-ticket';
 
 // Mock the dependencies
 jest.mock('@/mappers/access-ticket-mapper', () => ({

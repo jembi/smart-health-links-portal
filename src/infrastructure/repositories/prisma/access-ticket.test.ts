@@ -1,5 +1,7 @@
-import { AccessTicketEntity } from '@/entities/access-ticket';
 import { PrismaClient } from '@prisma/client';
+
+import { AccessTicketEntity } from '@/entities/access-ticket';
+
 import { AccessTicketPrismaRepository } from './access-ticket-repository';
 
 // Create a mock for PrismaClient

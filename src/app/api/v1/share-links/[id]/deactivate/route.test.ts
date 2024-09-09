@@ -3,9 +3,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { GET } from './route';
-import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
+
 import { mapModelToDto } from '@/mappers/shlink-mapper';
+import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
+
+import { GET } from './route';
 
 jest.mock('@/usecases/shlinks/deactivate-shlink', () => ({
   deactivateSHLinksUseCase: jest.fn(),

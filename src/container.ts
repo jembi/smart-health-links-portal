@@ -1,10 +1,10 @@
-import { ServerConfigPrismaRepository } from './infrastructure/repositories/prisma/server-config-repository';
-import { UserPrismaRepository } from './infrastructure/repositories/prisma/user-repository';
 import prisma from './infrastructure/clients/prisma';
-import { SHLinkPrismaRepository } from './infrastructure/repositories/prisma/shlink-repository';
-import { SHLinkAccessPrismaRepository } from './infrastructure/repositories/prisma/shlink-access-repository';
 import { AccessTicketPrismaRepository } from './infrastructure/repositories/prisma/access-ticket-repository';
+import { ServerConfigPrismaRepository } from './infrastructure/repositories/prisma/server-config-repository';
+import { SHLinkAccessPrismaRepository } from './infrastructure/repositories/prisma/shlink-access-repository';
 import { SHLinkEndpointPrismaRepository } from './infrastructure/repositories/prisma/shlink-endpoint-repository';
+import { SHLinkPrismaRepository } from './infrastructure/repositories/prisma/shlink-repository';
+import { UserPrismaRepository } from './infrastructure/repositories/prisma/user-repository';
 
 export const ServerConfigRepositoryToken = Symbol('ServerConfigPrismaRepository');
 export const UserRepositoryToken = Symbol('UserPrismaRepository');

@@ -1,6 +1,7 @@
-import { getSHLinkUseCase } from "./get-shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
+
+import { getSHLinkUseCase } from "./get-shlink";
 
 // Mock the repository interface
 describe("getSHLinkUseCase", () => {

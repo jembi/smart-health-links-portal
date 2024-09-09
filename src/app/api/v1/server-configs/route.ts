@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, ServerConfigRepositoryToken } from "@/container";
 import { CreateServerConfigDto, ServerConfigDto } from "@/domain/dtos/server-config";
@@ -5,7 +7,6 @@ import { IServerConfigRepository } from "@/infrastructure/repositories/interface
 import { mapDtoToModel, mapModelToDto } from "@/mappers/server-config-mapper";
 import { addServerConfigUseCase } from "@/usecases/server-configs/add-server-config";
 import { getServerConfigsUseCase } from "@/usecases/server-configs/get-server-configs";
-import { NextResponse } from "next/server";
 
 const repo = container.get<IServerConfigRepository>(ServerConfigRepositoryToken);
 

@@ -1,10 +1,10 @@
 /**
  * @jest-environment node
  */
-import { deleteAccessTicketUseCase } from "@/usecases/access-tickets/delete-access-ticket";
 import { AccessTicketModel } from "@/domain/models/access-ticket";
 import { IAccessTicketRepository } from "@/infrastructure/repositories/interfaces/access-ticket-repository.interface";
 import { mapEntityToModel } from "@/mappers/access-ticket-mapper";
+import { deleteAccessTicketUseCase } from "@/usecases/access-tickets/delete-access-ticket";
 
 // Mock dependencies
 jest.mock("@/mappers/access-ticket-mapper", () => ({

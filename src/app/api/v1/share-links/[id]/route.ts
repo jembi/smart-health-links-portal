@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { INVALID_SHLINK_CREDS, NOT_FOUND, UNAUTHORIZED_REQUEST } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { AccessTicketRepositoryToken, container, SHLinkAccessRepositoryToken, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from "@/container";
@@ -18,7 +20,6 @@ import { decreasePasswordFailureCountUseCase } from "@/usecases/shlinks/decrease
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
 import { updateSingleSHLinkUseCase } from "@/usecases/shlinks/update-single-shlink";
 import { validateSHLinkUseCase } from "@/usecases/shlinks/validate-shlink";
-import { NextResponse } from "next/server";
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 const accessRepo = container.get<ISHLinkAccessRepository>(SHLinkAccessRepositoryToken);

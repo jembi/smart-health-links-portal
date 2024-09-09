@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, ServerConfigRepositoryToken, UserRepositoryToken } from "@/container";
 import { CreateUserDto, UserDto } from "@/domain/dtos/user";
@@ -6,7 +8,6 @@ import { IUserRepository } from "@/infrastructure/repositories/interfaces/user-r
 import { mapDtoToModel, mapModelToDto } from "@/mappers/user-mapper";
 import { searchPatientUseCase } from "@/usecases/patient/search-patient";
 import { addUserUseCase } from "@/usecases/users/add-user";
-import { NextResponse } from "next/server";
 
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);

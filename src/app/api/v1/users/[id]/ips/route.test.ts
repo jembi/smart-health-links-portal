@@ -3,12 +3,14 @@
  */
 
 import { NextRequest } from 'next/server';
-import { GET } from "./route";
+
+import { NOT_FOUND } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
+import { ExternalDataFetchError } from "@/services/hapi-fhir.service";
 import { getPatientDataUseCase } from "@/usecases/patient/get-patient-data";
 import { getUserUseCase } from "@/usecases/users/get-user";
-import { NOT_FOUND } from "@/app/constants/http-constants";
-import { ExternalDataFetchError } from "@/services/hapi-fhir.service";
+
+import { GET } from "./route";
 
 // Mock dependencies
 jest.mock("@/app/utils/error-handler", () => ({

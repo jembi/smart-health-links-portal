@@ -1,8 +1,10 @@
+import React from 'react';
+
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
+import { IResourceType } from '@/types/fhir.types';
+
 import InfoRow from '../../InfoRow';
 import ConnectionDetails from '../Patient/ConnectionDetails';
-import React from 'react';
-import { IResourceType } from '@/types/fhir.types';
 
 export default function Organization({
   data,

@@ -1,4 +1,5 @@
 import { SHLinkModel } from "@/domain/models/shlink";
+
 import { SHLinkValidationError, validateSHLinkUseCase } from "./validate-shlink";
 
 describe('validateSHLinkUseCase', () => {

@@ -2,16 +2,19 @@
  * @jest-environment node
  */
 
-import { GET } from './route';
+import { NextRequest, NextResponse } from 'next/server';
+
 import { NOT_FOUND, UNAUTHORIZED_REQUEST } from '@/app/constants/http-constants';
 import { AccessTicketModel } from '@/domain/models/access-ticket';
+import { SHLinkModel } from '@/domain/models/shlink';
+import { UserModel } from '@/domain/models/user';
 import { getAccessTicketUseCase } from '@/usecases/access-tickets/get-access-ticket';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 import { getUserUseCase } from '@/usecases/users/get-user';
-import { SHLinkModel } from '@/domain/models/shlink';
-import { UserModel } from '@/domain/models/user';
-import { NextRequest, NextResponse } from 'next/server';
+
+import { GET } from './route';
+
 
 jest.mock('@/usecases/access-tickets/get-access-ticket');
 jest.mock('@/usecases/patient/get-patient-data');

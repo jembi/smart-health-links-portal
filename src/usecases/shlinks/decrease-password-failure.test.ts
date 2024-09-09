@@ -1,10 +1,11 @@
 /**
  * @jest-environment node
  */
-import { decreasePasswordFailureCountUseCase } from "./decrease-password-failure";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
 import { mapModelToEntity } from "@/mappers/shlink-mapper";
+
+import { decreasePasswordFailureCountUseCase } from "./decrease-password-failure";
 
 // Mock dependencies
 jest.mock("@/mappers/shlink-mapper", () => ({

@@ -1,6 +1,7 @@
 import { AccessTicketModel } from "@/domain/models/access-ticket";
 import { IAccessTicketRepository } from "@/infrastructure/repositories/interfaces/access-ticket-repository.interface";
 import { mapEntityToModel, mapModelToEntity } from "@/mappers/access-ticket-mapper";
+
 import { addAccessTicketUseCase } from "./add-access-ticket";
 
 // Mock the mapping functions

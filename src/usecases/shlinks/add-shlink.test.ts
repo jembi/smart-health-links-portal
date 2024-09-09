@@ -1,9 +1,10 @@
 import { CreateSHLinkDto } from "@/domain/dtos/shlink";
-import { addShlinkUseCase } from "./add-shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
 import { mapEntityToModel, mapModelToEntity } from "@/mappers/shlink-mapper";
+
+import { addShlinkUseCase } from "./add-shlink";
 
 // Mock the dependencies
 jest.mock("@/mappers/shlink-mapper", () => ({

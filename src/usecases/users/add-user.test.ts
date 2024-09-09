@@ -1,8 +1,9 @@
-import { addUserUseCase } from './add-user';
 import { UserModel } from '@/domain/models/user';
 import { UserEntity } from '@/entities/user';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
 import { mapEntityToModel, mapModelToEntity } from '@/mappers/user-mapper';
+
+import { addUserUseCase } from './add-user';
 
 jest.mock('@/mappers/user-mapper', () => ({
   mapEntityToModel: jest.fn(),

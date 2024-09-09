@@ -1,7 +1,8 @@
-import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel } from './shlink-endpoint-mapper';
 import { SHLinkEndpointDto } from '@/domain/dtos/shlink-endpoint';
 import { SHLinkEndpointModel } from '@/domain/models/shlink-endpoint';
 import { SHLinkEndpointEntity } from '@/entities/shlink-endpoint';
+
+import { mapEntityToModel, mapModelToEntity, mapModelToDto, mapDtoToModel } from './shlink-endpoint-mapper';
 
 describe('SHLinkEndpoint Mappers', () => {
   

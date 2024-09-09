@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+
 import { BaseEntity } from '@/entities/base-entity';
 import { UserEntity } from '@/entities/user';
+
 import { UserPrismaRepository } from './user-repository';
 
 // Create a mock for PrismaClient

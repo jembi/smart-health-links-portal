@@ -1,8 +1,9 @@
-import { searchPatientUseCase } from "./search-patient";
 import { IServerConfigRepository } from "@/infrastructure/repositories/interfaces/server-config-repository";
 import { HapiFhirServiceFactory } from "@/services/hapi-fhir-factory";
-import { ExternalDataFetchError } from "@/services/hapi-fhir.service";
 import { IHapiFhirService, FhirSearchResult, FhirPatient } from "@/services/hapi-fhir.interface";
+import { ExternalDataFetchError } from "@/services/hapi-fhir.service";
+
+import { searchPatientUseCase } from "./search-patient";
 
 // Mock the HapiFhirServiceFactory and IServerConfigRepository
 jest.mock('@/services/hapi-fhir-factory');

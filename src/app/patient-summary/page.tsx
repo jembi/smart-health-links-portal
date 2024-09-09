@@ -1,5 +1,6 @@
-import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
+import Box from '@mui/material/Box';
+
 import PatientSummary from './components/PatientSummary';
 import fhirBundleJson from './sample/bundle.json';
 import { TBundle } from '../../types/fhir.types';

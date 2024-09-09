@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { NOT_FOUND } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, ServerConfigRepositoryToken, UserRepositoryToken } from "@/container";
@@ -5,7 +7,6 @@ import { IServerConfigRepository } from "@/infrastructure/repositories/interface
 import { IUserRepository } from "@/infrastructure/repositories/interfaces/user-repository";
 import { getPatientDataUseCase } from "@/usecases/patient/get-patient-data";
 import { getUserUseCase } from "@/usecases/users/get-user";
-import { NextResponse } from "next/server";
 
 const userRepo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(ServerConfigRepositoryToken);

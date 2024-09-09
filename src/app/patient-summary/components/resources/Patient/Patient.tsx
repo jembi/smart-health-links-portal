@@ -1,9 +1,12 @@
 import React from 'react';
-import InfoRow from '../../InfoRow';
-import ConnectionDetails from './ConnectionDetails';
-import PatientIdentifiers from './PatientIdentifiers';
+
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import { IResourceType } from '@/types/fhir.types';
+
+import ConnectionDetails from './ConnectionDetails';
+import PatientIdentifiers from './PatientIdentifiers';
+import InfoRow from '../../InfoRow';
+
 export default function Patient({
   data,
 }: {

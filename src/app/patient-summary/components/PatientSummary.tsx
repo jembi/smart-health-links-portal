@@ -1,14 +1,16 @@
 'use client';
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import TabPanel from './TabPanel';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import * as React from 'react';
 import { ElementType, useState } from 'react';
-import Patient from './resources/Patient/Patient';
+
 import { extractResourceInfo } from '@/app/utils/helpers';
-import Organization from './resources/Organization/Organization';
+
 import Condition from './resources/Condition/Condition';
+import Organization from './resources/Organization/Organization';
+import Patient from './resources/Patient/Patient';
+import TabPanel from './TabPanel';
 import { IResourceType, TBundle } from '../../../types/fhir.types';
 
 const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {

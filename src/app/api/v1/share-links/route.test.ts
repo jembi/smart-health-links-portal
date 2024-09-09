@@ -2,15 +2,17 @@
 /**
  * @jest-environment node
  */
-import { POST, GET } from "./route";
+import { NextRequest, NextResponse } from "next/server";
+
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { SHLinkPrismaRepository } from "@/infrastructure/repositories/prisma/shlink-repository";
 import { mapDtoToModel, mapModelToDto } from "@/mappers/shlink-mapper";
-import { NextRequest, NextResponse } from "next/server";
 import { addShlinkUseCase } from "@/usecases/shlinks/add-shlink";
+
+import { POST, GET } from "./route";
 
 // Mocks
 jest.mock("@/app/utils/error-handler");

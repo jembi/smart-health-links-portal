@@ -1,5 +1,6 @@
-import { BaseModel } from "./base-model";
 import z from 'zod';
+
+import { BaseModel } from "./base-model";
 
 export class SHLinkEndpointModel extends BaseModel{
     

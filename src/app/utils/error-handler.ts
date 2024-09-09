@@ -1,12 +1,14 @@
-import { ModelValidationError } from '@/domain/models/base-model';
 import { NextResponse } from 'next/server';
+
+import { ModelValidationError } from '@/domain/models/base-model';
+import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
+import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
+
 import {
   BAD_REQUEST,
   PRECONDITION_FAILED,
   SERVER_ERROR,
 } from '../constants/http-constants';
-import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
-import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
 
 export function handleApiValidationError(error: unknown) {
   console.error('API route error:', error);

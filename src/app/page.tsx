@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-import { Container, Typography } from '@mui/material';
 import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
+import { Container, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
 
 export default function Home() {
   return (

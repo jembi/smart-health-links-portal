@@ -1,8 +1,9 @@
-import { getSingleSHLinkUseCase } from "./get-single-shlink";
+import { SHLinkModel } from "@/domain/models/shlink";
 import { SHLinkEntity } from "@/entities/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
-import { SHLinkModel } from "@/domain/models/shlink";
 import { mapEntityToModel } from "@/mappers/shlink-mapper";
+
+import { getSingleSHLinkUseCase } from "./get-single-shlink";
 
 // Mock the dependencies
 jest.mock("@/mappers/shlink-mapper", () => ({

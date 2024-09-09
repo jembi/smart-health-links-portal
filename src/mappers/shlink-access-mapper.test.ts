@@ -1,5 +1,6 @@
 import { SHLinkAccessModel } from "@/domain/models/shlink-access";
 import { SHLinkAccessEntity } from "@/entities/shlink-access";
+
 import { mapModelToEntity } from "./shlink-access-mapper";
 
 // Mock the SHLinkAccessModel class
