@@ -12,7 +12,7 @@ export const deactivateSHLinksUseCase = async (
   let newShlink: SHLinkEntity;
 
   if(entity) {
-    if(data.user.id !== entity.user_id) throw new AuthenticationError();
+    if(data.user.id !== entity.user_id) throw new AuthenticationError('User not authorized to deactivate shlink.');
 
         entity.active = false;
         newShlink = await context.repo.update(entity); 
