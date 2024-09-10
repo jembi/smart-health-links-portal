@@ -10,6 +10,7 @@ import { extractResourceInfo } from '@/app/utils/helpers';
 import Condition from './resources/Condition/Condition';
 import Organization from './resources/Organization/Organization';
 import Patient from './resources/Patient/Patient';
+import Practitioner from './resources/Practitioner/Practitioner';
 import TabPanel from './TabPanel';
 import { IResourceType, TBundle } from '../../../types/fhir.types';
 
@@ -17,6 +18,7 @@ const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {
   Patient,
   Organization,
   Condition,
+  Practitioner,
 };
 
 export default function PatientSummary({
