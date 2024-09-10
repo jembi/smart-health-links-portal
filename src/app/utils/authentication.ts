@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt";
 
 import { UNAUTHORIZED_REQUEST } from "../constants/http-constants";
+import { NextRequest } from "next/server";
 
 export interface UserProfile{
     name: string;
@@ -9,7 +10,7 @@ export interface UserProfile{
 }
 
 export const getUserProfile = async(req: Request): Promise<UserProfile> => {
-    const token = await getToken({req: req as any});
+    const token = await getToken({req: req as NextRequest});
 
     return { name: token.name, id: token.sub, email: token.email };
 }
