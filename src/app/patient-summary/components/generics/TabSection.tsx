@@ -1,17 +1,14 @@
 import React from 'react';
 
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
-import { IResourceType } from '@/types/fhir.types';
+import { EResourceType, IResourceType } from '@/types/fhir.types';
 
 import { DetailedTable } from './DetailedTable';
 import { TTabProps } from './resource.types';
 import InfoRow from '../InfoRow';
-import { ALLERGY_INTOLERANCE_ROWS } from '../resources/AllergyIntolerance/AllergyIntoleranceRows';
 
-export const TabSection = <
-  K extends keyof IResourceType,
-  T extends IResourceType[K],
->({
+export const TabSection = <T extends IResourceType[EResourceType]>({
+  rows,
   data,
   title = '',
 }: TTabProps<T>) =>
@@ -21,7 +18,7 @@ export const TabSection = <
         {title} {index > -1 && `(${index + 1})`}
       </StyledSectionTypography>
 
-      {ALLERGY_INTOLERANCE_ROWS.map(({ type, config }, index) => {
+      {rows.map(({ type, config }, index) => {
         if (type === 'row') {
           const { field, label, value = '', prefix = '' } = config;
           if (field) {

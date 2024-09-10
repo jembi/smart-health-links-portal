@@ -23,18 +23,21 @@ export type tableConfig<T> = {
   }) => JSX.Element[];
 };
 
-export type TRowInfo<T> =
-  | {
-      type: 'row';
-      config: rowConfig<T>;
-    }
-  | {
-      type: 'table';
-      config: tableConfig<T>;
-    };
+type TRowRow<T> = {
+  type: 'row';
+  config: rowConfig<T>;
+};
+
+type TRowTable<T> = {
+  type: 'table';
+  config: tableConfig<T>;
+};
+
+export type TRow<T> = TRowRow<T> | TRowTable<T>;
 
 export type TTabProps<T> = {
   data: T[];
+  rows: TRow<T>[];
   title: string;
 };
 

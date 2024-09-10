@@ -1,5 +1,5 @@
 import { TMapComponent } from './resource.types';
-import { AllergyIntolerance } from '../resources/AllergyIntolerance/AllergyIntolerance';
+import { AllergyIntolerance } from '../resources/AllergyIntolerance';
 import Condition from '../resources/Condition/Condition';
 import Organization from '../resources/Organization/Organization';
 import Patient from '../resources/Patient/Patient';
