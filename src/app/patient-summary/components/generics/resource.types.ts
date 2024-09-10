@@ -39,5 +39,5 @@ export type TTabProps<T> = {
 };
 
 export type TMapComponent = Partial<
-  Record<keyof IResourceType, { title?: String; Component: ElementType }>
+  Record<keyof IResourceType, { title?: string; Component: ElementType }>
 >;
