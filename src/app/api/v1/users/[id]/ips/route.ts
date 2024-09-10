@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
+import { validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   container,
@@ -18,18 +19,14 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
 );
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } },
+  request: Request, { params }: { params: { id: string } }
 ) {
-  const user = await getUserUseCase({ repo: userRepo }, { userId: params.id });
 
-  if (!user) return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
-
-  try {
-    const result = await getPatientDataUseCase(
-      { repo: serverConfigRepo },
-      { user },
-    );
+  try{
+    await validateUser(request, params.id);
+    const user = await getUserUseCase({repo: userRepo}, {userId: params.id});
+    if(!user) return NextResponse.json({message: NOT_FOUND}, { status: 404});
+    const result = await getPatientDataUseCase({repo: serverConfigRepo }, {user});
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
