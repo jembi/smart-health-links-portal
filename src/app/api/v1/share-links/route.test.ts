@@ -3,7 +3,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 
-import { validateUser } from "@/app/utils/authentication";
+import { getUserProfile, validateUser } from "@/app/utils/authentication";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
 import { SHLinkModel } from "@/domain/models/shlink";
@@ -135,7 +135,7 @@ describe("API Route Handlers", () => {
 
     describe("GET /shlink", () => {
         it("should handle successful GET request with valid user_id", async () => {
-            (validateUser as jest.Mock).mockResolvedValue({id: '1234567890'});
+            (getUserProfile as jest.Mock).mockResolvedValue({id: '1234567890'});
             (getSHLinkUseCase as jest.Mock).mockResolvedValue([mockEntity]);
             (mapEntityToModel as jest.Mock).mockReturnValue(mockModel);
             (mapModelToMiniDto as jest.Mock).mockReturnValue({
@@ -144,11 +144,11 @@ describe("API Route Handlers", () => {
                 // Map other properties as necessary
             });
 
-            const request = new NextRequest('http://localhost/api/share-link?user_id=1234567890', { method: 'GET' });
+            const request = new NextRequest('http://localhost/api/share-link', { method: 'GET' });
 
             const response = await GET(request);
 
-            expect(validateUser).toHaveBeenCalledWith(request, '1234567890');
+            expect(getUserProfile).toHaveBeenCalledWith(request);
             expect(response.status).toBe(200);
             expect(response).toBeInstanceOf(NextResponse);
 
@@ -160,29 +160,17 @@ describe("API Route Handlers", () => {
             }]);
         });
 
-        it("should handle missing user_id", async () => {
+        it("should handle errors during GET request", async () => {
+            const error = new Error('Database error');
+            (getUserProfile as jest.Mock).mockResolvedValue({id: '1234567890'});
+            (getSHLinkUseCase as jest.Mock).mockRejectedValue(error);
+            (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Database error' }, { status: 500 }));
+
             const request = new NextRequest('http://localhost/api/share-link', { method: 'GET' });
 
             const response = await GET(request);
 
-            expect(response.status).toBe(404);
-            expect(response).toBeInstanceOf(NextResponse);
-
-            const json = await response.json();
-            expect(json).toEqual({ message: 'Not Found' });
-        });
-
-        it("should handle errors during GET request", async () => {
-            const error = new Error('Database error');
-            (validateUser as jest.Mock).mockResolvedValue({id: '1234567890'});
-            (getSHLinkUseCase as jest.Mock).mockRejectedValue(error);
-            (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Database error' }, { status: 500 }));
-
-            const request = new NextRequest('http://localhost/api/share-link?user_id=1234567890', { method: 'GET' });
-
-            const response = await GET(request);
-
-            expect(validateUser).toHaveBeenCalledWith(request, '1234567890');
+            expect(getUserProfile).toHaveBeenCalledWith(request);
             expect(handleApiValidationError).toHaveBeenCalledWith(error);
             expect(response).toBeInstanceOf(NextResponse);
             expect(response.status).toBe(500);

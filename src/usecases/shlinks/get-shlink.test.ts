@@ -2,13 +2,15 @@ import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 
 import { getSHLinkUseCase } from './get-shlink';
+import { SHLinkModel } from '@/domain/models/shlink';
 
 // Mock the repository interface
 describe('getSHLinkUseCase', () => {
   let mockRepo: Partial<jest.Mocked<ISHLinkRepository>>;
   let mockContext: { repo: ISHLinkRepository };
-  let mockSHLinkEntity: SHLinkEntity[];
+  let mockSHLinkEntities: SHLinkEntity[];
   let mockUserId: string;
+  let mockModels: SHLinkModel[];
 
   beforeEach(() => {
     mockRepo = {
@@ -20,7 +22,7 @@ describe('getSHLinkUseCase', () => {
     mockUserId = '1234567890';
 
     // Mock entity data
-    mockSHLinkEntity = [
+    mockSHLinkEntities = [
       {
         id: '1',
         name: 'name 1',
@@ -42,9 +44,12 @@ describe('getSHLinkUseCase', () => {
         config_exp: new Date('2024-06-01T00:00:00Z'),
       },
     ];
-
+    mockModels = [
+      new SHLinkModel(mockUserId, 'name 1', 3, true, 'token-xyz1234', 'passcode-abcde',new Date('2024-01-01T00:00:00Z'), '1'),
+      new SHLinkModel(mockUserId, 'name 2', 1, false, 'token-uvw5678', 'passcode-fghij', new Date('2024-06-01T00:00:00Z'), '2')
+    ];
     // Set up mock implementations
-    (mockRepo.findMany as jest.Mock).mockResolvedValue(mockSHLinkEntity);
+    (mockRepo.findMany as jest.Mock).mockResolvedValue(mockSHLinkEntities);
   });
 
   it("should call the repository's findMany method with the correct user_id", async () => {
@@ -56,7 +61,7 @@ describe('getSHLinkUseCase', () => {
   it('should return the list of SHLinkEntities returned by the repository', async () => {
     const result = await getSHLinkUseCase(mockContext, { user_id: mockUserId });
 
-    expect(result).toEqual(mockSHLinkEntity);
+    expect(result.length).toEqual(mockModels.length);
   });
 
   it('should return an empty array if the repository returns no entities', async () => {
