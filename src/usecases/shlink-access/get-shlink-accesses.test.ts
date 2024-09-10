@@ -1,9 +1,9 @@
 import { SHLinkAccessModel } from '@/domain/models/shlink-access';
+import { SHLinkAccessEntity } from '@/entities/shlink-access';
 import { ISHLinkAccessRepository } from '@/infrastructure/repositories/interfaces/shlink-access-repository';
 import { mapEntityToModel } from '@/mappers/shlink-access-mapper';
 
 import { getSHLinkAccessesUseCase } from './get-shlink-accesses';
-import { SHLinkAccessEntity } from '@/entities/shlink-access';
 
 // Mock the mapping function and repository
 jest.mock('@/mappers/shlink-access-mapper', () => ({

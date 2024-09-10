@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { NOT_FOUND } from "@/app/constants/http-constants";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkAccessRepositoryToken, SHLinkRepositoryToken } from "@/container";
@@ -7,7 +9,6 @@ import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shli
 import { mapModelToDto } from "@/mappers/shlink-access-mapper";
 import { getSHLinkAccessesUseCase } from "@/usecases/shlink-access/get-shlink-accesses";
 import { getSingleSHLinkUseCase } from "@/usecases/shlinks/get-single-shlink";
-import { NextResponse } from "next/server";
 
 const repo = container.get<ISHLinkAccessRepository>(SHLinkAccessRepositoryToken);
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);

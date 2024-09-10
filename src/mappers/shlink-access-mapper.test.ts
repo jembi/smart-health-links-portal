@@ -1,8 +1,8 @@
+import { SHLinkAccessDto } from '@/domain/dtos/shlink-access';
 import { SHLinkAccessModel } from '@/domain/models/shlink-access';
 import { SHLinkAccessEntity } from '@/entities/shlink-access';
 
 import { mapModelToEntity, mapEntityToModel, mapModelToDto } from './shlink-access-mapper';
-import { SHLinkAccessDto } from '@/domain/dtos/shlink-access';
 
 // Mock the SHLinkAccessModel class
 jest.mock('@/domain/models/shlink-access', () => {

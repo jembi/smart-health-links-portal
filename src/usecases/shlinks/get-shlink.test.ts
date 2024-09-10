@@ -1,8 +1,8 @@
+import { SHLinkModel } from '@/domain/models/shlink';
 import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 
 import { getSHLinkUseCase } from './get-shlink';
-import { SHLinkModel } from '@/domain/models/shlink';
 
 // Mock the repository interface
 describe('getSHLinkUseCase', () => {

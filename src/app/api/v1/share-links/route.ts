@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { getUserProfile, validateUser } from "@/app/utils/authentication";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkRepositoryToken } from "@/container";
