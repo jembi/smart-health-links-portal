@@ -6,12 +6,18 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  styled,
 } from '@mui/material';
 
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
 import { IResourceType } from '@/types/fhir.types';
 
 import { tableConfig } from './resource.types';
+
+export const StyledTableCell = styled(TableCell)(() => ({
+  width: 0,
+  minWidth: '120px',
+}));
 
 export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
   title,

@@ -1,8 +1,9 @@
-import { TableRow, TableCell } from '@mui/material';
+import { TableRow } from '@mui/material';
 import React from 'react';
 
 import { EResourceType, TType } from '@/types/fhir.types';
 
+import { StyledTableCell } from '../../generics/DetailedTable';
 import { TRow, TTabProps } from '../../generics/resource.types';
 import { TabSection } from '../../generics/TabSection';
 
@@ -40,10 +41,10 @@ export const AllergyIntolerance = <T extends TAllergyIntolerance>(
           Object.entries(customFields).map(([key, val]) =>
             row[key]?.coding?.map((data, index) => (
               <TableRow key={`${JSON.stringify(data)}_${index}`}>
-                <TableCell>{val}</TableCell>
-                <TableCell>{data.code}</TableCell>
-                <TableCell>{data.display}</TableCell>
-                <TableCell>{data.system}</TableCell>
+                <StyledTableCell>{val}</StyledTableCell>
+                <StyledTableCell>{data.code}</StyledTableCell>
+                <StyledTableCell>{data.display}</StyledTableCell>
+                <StyledTableCell>{data.system}</StyledTableCell>
               </TableRow>
             )),
           ),
