@@ -18,11 +18,18 @@ export const TabSection = <T extends IResourceType[EResourceType]>({
         {title} {index > -1 && `(${index + 1})`}
       </StyledSectionTypography>
 
-      {rows.map(({ type, config }, index) => {
+      {rows.map((row, index) => {
+        const { type, config } = row;
         if (type === 'row') {
-          const { field, label, value = '', prefix = '' } = config;
+          const {
+            field,
+            label,
+            value = '',
+            prefix = '',
+            renderRow = () => {},
+          } = config;
           if (field) {
-            const selectedField = datum[field];
+            const selectedField = renderRow(datum) || datum[field];
 
             if (Array.isArray(selectedField?.['coding'])) {
               return selectedField['coding'].map((item) => {

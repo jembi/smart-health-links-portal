@@ -1,4 +1,5 @@
-import { ElementType } from 'react';
+import { TableCellProps, TableRowProps } from '@mui/material';
+import { ElementType, FC, FunctionComponent } from 'react';
 
 import { IResourceType } from '@/types/fhir.types';
 
@@ -7,6 +8,7 @@ export type rowConfig<T> = {
   label: string;
   value?: string;
   prefix?: string;
+  renderRow?: (field: T) => string;
 };
 
 export type tableConfig<T> = {
@@ -14,13 +16,17 @@ export type tableConfig<T> = {
   columns: string[];
   customFields?: Partial<Record<keyof T, string>>;
   resource: (resource) => T;
-  renderRows: ({
+  renderRow: ({
     row,
     customFields,
+    StyledTableRow,
+    StyledTableCell,
   }: {
-    customFields: Partial<Record<keyof T, string>>;
     row: T;
-  }) => JSX.Element[];
+    customFields: Partial<Record<keyof T, string>>;
+    StyledTableRow: FC<TableRowProps>;
+    StyledTableCell: FC<TableCellProps & { cellNumber?: number }>;
+  }) => JSX.Element[] | JSX.Element[][];
 };
 
 type TRowRow<T> = {

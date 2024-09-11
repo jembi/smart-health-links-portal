@@ -14,17 +14,20 @@ import { IResourceType } from '@/types/fhir.types';
 
 import { tableConfig } from './resource.types';
 
-export const StyledTableCell = styled(TableCell)(() => ({
-  width: 0,
-  minWidth: '120px',
+export const StyledTableRow = styled(TableRow)(() => ({}));
+
+export const StyledTableCell = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== 'cellNumber',
+})(({ cellNumber }: { cellNumber: number }) => ({
+  width: `${100 / cellNumber}%`,
 }));
 
 export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
   title,
   columns,
+  resource: row,
   customFields,
-  resource,
-  renderRows,
+  renderRow,
 }: Omit<tableConfig<T>, 'resource'> & { resource: T }) => (
   <TableContainer component={Paper}>
     <ArrayCaption caption={title} />
@@ -36,7 +39,16 @@ export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
           ))}
         </TableRow>
       </TableHead>
-      <TableBody>{renderRows({ customFields, row: resource })}</TableBody>
+      <TableBody>
+        {renderRow({
+          row,
+          customFields,
+          StyledTableRow: (props) => <StyledTableRow {...props} />,
+          StyledTableCell: (props) => (
+            <StyledTableCell {...props} cellNumber={columns.length} />
+          ),
+        })}
+      </TableBody>
     </Table>
   </TableContainer>
 );
