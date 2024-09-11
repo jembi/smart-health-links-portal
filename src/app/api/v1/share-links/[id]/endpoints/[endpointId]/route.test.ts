@@ -23,10 +23,10 @@ jest.mock('@/usecases/patient/get-patient-data');
 jest.mock('@/usecases/shlinks/get-single-shlink');
 jest.mock('@/usecases/users/get-user');
 
-describe('GET /api/v1/[id]/[endpointId]', () => {
+describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
   const mockRequest = (ticketId: string | null) => {
     const url = new URL(
-      'http://localhost/api/v1/123/endpoint?ticket=' + ticketId,
+      'http://localhost/api/v1/share-links/12356/endpoints/endpoint?ticket=' + ticketId,
     );
     return new NextRequest(url.toString(), { method: 'GET' });
   };
@@ -66,8 +66,8 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     (getAccessTicketUseCase as jest.Mock).mockResolvedValue(mockTicket);
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(null);
 
-    const request = mockRequest('valid-ticket');
-    const response = await GET(request, { params: mockParams });
+    const request = mockRequest('123456789');
+    const response = await GET(request, { params: {id: 'abc', endpointId: ''} });
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(404);
@@ -75,7 +75,7 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     expect(responseBody).toEqual({ message: NOT_FOUND });
   });
 
-  it('should return 404 if user is not found', async () => {
+  it('should return 401 if user is not found', async () => {
     (getAccessTicketUseCase as jest.Mock).mockResolvedValue(mockTicket);
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockShlink);
     (getUserUseCase as jest.Mock).mockResolvedValue(null);
@@ -84,9 +84,9 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     const response = await GET(request, { params: mockParams });
 
     expect(response).toBeInstanceOf(NextResponse);
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(401);
     const responseBody = await response.json();
-    expect(responseBody).toEqual({ message: NOT_FOUND });
+    expect(responseBody).toEqual({ message: UNAUTHORIZED_REQUEST });
   });
 
   it('should return 200 with patient data if everything is valid', async () => {
@@ -110,7 +110,7 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     expect(jsonResponse).toEqual(mockPatientData);
   });
 
-  it('should return 404 if patient data is not found', async () => {
+  it('should return 401 if patient data is not found', async () => {
     (getAccessTicketUseCase as jest.Mock).mockResolvedValue(mockTicket);
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockShlink);
     (getUserUseCase as jest.Mock).mockResolvedValue(mockUser);
@@ -120,8 +120,8 @@ describe('GET /api/v1/[id]/[endpointId]', () => {
     const response = await GET(request, { params: mockParams });
 
     expect(response).toBeInstanceOf(NextResponse);
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(401);
     const responseBody = await response.json();
-    expect(responseBody).toEqual({ message: NOT_FOUND });
+    expect(responseBody).toEqual({ message: UNAUTHORIZED_REQUEST });
   });
 });

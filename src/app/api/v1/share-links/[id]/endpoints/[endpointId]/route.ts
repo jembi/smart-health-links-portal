@@ -31,6 +31,29 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
+/**
+ * @swagger
+ * /api/v1/shlinks/{id}/endpoints/{endpointId}:
+ *   get:
+ *     tags: [Share Link Endpoints]
+ *     description: Get a share link endpoint.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the share link's unique identifier.
+ *         required: true
+ *       - name: endpointId
+ *         in: path
+ *         description: A string representing the share link endpoint's unique identifier.
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Get Share Link
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 export async function GET(
   request: Request,
   { params }: { params: { id: string; endpointId: string } },
@@ -45,21 +68,19 @@ export async function GET(
       ticketId,
     );
 
-    if (!ticket) {
+    if (!ticket || ticket.getSHLinkId() !== params.id) {
       return NextResponse.json(
         { message: UNAUTHORIZED_REQUEST },
         { status: 401 },
       );
     }
 
-    if (ticket.getSHLinkId() !== params.id) {
-      return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
-    }
-
     const shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
       { id: params.id },
     );
+
+    if(!shlink) return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
 
     const user = await getUserUseCase(
       { repo: userRepo },

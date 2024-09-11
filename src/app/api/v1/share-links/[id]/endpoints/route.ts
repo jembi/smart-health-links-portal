@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
+import { container, ServerConfigRepositoryToken, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from '@/container';
 import {
   CreateSHLinkEndpointDto,
   SHLinkEndpointDto,
 } from '@/domain/dtos/shlink-endpoint';
-import prisma from '@/infrastructure/clients/prisma';
-import { ServerConfigPrismaRepository } from '@/infrastructure/repositories/prisma/server-config-repository';
-import { SHLinkEndpointPrismaRepository } from '@/infrastructure/repositories/prisma/shlink-endpoint-repository';
-import { SHLinkPrismaRepository } from '@/infrastructure/repositories/prisma/shlink-repository';
+import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
+import { ISHLinkEndpointRepository } from '@/infrastructure/repositories/interfaces/shlink-endpoint-repository';
+import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import {
   mapDtoToModel,
   mapModelToDto as mapModelToDtoEndpoint,
@@ -19,10 +19,36 @@ import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-co
 import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
-const shlRepo = new SHLinkPrismaRepository(prisma);
-const shlEndpointRepo = new SHLinkEndpointPrismaRepository(prisma);
-const serverConfigRepo = new ServerConfigPrismaRepository(prisma);
+const shlRepo =  container.get<ISHLinkRepository>(SHLinkRepositoryToken);
+const shlEndpointRepo = container.get<ISHLinkEndpointRepository>(SHLinkEndpointRepositoryToken);
+const serverConfigRepo = container.get<IServerConfigRepository>(ServerConfigRepositoryToken);
 
+/**
+ * @swagger
+ * /api/v1/shlinks/{id}/endpoints:
+ *   post:
+ *     tags: [Share Link Endpoints]
+ *     description: Create a share link endpoint.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the share link's unique identifier.
+ *         required: true
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/CreateSHLinkEndpoint'
+ *     responses:
+ *       200:
+ *         description: Get Share Link
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/SHLinkEndpoint'
+ */
 export async function POST(
   request: Request,
   { params }: { params: { id: string } },
