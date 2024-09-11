@@ -1,7 +1,7 @@
+import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 import { UNAUTHORIZED_REQUEST } from "../constants/http-constants";
-import { NextRequest } from "next/server";
 
 export interface UserProfile{
     name: string;

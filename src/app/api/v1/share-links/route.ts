@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { NOT_FOUND } from "@/app/constants/http-constants";
-import { validateUser } from "@/app/utils/authentication";
+import { getUserProfile, validateUser } from "@/app/utils/authentication";
 import { handleApiValidationError } from "@/app/utils/error-handler";
 import { container, SHLinkRepositoryToken } from "@/container";
 import { CreateSHLinkDto, SHLinkDto } from "@/domain/dtos/shlink";
-import { SHLinkEntity } from "@/entities/shlink";
 import { ISHLinkRepository } from "@/infrastructure/repositories/interfaces/shlink-repository";
 import { 
     mapDtoToModel,
-    mapEntityToModel, 
     mapModelToDto,
     mapModelToMiniDto
 } from "@/mappers/shlink-mapper";
@@ -32,15 +29,11 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const userId = url.searchParams.get('user_id');
-
-    if(!userId) return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
-
     try{
-        await validateUser(request, userId);
-        const newShlink:SHLinkEntity[] = await getSHLinkUseCase({ repo }, { user_id: userId })
-        return NextResponse.json(newShlink.map(shlink => mapModelToMiniDto(mapEntityToModel(shlink))), { status: 200 });
+        const user = await getUserProfile(request);
+
+        const newShlink = await getSHLinkUseCase({ repo }, { user_id: user.id })
+        return NextResponse.json(newShlink.map(shlink => mapModelToMiniDto(shlink)), { status: 200 });
     }
     catch(error){
         return handleApiValidationError(error);
