@@ -45,6 +45,7 @@ model shlink {
     id                         String           @id @unique @default(cuid())
     passcode_failures_remaining Int             @default(5)
     config_passcode            String?          /// @encrypted
+    config_passcode_hash        String?         /// @encryption:hash(config_passcode)
     config_exp                 DateTime?
     active                     Boolean          @default(true)
     management_token           String           @unique @default(cuid())
