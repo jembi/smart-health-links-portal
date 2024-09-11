@@ -1,4 +1,4 @@
-import { TType, TBundle, IDynamicProps } from '../../types/fhir.types';
+import { TType, TBundle, IDynamicProps } from '@/types/fhir.types';
 
 export const extractResourceInfo = <
   TResource extends IDynamicProps['resource'],

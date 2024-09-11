@@ -3,8 +3,8 @@ import React from 'react';
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
 import { IResourceType } from '@/types/fhir.types';
 
+import ConnectionDetails from './ConnectionDetails';
 import InfoRow from '../../InfoRow';
-import ConnectionDetails from '../Patient/ConnectionDetails';
 
 export default function Organization({
   data,

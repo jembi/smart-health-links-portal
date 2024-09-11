@@ -3,23 +3,13 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
-import { ElementType, useState } from 'react';
+import { useState } from 'react';
 
 import { extractResourceInfo } from '@/app/utils/helpers';
+import { IResourceType, TBundle } from '@/types/fhir.types';
 
-import Condition from './resources/Condition/Condition';
-import Organization from './resources/Organization/Organization';
-import Patient from './resources/Patient/Patient';
-import Practitioner from './resources/Practitioner/Practitioner';
+import { COMPONENT_MAP } from './generics/constants';
 import TabPanel from './TabPanel';
-import { IResourceType, TBundle } from '../../../types/fhir.types';
-
-const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {
-  Patient,
-  Organization,
-  Condition,
-  Practitioner,
-};
 
 export default function PatientSummary({
   fhirBundle,
@@ -32,13 +22,15 @@ export default function PatientSummary({
   const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>
     dataTabs.map((resourceType: keyof IResourceType) => {
-      const DynamicComponent = COMPONENT_MAP[resourceType];
-      const resourceInfo = extractResourceInfo(resourceType, fhirBundle);
-      return (
-        <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-          {DynamicComponent && <DynamicComponent data={resourceInfo} />}
-        </TabPanel>
-      );
+      if (COMPONENT_MAP[resourceType]) {
+        const { Component, ...rest } = COMPONENT_MAP[resourceType];
+        const resourceInfo = extractResourceInfo(resourceType, fhirBundle);
+        return (
+          <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
+            {<Component data={resourceInfo} {...rest} />}
+          </TabPanel>
+        );
+      }
     });
   const renderTabs = () =>
     dataTabs.map((resourceType) => (
