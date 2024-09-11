@@ -1,11 +1,11 @@
-import { TMapComponent } from './resource.types';
+import { TComponentMap } from './resource.types';
 import { AllergyIntolerance } from '../resources/AllergyIntolerance';
 import Condition from '../resources/Condition/Condition';
 import Organization from '../resources/Organization/Organization';
 import { Patient } from '../resources/Patient';
 import Practitioner from '../resources/Practitioner/Practitioner';
 
-export const COMPONENT_MAP: TMapComponent = {
+export const COMPONENT_MAP: TComponentMap = {
   Patient: { title: 'Patient', Component: Patient },
   Organization: { Component: Organization },
   Condition: { Component: Condition },

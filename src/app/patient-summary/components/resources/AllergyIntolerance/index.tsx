@@ -48,6 +48,6 @@ const rows: TRow<TAllergyIntolerance>[] = [
   },
 ];
 
-export const AllergyIntolerance = <T extends TAllergyIntolerance>(
-  props: Omit<TTabProps<T>, 'rows'>,
+export const AllergyIntolerance = (
+  props: Omit<TTabProps<TAllergyIntolerance>, 'rows'>,
 ) => <TabSection<TAllergyIntolerance> {...props} rows={rows} />;

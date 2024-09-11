@@ -63,6 +63,6 @@ const rows: TRow<TPatient>[] = [
   },
 ];
 
-export const Patient = <T extends TPatient>(
-  props: Omit<TTabProps<T>, 'rows'>,
-) => <TabSection<TPatient> {...props} rows={rows} />;
+export const Patient = (props: Omit<TTabProps<TPatient>, 'rows'>) => (
+  <TabSection<TPatient> {...props} rows={rows} />
+);
