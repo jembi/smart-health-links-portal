@@ -1,7 +1,7 @@
 import { TableCellProps, TableRowProps } from '@mui/material';
-import { ElementType, FC, FunctionComponent } from 'react';
+import { ElementType, FC } from 'react';
 
-import { EResourceType, IResourceType } from '@/types/fhir.types';
+import { IResourceType } from '@/types/fhir.types';
 
 export type rowConfig<T> = {
   field: keyof T;
