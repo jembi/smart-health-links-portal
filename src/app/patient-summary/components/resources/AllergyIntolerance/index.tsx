@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { camelToFlat, getCodings } from '@/app/utils/helpers';
 import { EResourceType, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -27,22 +28,19 @@ const rows: TRow<TAllergyIntolerance>[] = [
     config: {
       title: 'Allergy Details',
       columns: ['Name', 'Code', 'Display', 'System'],
-      customFields: {
-        clinicalStatus: 'Clinical Status',
-        verificationStatus: 'Verification Status',
-        code: 'Code',
-      },
-      renderRow: ({ row, customFields, StyledTableRow, StyledTableCell }) =>
-        Object.entries(customFields).map(([key, val]) =>
-          row[key]?.coding?.map((data, index) => (
+      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
+        getCodings({ resource: row }).map((data, index) => {
+          const [[key, { code, display, system }]] = Object.entries(data);
+
+          return (
             <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
-              <StyledTableCell>{val}</StyledTableCell>
-              <StyledTableCell>{data.code}</StyledTableCell>
-              <StyledTableCell>{data.display}</StyledTableCell>
-              <StyledTableCell>{data.system}</StyledTableCell>
+              <StyledTableCell>{camelToFlat(key)}</StyledTableCell>
+              <StyledTableCell>{code}</StyledTableCell>
+              <StyledTableCell>{display}</StyledTableCell>
+              <StyledTableCell>{system}</StyledTableCell>
             </StyledTableRow>
-          )),
-        ),
+          );
+        }),
       resource: (datum) => datum,
     },
   },

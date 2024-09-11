@@ -14,16 +14,13 @@ export type rowConfig<T> = {
 export type tableConfig<T> = {
   title: string;
   columns: string[];
-  customFields?: Partial<Record<keyof T, string>>;
   resource: (resource: T) => T;
   renderRow: ({
     row,
-    customFields,
     StyledTableRow,
     StyledTableCell,
   }: {
     row: T;
-    customFields: Partial<Record<keyof T, string>>;
     StyledTableRow: FC<TableRowProps>;
     StyledTableCell: FC<TableCellProps & { cellNumber?: number }>;
   }) => JSX.Element[] | JSX.Element[][];

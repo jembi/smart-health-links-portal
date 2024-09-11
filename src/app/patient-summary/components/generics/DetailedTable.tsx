@@ -26,7 +26,6 @@ export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
   title,
   columns,
   resource: row,
-  customFields,
   renderRow,
 }: Omit<tableConfig<T>, 'resource'> & { resource: T }) => (
   <TableContainer component={Paper}>
@@ -42,7 +41,6 @@ export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
       <TableBody>
         {renderRow({
           row,
-          customFields,
           StyledTableRow: (props) => <StyledTableRow {...props} />,
           StyledTableCell: (props) => (
             <StyledTableCell {...props} cellNumber={columns.length} />
