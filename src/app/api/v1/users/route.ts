@@ -39,7 +39,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
  *               type: object
  *               $ref: '#/components/schemas/User'
  */
-export async function POST(request: Request, response: NextResponse<UserDto>) {
+export async function POST(request: Request) {
   let dto: CreateUserDto = await request.json();
   try {
     const patientId = await searchPatientUseCase(
