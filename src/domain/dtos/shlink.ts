@@ -175,7 +175,7 @@ export class SHLinkRequestDto {
  * @swagger
  * components:
  *   schemas:
- *     SHLinkUpdate
+ *     SHLinkUpdate:
  *       type: object
  *       properties:
  *         id:
