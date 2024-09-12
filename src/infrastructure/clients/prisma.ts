@@ -2,7 +2,9 @@ import { PrismaClient } from '@prisma/client';
 import { fieldEncryptionExtension } from 'prisma-field-encryption';
 
 const prismaClientSingleton = () => {
-  return new PrismaClient().$extends(fieldEncryptionExtension());
+  return new PrismaClient().$extends(
+    fieldEncryptionExtension(),
+  ) as unknown as PrismaClient;
 };
 
 declare const globalThis: {

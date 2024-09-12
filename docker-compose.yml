@@ -13,7 +13,7 @@ services:
       - ./public:/app/public
       - /app/.next
     ports:
-      - "3000:3000"
+      - "3080:3000"
     networks:
       - smart-health-links-portal-network
     healthcheck:
@@ -50,7 +50,7 @@ services:
       KC_DB_USERNAME: ${POSTGRES_USER}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - 8080:8080
+      - 8082:8080
     volumes:
       - ./import/config/shlp:/opt/keycloak/data/import
     restart: always
