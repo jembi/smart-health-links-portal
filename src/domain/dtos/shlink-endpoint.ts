@@ -47,7 +47,7 @@ export class CreateSHLinkEndpointDto {
  *         urlPath:
  *           type: string
  *           description: An optional string representing the share link endpoint's query parameters.
- *           example: 
+ *           example:
  */
 export class SHLinkEndpointDto extends CreateSHLinkEndpointDto {
   id: string;

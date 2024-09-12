@@ -17,7 +17,7 @@
  *         clientSecret:
  *           type: string
  *           description: A string representing a client's secret for the external endpoint.
- *           example: 
+ *           example:
  *           required: false
  *         tokenEndpoint:
  *           type: string

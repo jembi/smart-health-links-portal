@@ -15,21 +15,28 @@ export const mapModelToEntity = (
     : undefined;
 };
 
+export const mapEntityToModel = (
+  shlinkAccessEntity?: SHLinkAccessEntity,
+): SHLinkAccessModel | undefined => {
+  return shlinkAccessEntity
+    ? new SHLinkAccessModel(
+        shlinkAccessEntity.shlink_id,
+        shlinkAccessEntity.access_time,
+        shlinkAccessEntity.recipient,
+        shlinkAccessEntity.id,
+      )
+    : undefined;
+};
 
-export const mapEntityToModel = (shlinkAccessEntity?: SHLinkAccessEntity): SHLinkAccessModel  | undefined => {
-  return shlinkAccessEntity ? new SHLinkAccessModel(
-    shlinkAccessEntity.shlink_id,
-    shlinkAccessEntity.access_time,
-    shlinkAccessEntity.recipient,
-    shlinkAccessEntity.id
-  ) : undefined;
-}
-
-export const mapModelToDto = (shlinkAccessModel?: SHLinkAccessModel): SHLinkAccessDto | undefined => {
-  return shlinkAccessModel ? {
-    id: shlinkAccessModel.getId(),
-    shlinkId: shlinkAccessModel.getSHLinkId(),
-    accessTime: shlinkAccessModel.getAccessTime(),
-    recipient: shlinkAccessModel.getRecipient(),
-  } : undefined;
-}
+export const mapModelToDto = (
+  shlinkAccessModel?: SHLinkAccessModel,
+): SHLinkAccessDto | undefined => {
+  return shlinkAccessModel
+    ? {
+        id: shlinkAccessModel.getId(),
+        shlinkId: shlinkAccessModel.getSHLinkId(),
+        accessTime: shlinkAccessModel.getAccessTime(),
+        recipient: shlinkAccessModel.getRecipient(),
+      }
+    : undefined;
+};

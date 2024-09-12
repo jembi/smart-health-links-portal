@@ -16,11 +16,11 @@
  *         configPasscode:
  *           type: string
  *           description: An optional string representing the share link's password.
- *           example: 
+ *           example:
  *         configExp:
  *           type: datetime
  *           description: An optional date representing the date when the share link expires.
- *           example: 
+ *           example:
  */
 export class CreateSHLinkDto {
   userId: string;
@@ -77,11 +77,11 @@ export class SHLinkFileDto {
  *         configPasscode:
  *           type: string
  *           description: An optional string representing the share link's password.
- *           example: 
+ *           example:
  *         configExp:
  *           type: datetime
  *           description: An optional date representing the date when the share link expires.
- *           example: 
+ *           example:
  *         passcodeFailureRemaining:
  *           type: number
  *           description: An integer representing how many passcode failure attempts are remaining for the share link.
@@ -185,7 +185,7 @@ export class SHLinkRequestDto {
  *         passcode:
  *           type: string
  *           description: An optional string representing the share link's new passcode.
- *           example: 
+ *           example:
  *         managementToken:
  *           type: string
  *           description: A string representing the share link's unique management token used for managing the share link.
@@ -193,7 +193,7 @@ export class SHLinkRequestDto {
  *         oldPasscode:
  *           type: string
  *           description: An optional string representing the share link's old passcode.
- *           example: 
+ *           example:
  *         expiryDate:
  *           type: datetime
  *           required: false

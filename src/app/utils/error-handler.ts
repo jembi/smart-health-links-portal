@@ -28,14 +28,13 @@ export function handleApiValidationError(error: unknown) {
     return NextResponse.json(
       { error: error.name, detail: error.message },
       { status: error.code },
-    )
-  } else if(error instanceof AuthenticationError) {
+    );
+  } else if (error instanceof AuthenticationError) {
     return NextResponse.json(
       { error: error.name, detail: error.message },
-      { status: error.code }
-    )
-  } 
-  else {
+      { status: error.code },
+    );
+  } else {
     return NextResponse.json(
       { error: SERVER_ERROR, detail: error },
       { status: 500 },

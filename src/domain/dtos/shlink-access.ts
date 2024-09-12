@@ -11,7 +11,7 @@
  *           example: hWWNwskdGOnEdq0KIQ3S
  */
 export class SHLinkAccessRequestDto {
-    managementToken: string
+  managementToken: string;
 }
 
 /**
@@ -39,8 +39,8 @@ export class SHLinkAccessRequestDto {
  *           example: 2024-09-09T09:45:00.479+00:00
  */
 export class SHLinkAccessDto {
-    shlinkId: string;
-    accessTime: Date;
-    recipient: string;
-    id?: string;
+  shlinkId: string;
+  accessTime: Date;
+  recipient: string;
+  id?: string;
 }
