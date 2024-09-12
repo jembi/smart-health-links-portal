@@ -2,7 +2,11 @@ import { SHLinkAccessDto } from '@/domain/dtos/shlink-access';
 import { SHLinkAccessModel } from '@/domain/models/shlink-access';
 import { SHLinkAccessEntity } from '@/entities/shlink-access';
 
-import { mapModelToEntity, mapEntityToModel, mapModelToDto } from './shlink-access-mapper';
+import {
+  mapModelToEntity,
+  mapEntityToModel,
+  mapModelToDto,
+} from './shlink-access-mapper';
 
 // Mock the SHLinkAccessModel class
 jest.mock('@/domain/models/shlink-access', () => {
@@ -70,7 +74,12 @@ describe('mapEntityToModel', () => {
       id: id,
     };
 
-    const expectedModel = new SHLinkAccessModel(shlinkId, accessTime, recipient, id);
+    const expectedModel = new SHLinkAccessModel(
+      shlinkId,
+      accessTime,
+      recipient,
+      id,
+    );
 
     const result = mapEntityToModel(entity);
 

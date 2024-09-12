@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { container, ServerConfigRepositoryToken, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from '@/container';
+import {
+  container,
+  ServerConfigRepositoryToken,
+  SHLinkEndpointRepositoryToken,
+  SHLinkRepositoryToken,
+} from '@/container';
 import {
   CreateSHLinkEndpointDto,
   SHLinkEndpointDto,
@@ -19,9 +24,13 @@ import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-co
 import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
-const shlRepo =  container.get<ISHLinkRepository>(SHLinkRepositoryToken);
-const shlEndpointRepo = container.get<ISHLinkEndpointRepository>(SHLinkEndpointRepositoryToken);
-const serverConfigRepo = container.get<IServerConfigRepository>(ServerConfigRepositoryToken);
+const shlRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
+const shlEndpointRepo = container.get<ISHLinkEndpointRepository>(
+  SHLinkEndpointRepositoryToken,
+);
+const serverConfigRepo = container.get<IServerConfigRepository>(
+  ServerConfigRepositoryToken,
+);
 
 /**
  * @swagger

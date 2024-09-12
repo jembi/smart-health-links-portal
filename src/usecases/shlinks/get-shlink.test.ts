@@ -45,8 +45,26 @@ describe('getSHLinkUseCase', () => {
       },
     ];
     mockModels = [
-      new SHLinkModel(mockUserId, 'name 1', 3, true, 'token-xyz1234', 'passcode-abcde',new Date('2024-01-01T00:00:00Z'), '1'),
-      new SHLinkModel(mockUserId, 'name 2', 1, false, 'token-uvw5678', 'passcode-fghij', new Date('2024-06-01T00:00:00Z'), '2')
+      new SHLinkModel(
+        mockUserId,
+        'name 1',
+        3,
+        true,
+        'token-xyz1234',
+        'passcode-abcde',
+        new Date('2024-01-01T00:00:00Z'),
+        '1',
+      ),
+      new SHLinkModel(
+        mockUserId,
+        'name 2',
+        1,
+        false,
+        'token-uvw5678',
+        'passcode-fghij',
+        new Date('2024-06-01T00:00:00Z'),
+        '2',
+      ),
     ];
     // Set up mock implementations
     (mockRepo.findMany as jest.Mock).mockResolvedValue(mockSHLinkEntities);

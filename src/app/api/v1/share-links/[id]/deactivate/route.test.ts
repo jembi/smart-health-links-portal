@@ -69,12 +69,16 @@ describe('DELETE /api/v1/share-link/[id]/deactivate', () => {
   });
 
   it('should return deactivated link DTO and status 200 when link is found', async () => {
-    (getUserProfile as jest.Mock).mockResolvedValue({id: 'user-123456', name: '', email: ''});
+    (getUserProfile as jest.Mock).mockResolvedValue({
+      id: 'user-123456',
+      name: '',
+      email: '',
+    });
     (deactivateSHLinksUseCase as jest.Mock).mockResolvedValue(mockModel);
     (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
     const request = mockRequest();
-    const response = await DELETE(request, {params: {id: 'user-123456',}});
+    const response = await DELETE(request, { params: { id: 'user-123456' } });
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(200);

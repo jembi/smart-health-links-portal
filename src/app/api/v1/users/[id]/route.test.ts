@@ -83,7 +83,9 @@ describe('GET /api/users/[id]', () => {
     const error = new Error('Validation error');
     (validateUser as jest.Mock).mockResolvedValue(undefined); // Assuming validateUser returns undefined on success
     (getUserUseCase as jest.Mock).mockRejectedValue(error);
-    (handleApiValidationError as jest.Mock).mockReturnValue(NextResponse.json({ message: 'Validation error' }, { status: 400 }));
+    (handleApiValidationError as jest.Mock).mockReturnValue(
+      NextResponse.json({ message: 'Validation error' }, { status: 400 }),
+    );
 
     const mockRequest = new NextRequest('http://localhost/api/users/user-id', {
       method: 'GET',

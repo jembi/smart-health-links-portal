@@ -7,7 +7,7 @@ import { getSHLinkAccessesUseCase } from './get-shlink-accesses';
 
 // Mock the mapping function and repository
 jest.mock('@/mappers/shlink-access-mapper', () => ({
-    mapEntityToModel: jest.fn(),
+  mapEntityToModel: jest.fn(),
 }));
 
 jest.mock(
@@ -19,7 +19,9 @@ jest.mock(
 
 describe('getSHLinkAccessesUseCase', () => {
   const mockFindMany = jest.fn();
-  const mockRepo = { findMany: mockFindMany } as unknown as ISHLinkAccessRepository;
+  const mockRepo = {
+    findMany: mockFindMany,
+  } as unknown as ISHLinkAccessRepository;
   const mockEntityToModel = mapEntityToModel as jest.Mock;
 
   beforeEach(() => {
@@ -31,36 +33,42 @@ describe('getSHLinkAccessesUseCase', () => {
       'shlink-id',
       new Date('2024-01-01T00:00:00Z'),
       'recipient@example.com',
-      '1'
+      '1',
     );
 
     const accessEntity: SHLinkAccessEntity = {
       access_time: new Date('2024-01-01T00:00:00Z'),
       recipient: 'recipient@example.com',
       shlink_id: 'shlink-id',
-      id: '1'
+      id: '1',
     };
 
     mockFindMany.mockReturnValue([accessEntity]);
 
-    await getSHLinkAccessesUseCase({ repo: mockRepo }, {shlinkId: 'shlink-id'});
+    await getSHLinkAccessesUseCase(
+      { repo: mockRepo },
+      { shlinkId: 'shlink-id' },
+    );
 
     // Assert that mapEntityToModel was called with the correct entity
     expect(mockEntityToModel).toHaveBeenCalledWith(accessEntity);
 
     // Assert that repo.findMany was called with the mapped correct filter.
-    expect(mockFindMany).toHaveBeenCalledWith({ shlink_id: 'shlink-id'});
+    expect(mockFindMany).toHaveBeenCalledWith({ shlink_id: 'shlink-id' });
   });
 
   it('should handle cases where findMany returns an empty array', async () => {
     mockFindMany.mockReturnValue([]);
 
-    await getSHLinkAccessesUseCase({ repo: mockRepo }, { shlinkId: 'shlink-id'});
+    await getSHLinkAccessesUseCase(
+      { repo: mockRepo },
+      { shlinkId: 'shlink-id' },
+    );
 
     // Assert that mapModelToEntity was called with the correct model
     expect(mockEntityToModel).not.toHaveBeenCalled();
 
     // Assert that repo.insert was called with undefined
-    expect(mockFindMany).toHaveBeenCalledWith({ shlink_id: 'shlink-id'});
+    expect(mockFindMany).toHaveBeenCalledWith({ shlink_id: 'shlink-id' });
   });
 });

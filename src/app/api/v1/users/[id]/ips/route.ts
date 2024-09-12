@@ -38,14 +38,21 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
  *               type: object
  */
 export async function GET(
-  request: Request, { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: { id: string } },
 ) {
-
-  try{
+  try {
     await validateUser(request, params.id);
-    const user = await getUserUseCase({repo: userRepo}, {userId: params.id});
-    if(!user) return NextResponse.json({message: NOT_FOUND}, { status: 404});
-    const result = await getPatientDataUseCase({repo: serverConfigRepo }, {user});
+    const user = await getUserUseCase(
+      { repo: userRepo },
+      { userId: params.id },
+    );
+    if (!user)
+      return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
+    const result = await getPatientDataUseCase(
+      { repo: serverConfigRepo },
+      { user },
+    );
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {

@@ -80,7 +80,8 @@ export async function GET(
       { id: params.id },
     );
 
-    if(!shlink) return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
+    if (!shlink)
+      return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
 
     const user = await getUserUseCase(
       { repo: userRepo },

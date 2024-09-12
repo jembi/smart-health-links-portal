@@ -8,5 +8,5 @@ export const getSHLinkUseCase = async (
 ): Promise<SHLinkModel[]> => {
   const entities = await context.repo.findMany({ user_id: data.user_id });
 
-  return entities.map(x => mapEntityToModel(x));
+  return entities.map((x) => mapEntityToModel(x));
 };
