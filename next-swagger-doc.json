@@ -1,0 +1,22 @@
+{
+  "apiFolder": "./src/app/api/v1",
+  "outputFile": "/swagger.json",
+  "schemaFolders": ["./src/domain/dtos"],
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Share Link API",
+      "version": "1.0"
+    },
+    "components": {
+      "securitySchemes": {
+        "BearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "security": []
+  }
+}
