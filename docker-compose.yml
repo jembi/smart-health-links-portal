@@ -13,11 +13,11 @@ services:
       - ./public:/app/public
       - /app/.next
     ports:
-      - "3080:3000"
+      - '3080:3000'
     networks:
       - smart-health-links-portal-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
       interval: 30s
       timeout: 3s
       retries: 10
@@ -30,6 +30,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
     networks:
       - smart-health-links-portal-network
 
