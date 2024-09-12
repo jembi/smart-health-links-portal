@@ -19,17 +19,24 @@ For detailed API documentation and usage examples, please visit our [Postman Doc
 To get started with the project, follow these steps:
 
 1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-repository/smart-health-links-portal.git
-    ```
+   ```bash
+   git clone https://github.com/your-repository/smart-health-links-portal.git
+   ```
 2. Install dependencies:
-    ```bash
-    cd smart-health-links-portal
-    yarn install
-    ```
+   ```bash
+   cd smart-health-links-portal
+   yarn install
+   ```
 3. Run the development server:
-    ```bash
-    yarn run dev
-    ```
+   ```bash
+   yarn run dev
+   ```
 4. Open your browser and navigate to `http://localhost:3000` to view the portal.
 
+## Generating swagger docs.
+
+To generate the swagger.json file for this application run the following command.
+
+```bash
+yarn next-swagger-doc-cli next-swagger-doc.json
+```
