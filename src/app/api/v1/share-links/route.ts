@@ -15,6 +15,27 @@ import { getSHLinkUseCase } from "@/usecases/shlinks/get-shlink";
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
+/**
+ * @swagger
+ * /api/v1/shlinks:
+ *   post:
+ *     tags: [Share Links]
+ *     description: Create a server config.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/CreateSHLink'
+ *     responses:
+ *       200:
+ *         description: Create Server Config
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/SHLink'
+ */
 export async function POST(request: Request) {
     try{
         const dto: CreateSHLinkDto = await request.json();
@@ -28,6 +49,22 @@ export async function POST(request: Request) {
     }
 }
 
+/**
+ * @swagger
+ * /api/v1/shlinks:
+ *   get:
+ *     tags: [Share Links]
+ *     description: Get share links.
+ *     responses:
+ *       200:
+ *         description: Gets all the signed in user's share links.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/SHLinkMini'
+ */
 export async function GET(request: Request) {
     try{
         const user = await getUserProfile(request);

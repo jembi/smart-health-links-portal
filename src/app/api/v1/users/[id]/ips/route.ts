@@ -18,6 +18,25 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
+/**
+ * @swagger
+ * /api/v1/users/{id}/ips:
+ *   get:
+ *     tags: [Users]
+ *     description: Get a user's patient summary data.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the user's unique identifier.
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: International Patient Summary
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 export async function GET(
   request: Request, { params }: { params: { id: string } }
 ) {
