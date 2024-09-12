@@ -18,6 +18,27 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
+/**
+ * @swagger
+ * /api/v1/users:
+ *   post:
+ *     tags: [Users]
+ *     description: Creates a new user
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/CreateUser'
+ *     responses:
+ *       200:
+ *         description: A new user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/User'
+ */
 export async function POST(request: Request) {
   let dto: CreateUserDto = await request.json();
   try {

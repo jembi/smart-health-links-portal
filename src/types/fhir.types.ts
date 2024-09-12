@@ -11,7 +11,7 @@ import {
   FhirResource,
 } from 'fhir/r4';
 
-export enum EResourceType {
+export enum EResource {
   Composition = 'Composition',
   Patient = 'Patient',
   Practitioner = 'Practitioner',
@@ -23,21 +23,19 @@ export enum EResourceType {
 }
 
 //TODO: this type need to be extended with extra Resources type if needed
-export interface IResourceType {
-  [EResourceType.Composition]: Composition;
-  [EResourceType.Patient]: Patient;
-  [EResourceType.Practitioner]: Practitioner;
-  [EResourceType.Organization]: Organization;
-  [EResourceType.Condition]: Condition;
-  [EResourceType.Medication]: Medication;
-  [EResourceType.AllergyIntolerance]: AllergyIntolerance;
-  [EResourceType.Observation]: Observation;
+export interface IResource {
+  [EResource.Composition]: Composition;
+  [EResource.Patient]: Patient;
+  [EResource.Practitioner]: Practitioner;
+  [EResource.Organization]: Organization;
+  [EResource.Condition]: Condition;
+  [EResource.Medication]: Medication;
+  [EResource.AllergyIntolerance]: AllergyIntolerance;
+  [EResource.Observation]: Observation;
 }
 
-export type TType<TParam extends keyof IResourceType> = IResourceType[TParam];
+export type TType<TParam extends keyof IResource> = IResource[TParam];
 
-export interface IDynamicProps {
-  resource: keyof IResourceType;
-}
+export type TSupportedResource = TType<EResource>;
 
 export type TBundle<R = FhirResource> = Bundle<R>;

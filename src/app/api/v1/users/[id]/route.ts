@@ -10,6 +10,26 @@ import { getUserUseCase } from "@/usecases/users/get-user";
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   get:
+ *     tags: [Users]
+ *     description: Get a user by id
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the user's unique identifier.
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: User
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/User'
+ */
 export async function GET(
   request: Request,
   { params }: { params: { id: string } },
