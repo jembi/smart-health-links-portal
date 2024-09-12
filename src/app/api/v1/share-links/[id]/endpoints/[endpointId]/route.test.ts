@@ -26,7 +26,8 @@ jest.mock('@/usecases/users/get-user');
 describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
   const mockRequest = (ticketId: string | null) => {
     const url = new URL(
-      'http://localhost/api/v1/share-links/12356/endpoints/endpoint?ticket=' + ticketId,
+      'http://localhost/api/v1/share-links/12356/endpoints/endpoint?ticket=' +
+        ticketId,
     );
     return new NextRequest(url.toString(), { method: 'GET' });
   };
@@ -67,7 +68,9 @@ describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(null);
 
     const request = mockRequest('123456789');
-    const response = await GET(request, { params: {id: 'abc', endpointId: ''} });
+    const response = await GET(request, {
+      params: { id: 'abc', endpointId: '' },
+    });
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(404);
@@ -75,7 +78,7 @@ describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
     expect(responseBody).toEqual({ message: NOT_FOUND });
   });
 
-  it('should return 401 if user is not found', async () => {
+  it('should return 401 if user is not authorized', async () => {
     (getAccessTicketUseCase as jest.Mock).mockResolvedValue(mockTicket);
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockShlink);
     (getUserUseCase as jest.Mock).mockResolvedValue(null);
