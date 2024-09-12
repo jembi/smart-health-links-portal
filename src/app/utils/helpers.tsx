@@ -5,15 +5,35 @@ import {
   TBundle,
   IResource,
   TSupportedResource,
+  EResource,
 } from '@/types/fhir.types';
 
 export const extractResource = <TResource extends keyof IResource>(
   bundle: TBundle,
   resourceType: TResource,
-) =>
-  bundle.entry
-    ?.filter(({ resource }) => resource.resourceType === resourceType)
-    .map(({ resource }) => resource) as TType<TResource>[];
+) => {
+  const filterResourceByType = (type: keyof IResource) =>
+    bundle.entry
+      ?.filter(({ resource }) => resource.resourceType === type)
+      .map(({ resource }) => resource) as TType<TResource>[];
+
+  // Define the dependent resources based on the provided resourceType
+  const dependentResources: Record<string, (keyof IResource)[]> = {
+    Medication: [EResource.MedicationStatement],
+    Composition: [EResource.Patient, EResource.Condition],
+  };
+
+  // Get the resources for the specified type
+  const resources = filterResourceByType(resourceType);
+
+  // If there are dependent resources for the specified type, fetch them as well
+  const dependentResourceTypes = dependentResources[resourceType as string];
+  const dependentResourcesData = dependentResourceTypes
+    ? dependentResourceTypes.flatMap((type) => filterResourceByType(type))
+    : [];
+
+  return [...resources, ...dependentResourcesData];
+};
 
 export const getCodings = <TResource extends TSupportedResource>({
   resource,

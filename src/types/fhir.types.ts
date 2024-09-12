@@ -9,6 +9,7 @@ import {
   Observation,
   Bundle,
   FhirResource,
+  MedicationStatement,
 } from 'fhir/r4';
 
 export enum EResource {
@@ -20,6 +21,7 @@ export enum EResource {
   Medication = 'Medication',
   AllergyIntolerance = 'AllergyIntolerance',
   Observation = 'Observation',
+  MedicationStatement = 'MedicationStatement',
 }
 
 //TODO: this type need to be extended with extra Resources type if needed
@@ -30,6 +32,7 @@ export interface IResource {
   [EResource.Organization]: Organization;
   [EResource.Condition]: Condition;
   [EResource.Medication]: Medication;
+  [EResource.MedicationStatement]: MedicationStatement;
   [EResource.AllergyIntolerance]: AllergyIntolerance;
   [EResource.Observation]: Observation;
 }
