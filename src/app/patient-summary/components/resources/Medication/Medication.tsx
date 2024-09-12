@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
-import { IResourceType } from '@/types/fhir.types';
+import { IResource } from '@/types/fhir.types';
 
 import DosageDetails from './DosageDetail';
 import MedicationInfo from './MedicationInfo';
@@ -11,7 +11,7 @@ import InfoRow from '../../InfoRow';
 export default function Medication({
   data,
 }: {
-  data: IResourceType['MedicationStatement'][] | IResourceType['Medication'][];
+  data: IResource['MedicationStatement'][] | IResource['Medication'][];
 }) {
   const { medications, medicationStatements } = data.reduce(
     (acc, item) => {
@@ -23,8 +23,8 @@ export default function Medication({
       return acc;
     },
     { medications: [], medicationStatements: [] } as {
-      medications: IResourceType['Medication'][];
-      medicationStatements: IResourceType['MedicationStatement'][];
+      medications: IResource['Medication'][];
+      medicationStatements: IResource['MedicationStatement'][];
     },
   );
   const groupedMedicationInfo = medications.map((medication, index) => ({
@@ -76,7 +76,7 @@ export default function Medication({
           <MedicationInfo data={groupedMedication.medication} />
         )}
 
-        {groupedMedication.medicationStatement.dosage && (
+        {groupedMedication.medicationStatement?.dosage && (
           <DosageDetails
             dosageDetails={groupedMedication.medicationStatement?.dosage}
           />
