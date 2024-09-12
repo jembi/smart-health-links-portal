@@ -19,4 +19,9 @@ export const authOptions: AuthOptions = {
       userinfo: `${process.env.NEXT_CONTAINER_KEYCLOAK_ENDPOINT}/realms/shlp/protocol/openid-connect/userinfo`,
     }),
   ],
+  callbacks: {
+    session: async ({ session, token, user }) => {
+      return { ...session, token, user };
+    },
+  },
 };
