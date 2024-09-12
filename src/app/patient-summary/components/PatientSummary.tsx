@@ -5,8 +5,8 @@ import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
 import { useState } from 'react';
 
-import { extractResourceInfo } from '@/app/utils/helpers';
-import { IResourceType, TBundle } from '@/types/fhir.types';
+import { extractResource } from '@/app/utils/helpers';
+import { IResource, TBundle } from '@/types/fhir.types';
 
 import { COMPONENT_MAP } from './generics/constants';
 import TabPanel from './TabPanel';
@@ -21,13 +21,13 @@ export default function PatientSummary({
   );
   const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>
-    dataTabs.map((resourceType: keyof IResourceType) => {
+    dataTabs.map((resourceType: keyof IResource) => {
       if (COMPONENT_MAP[resourceType]) {
         const { Component, ...rest } = COMPONENT_MAP[resourceType];
-        const resourceInfo = extractResourceInfo(resourceType, fhirBundle);
+        const resource = extractResource(fhirBundle, resourceType);
         return (
           <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-            {<Component data={resourceInfo} {...rest} />}
+            {<Component data={resource} {...rest} />}
           </TabPanel>
         );
       }

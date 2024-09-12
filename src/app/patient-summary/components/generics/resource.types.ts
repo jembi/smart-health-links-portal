@@ -1,7 +1,7 @@
 import { TableCellProps, TableRowProps } from '@mui/material';
 import { ElementType, FC } from 'react';
 
-import { IResourceType } from '@/types/fhir.types';
+import { EResource } from '@/types/fhir.types';
 
 export type rowConfig<T> = {
   field: keyof T;
@@ -14,16 +14,13 @@ export type rowConfig<T> = {
 export type tableConfig<T> = {
   title: string;
   columns: string[];
-  customFields?: Partial<Record<keyof T, string>>;
   resource: (resource: T) => T;
   renderRow: ({
     row,
-    customFields,
     StyledTableRow,
     StyledTableCell,
   }: {
     row: T;
-    customFields: Partial<Record<keyof T, string>>;
     StyledTableRow: FC<TableRowProps>;
     StyledTableCell: FC<TableCellProps & { cellNumber?: number }>;
   }) => JSX.Element[] | JSX.Element[][];
@@ -48,5 +45,5 @@ export type TTabProps<T> = {
 };
 
 export type TComponentMap = Partial<
-  Record<keyof IResourceType, { title?: string; Component: ElementType }>
+  Record<`${EResource}`, { title?: string; Component: ElementType }>
 >;

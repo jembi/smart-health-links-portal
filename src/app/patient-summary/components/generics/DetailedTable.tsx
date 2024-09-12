@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { IResourceType } from '@/types/fhir.types';
+import { TSupportedResource } from '@/types/fhir.types';
 
 import { tableConfig } from './resource.types';
 
@@ -22,11 +22,10 @@ export const StyledTableCell = styled(TableCell, {
   width: `${100 / cellNumber}%`,
 }));
 
-export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
+export const DetailedTable = <T extends TSupportedResource>({
   title,
   columns,
   resource: row,
-  customFields,
   renderRow,
 }: Omit<tableConfig<T>, 'resource'> & { resource: T }) => (
   <TableContainer component={Paper}>
@@ -42,7 +41,6 @@ export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
       <TableBody>
         {renderRow({
           row,
-          customFields,
           StyledTableRow: (props) => <StyledTableRow {...props} />,
           StyledTableCell: (props) => (
             <StyledTableCell {...props} cellNumber={columns.length} />

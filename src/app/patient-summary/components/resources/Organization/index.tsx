@@ -1,41 +1,14 @@
-import React from 'react';
-
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
 import { TabSection } from '../../generics/TabSection';
 
-type TPatient = TType<EResource.Patient>;
+type TOrganization = TType<EResource.Organization>;
 
-const rows: TRow<TPatient>[] = [
+const rows: TRow<TOrganization>[] = [
   {
     type: 'row',
-    config: {
-      field: 'name',
-      label: 'Name',
-      renderRow: (field) =>
-        `${field['name']?.[0].given[0]}, ${field['name']?.[0].family}`,
-    },
-  },
-  {
-    type: 'row',
-    config: { field: 'gender', label: 'Gender' },
-  },
-  { type: 'row', config: { field: 'birthDate', label: 'Birth Date' } },
-  {
-    type: 'table',
-    config: {
-      title: 'Patient Identifiers',
-      columns: ['Identifier', 'System'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        row.identifier?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
-            <StyledTableCell>{data.value}</StyledTableCell>
-            <StyledTableCell>{data.system}</StyledTableCell>
-          </StyledTableRow>
-        )),
-      resource: (datum) => datum,
-    },
+    config: { field: 'name', label: 'Name' },
   },
   {
     type: 'table',
@@ -63,6 +36,6 @@ const rows: TRow<TPatient>[] = [
   },
 ];
 
-export const Patient = (props: Omit<TTabProps<TPatient>, 'rows'>) => (
-  <TabSection<TPatient> {...props} rows={rows} />
+export const Organization = (props: Omit<TTabProps<TOrganization>, 'rows'>) => (
+  <TabSection<TOrganization> {...props} rows={rows} />
 );
