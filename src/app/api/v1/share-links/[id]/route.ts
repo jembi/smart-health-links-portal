@@ -50,6 +50,32 @@ const getPasswordErrorMessage = (shlink: SHLinkModel): string => {
   );
 };
 
+/**
+ * @swagger
+ * /api/v1/shlinks/{id}:
+ *   post:
+ *     tags: [Share Links]
+ *     description: Get a share link.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the share link's unique identifier.
+ *         required: true
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/SHLinkRequest'
+ *     responses:
+ *       200:
+ *         description: Get Share Link
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/SHLinkMini'
+ */
 export async function POST(
   request: Request,
   { params }: { params: { id: string } },
@@ -98,6 +124,32 @@ export async function POST(
   }
 }
 
+/**
+ * @swagger
+ * /api/v1/shlinks/{id}:
+ *   put:
+ *     tags: [Share Links]
+ *     description: Update A Share link.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the share link's unique identifier.
+ *         required: true
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/SHLinkUpdate'
+ *     responses:
+ *       200:
+ *         description: Updated Share Link
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/SHLinkMini'
+ */
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } },

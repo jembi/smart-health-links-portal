@@ -15,6 +15,27 @@ const repo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
+/**
+ * @swagger
+ * /api/v1/server-configs:
+ *   post:
+ *     tags: [Admin]
+ *     description: Create a server config.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/CreateServerConfig'
+ *     responses:
+ *       200:
+ *         description: Create Server Config
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/ServerConfig'
+ */
 export async function POST(request: Request) {
   let dto: CreateServerConfigDto = await request.json();
   try {
@@ -29,6 +50,21 @@ export async function POST(request: Request) {
   }
 }
 
+/**
+ * @swagger
+ * /api/v1/server-configs:
+ *   get:
+ *     tags: [Admin]
+ *     description: Gets all server configs
+ *     responses:
+ *       200:
+ *         description: Server Configs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/ServerConfig'
+ */
 export async function GET(request: Request) {
   const serverConfigs = await getServerConfigsUseCase({ repo });
   return NextResponse.json(

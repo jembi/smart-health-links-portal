@@ -4,10 +4,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+import { getUserProfile } from '@/app/utils/authentication';
 import { mapModelToDto } from '@/mappers/shlink-mapper';
 import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
 
-import { GET } from './route';
+import { DELETE } from './route';
 
 jest.mock('@/usecases/shlinks/deactivate-shlink', () => ({
   deactivateSHLinksUseCase: jest.fn(),
@@ -21,7 +22,11 @@ jest.mock('@/app/utils/error-handler', () => ({
   handleApiValidationError: jest.fn(),
 }));
 
-describe('GET /api/v1/share-link/[id]/deactivate', () => {
+jest.mock('@/app/utils/authentication', () => ({
+  getUserProfile: jest.fn(),
+}));
+
+describe('DELETE /api/v1/share-link/[id]/deactivate', () => {
   const mockId: string = '1';
 
   const mockModel = {
@@ -56,7 +61,7 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
 
   const mockRequest = () =>
     new NextRequest('http://localhost/api/share-link/1/deactivate', {
-      method: 'GET',
+      method: 'DELETE',
     });
 
   beforeEach(() => {
@@ -64,11 +69,12 @@ describe('GET /api/v1/share-link/[id]/deactivate', () => {
   });
 
   it('should return deactivated link DTO and status 200 when link is found', async () => {
+    (getUserProfile as jest.Mock).mockResolvedValue({id: 'user-123456', name: '', email: ''});
     (deactivateSHLinksUseCase as jest.Mock).mockResolvedValue(mockModel);
     (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
     const request = mockRequest();
-    const response = await GET(request, { params: { id: mockId } });
+    const response = await DELETE(request, {params: {id: 'user-123456',}});
 
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(200);

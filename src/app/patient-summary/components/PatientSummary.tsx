@@ -3,33 +3,17 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
-import { ElementType, useState } from 'react';
+import { useState } from 'react';
 
-import { extractResourceInfo } from '@/app/utils/helpers';
+import { extractResource } from '@/app/utils/helpers';
+import { EResource, IResource } from '@/types/fhir.types';
 
-import Condition from './resources/Condition/Condition';
-import Medication from './resources/Medication/Medication';
-import Organization from './resources/Organization/Organization';
-import Patient from './resources/Patient/Patient';
+import { COMPONENT_MAP } from './generics/constants';
 import TabPanel from './TabPanel';
-import {
-  EResourceType,
-  IResourceType,
-  TBundle,
-} from '../../../types/fhir.types';
-
-export const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> =
-  {
-    Patient,
-    Organization,
-    Condition,
-    Medication,
-  };
+import { TBundle } from '../../../types/fhir.types';
 
 // UNMAPPED_RESOURCES for resources that shouldn't have separate tab, but will rather be merged with other tabs
-export const UNMAPPED_RESOURCES: EResourceType[] = [
-  EResourceType.MedicationStatement,
-];
+export const UNMAPPED_RESOURCES: EResource[] = [EResource.MedicationStatement];
 
 export default function PatientSummary({
   fhirBundle,
@@ -42,7 +26,7 @@ export default function PatientSummary({
         .filter(
           (entry) =>
             !UNMAPPED_RESOURCES.includes(
-              entry.resource.resourceType as EResourceType,
+              entry.resource.resourceType as EResource,
             ),
         )
         .map((entry) => entry.resource.resourceType),
@@ -50,14 +34,16 @@ export default function PatientSummary({
   );
   const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>
-    dataTabs.map((resourceType: keyof IResourceType) => {
-      const DynamicComponent = COMPONENT_MAP[resourceType];
-      const resourceInfo = extractResourceInfo(resourceType, fhirBundle);
-      return (
-        <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-          {DynamicComponent && <DynamicComponent data={resourceInfo} />}
-        </TabPanel>
-      );
+    dataTabs.map((resourceType: keyof IResource) => {
+      if (COMPONENT_MAP[resourceType]) {
+        const { Component, ...rest } = COMPONENT_MAP[resourceType];
+        const resource = extractResource(fhirBundle, resourceType);
+        return (
+          <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
+            {<Component data={resource} {...rest} />}
+          </TabPanel>
+        );
+      }
     });
   const renderTabs = () =>
     dataTabs.map((resourceType) => (

@@ -4,6 +4,7 @@ import { ModelValidationError } from '@/domain/models/base-model';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
 
+import { AuthenticationError } from './authentication';
 import {
   BAD_REQUEST,
   PRECONDITION_FAILED,
@@ -27,8 +28,14 @@ export function handleApiValidationError(error: unknown) {
     return NextResponse.json(
       { error: error.name, detail: error.message },
       { status: error.code },
-    );
-  } else {
+    )
+  } else if(error instanceof AuthenticationError) {
+    return NextResponse.json(
+      { error: error.name, detail: error.message },
+      { status: error.code }
+    )
+  } 
+  else {
     return NextResponse.json(
       { error: SERVER_ERROR, detail: error },
       { status: 500 },
