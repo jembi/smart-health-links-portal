@@ -1,25 +1,18 @@
 import { NextResponse } from 'next/server';
-import QRCode from 'qrcode';
 
-import {
-  INVALID_SHLINK_CREDS,
-  NOT_FOUND,
-  UNAUTHORIZED_REQUEST,
-} from '@/app/constants/http-constants';
+import { NOT_FOUND } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { container, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from '@/container';
+import { container, SHLinkRepositoryToken } from '@/container';
 import { SHLinkQRCodeRequestDto } from '@/domain/dtos/shlink-qrcode';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
-import { encodeSHLink } from '@/mappers/shlink-mapper';
 import { getSHLinkQRCodeUseCase } from '@/usecases/shlink-qrcode/get-shlink-qrcode';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-
 /**
  * @swagger
- * /api/v1/shlinks/{id}/qrcode:
+ * /api/v1/share-links/{id}/qrcode:
  *   post:
  *     tags: [Share Link QR Code]
  *     description: Get Share link QR Code as an image.
@@ -45,18 +38,20 @@ const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
  *               format: binary
  */
 
-export async function POST(request: Request, { params }: {params: { id: string } }) {
-    
+export async function POST(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
     const requestDto: SHLinkQRCodeRequestDto = await request.json();
     const { id } = params;
 
     let shlink = await getSingleSHLinkUseCase(
-      {repo: shlinkRepo},
-      {id: id, managementToken: requestDto.managementToken},
+      { repo: shlinkRepo },
+      { id: id, managementToken: requestDto.managementToken },
     );
     if (!shlink)
-      return NextResponse.json({message: NOT_FOUND}, {status: 404});
+      return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
 
     const imageBuffer = await getSHLinkQRCodeUseCase(shlink);
 
@@ -65,9 +60,8 @@ export async function POST(request: Request, { params }: {params: { id: string }
       headers: {
         'Content-Type': 'image/png',
         'Content-Length': imageBuffer.length.toString(),
-      }
+      },
     });
-
   } catch (error) {
     return handleApiValidationError(error);
   }

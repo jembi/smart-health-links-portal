@@ -17,7 +17,7 @@ const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
 /**
  * @swagger
- * /api/v1/shlinks:
+ * /api/v1/share-links:
  *   post:
  *     tags: [Share Links]
  *     description: Create a server config.
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
 
 /**
  * @swagger
- * /api/v1/shlinks:
+ * /api/v1/share-links:
  *   get:
  *     tags: [Share Links]
  *     description: Get share links.

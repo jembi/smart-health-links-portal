@@ -52,7 +52,7 @@ const getPasswordErrorMessage = (shlink: SHLinkModel): string => {
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}:
+ * /api/v1/share-links/{id}:
  *   post:
  *     tags: [Share Links]
  *     description: Get a share link.
@@ -116,7 +116,7 @@ export async function POST(
       { shlinkId: shlink.getId() },
     );
     return NextResponse.json(
-      mapModelToMiniDto(shlink, [endpoint], ticket.getId()),
+      mapModelToMiniDto(shlink, endpoint ? [endpoint] : [], ticket.getId()),
       { status: 200 },
     );
   } catch (error) {
@@ -126,7 +126,7 @@ export async function POST(
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}:
+ * /api/v1/share-links/{id}:
  *   put:
  *     tags: [Share Links]
  *     description: Update A Share link.

@@ -34,7 +34,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}/endpoints:
+ * /api/v1/share-links/{id}/endpoints:
  *   post:
  *     tags: [Share Link Endpoints]
  *     description: Create a share link endpoint.

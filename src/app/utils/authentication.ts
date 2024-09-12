@@ -10,9 +10,10 @@ export interface UserProfile {
 }
 
 export const getUserProfile = async (req: Request): Promise<UserProfile> => {
-  const token = await getToken({ req: req as NextRequest });
+  const token = (await getToken({ req: req as NextRequest })) as any;
+  console.log(token);
 
-  return { name: token.name, id: token.sub, email: token.email };
+  return { name: token.user.name, id: token.user.id, email: token.user.email };
 };
 
 export const validateUser = async (req: Request, userId: string) => {

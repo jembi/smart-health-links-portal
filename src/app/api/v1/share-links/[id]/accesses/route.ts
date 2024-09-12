@@ -21,7 +21,7 @@ const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}/accesses:
+ * /api/v1/share-links/{id}/accesses:
  *   post:
  *     tags: [Share Link Accesses]
  *     description: Get Share link Accesses.
