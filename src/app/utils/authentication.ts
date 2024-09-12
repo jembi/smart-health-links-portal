@@ -11,7 +11,6 @@ export interface UserProfile {
 
 export const getUserProfile = async (req: Request): Promise<UserProfile> => {
   const token = (await getToken({ req: req as NextRequest })) as any;
-  console.log(token);
 
   return { name: token.user.name, id: token.user.id, email: token.user.email };
 };
