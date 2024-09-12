@@ -1,9 +1,9 @@
-import { EResourceType, TType } from '@/types/fhir.types';
+import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
 import { TabSection } from '../../generics/TabSection';
 
-type TOrganization = TType<EResourceType.Organization>;
+type TOrganization = TType<EResource.Organization>;
 
 const rows: TRow<TOrganization>[] = [
   {

@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
-import { EResourceType, IResourceType } from '@/types/fhir.types';
+import { TSupportedResource } from '@/types/fhir.types';
 
 import { DetailedTable } from './DetailedTable';
 import { TTabProps } from './resource.types';
 import InfoRow from '../InfoRow';
 
-export const TabSection = <T extends IResourceType[EResourceType]>({
+export const TabSection = <T extends TSupportedResource>({
   rows,
   data,
   title = '',

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { EResourceType, TType } from '@/types/fhir.types';
+import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
 import { TabSection } from '../../generics/TabSection';
 
-type TPractitioner = TType<EResourceType.Practitioner>;
+type TPractitioner = TType<EResource.Practitioner>;
 
 const rows: TRow<TPractitioner>[] = [
   {

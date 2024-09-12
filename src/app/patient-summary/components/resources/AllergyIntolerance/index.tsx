@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { camelToFlat, getCodings } from '@/app/utils/helpers';
-import { EResourceType, TType } from '@/types/fhir.types';
+import { camelCaseToFlat, getCodings } from '@/app/utils/helpers';
+import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
 import { TabSection } from '../../generics/TabSection';
 
-type TAllergyIntolerance = TType<EResourceType.AllergyIntolerance>;
+type TAllergyIntolerance = TType<EResource.AllergyIntolerance>;
 
 const rows: TRow<TAllergyIntolerance>[] = [
   {
@@ -29,18 +29,15 @@ const rows: TRow<TAllergyIntolerance>[] = [
       title: 'Allergy Details',
       columns: ['Name', 'Code', 'Display', 'System'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        getCodings({ resource: row }).map((data, index) => {
-          const [[key, { code, display, system }]] = Object.entries(data);
-
-          return (
-            <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
-              <StyledTableCell>{camelToFlat(key)}</StyledTableCell>
-              <StyledTableCell>{code}</StyledTableCell>
-              <StyledTableCell>{display}</StyledTableCell>
-              <StyledTableCell>{system}</StyledTableCell>
+        getCodings({ resource: row }).map(
+          ([field, { code, display, system }], index) => (
+            <StyledTableRow key={`${system}_${index}`}>
+              {[camelCaseToFlat(field), code, display, system].map((cell) => (
+                <StyledTableCell key={system}>{cell}</StyledTableCell>
+              ))}
             </StyledTableRow>
-          );
-        }),
+          ),
+        ),
       resource: (datum) => datum,
     },
   },

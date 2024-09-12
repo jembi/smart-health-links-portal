@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { IResourceType } from '@/types/fhir.types';
+import { TSupportedResource } from '@/types/fhir.types';
 
 import { tableConfig } from './resource.types';
 
@@ -22,7 +22,7 @@ export const StyledTableCell = styled(TableCell, {
   width: `${100 / cellNumber}%`,
 }));
 
-export const DetailedTable = <T extends IResourceType[keyof IResourceType]>({
+export const DetailedTable = <T extends TSupportedResource>({
   title,
   columns,
   resource: row,
