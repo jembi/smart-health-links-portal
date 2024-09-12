@@ -8,16 +8,28 @@ import { ElementType, useState } from 'react';
 import { extractResourceInfo } from '@/app/utils/helpers';
 
 import Condition from './resources/Condition/Condition';
+import Medication from './resources/Medication/Medication';
 import Organization from './resources/Organization/Organization';
 import Patient from './resources/Patient/Patient';
 import TabPanel from './TabPanel';
-import { IResourceType, TBundle } from '../../../types/fhir.types';
+import {
+  EResourceType,
+  IResourceType,
+  TBundle,
+} from '../../../types/fhir.types';
 
-const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> = {
-  Patient,
-  Organization,
-  Condition,
-};
+export const COMPONENT_MAP: Partial<Record<keyof IResourceType, ElementType>> =
+  {
+    Patient,
+    Organization,
+    Condition,
+    Medication,
+  };
+
+// UNMAPPED_RESOURCES for resources that shouldn't have separate tab, but will rather be merged with other tabs
+export const UNMAPPED_RESOURCES: EResourceType[] = [
+  EResourceType.MedicationStatement,
+];
 
 export default function PatientSummary({
   fhirBundle,
@@ -25,7 +37,16 @@ export default function PatientSummary({
   fhirBundle: TBundle;
 }) {
   const dataTabs: string[] = Array.from(
-    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
+    new Set(
+      fhirBundle.entry
+        .filter(
+          (entry) =>
+            !UNMAPPED_RESOURCES.includes(
+              entry.resource.resourceType as EResourceType,
+            ),
+        )
+        .map((entry) => entry.resource.resourceType),
+    ),
   );
   const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>

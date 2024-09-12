@@ -5,6 +5,7 @@ import {
   Organization,
   Condition,
   Medication,
+  MedicationStatement,
   AllergyIntolerance,
   Observation,
   Bundle,
@@ -18,6 +19,7 @@ export enum EResourceType {
   Organization = 'Organization',
   Condition = 'Condition',
   Medication = 'Medication',
+  MedicationStatement = 'MedicationStatement',
   AllergyIntolerance = 'AllergyIntolerance',
   Observation = 'Observation',
 }
@@ -31,6 +33,7 @@ export interface IResourceType {
   [EResourceType.Condition]: Condition;
   [EResourceType.Medication]: Medication;
   [EResourceType.AllergyIntolerance]: AllergyIntolerance;
+  [EResourceType.MedicationStatement]: MedicationStatement;
   [EResourceType.Observation]: Observation;
 }
 

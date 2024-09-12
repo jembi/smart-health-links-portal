@@ -5,7 +5,16 @@ export const extractResourceInfo = <
 >(
   resourceType: TResource,
   bundle: TBundle,
-) =>
-  bundle.entry
-    ?.filter(({ resource }) => resource.resourceType === resourceType)
-    .map(({ resource }) => resource) as TType<TResource>[];
+) => {
+  const filterResourceByType = (resourceType) =>
+    bundle.entry
+      ?.filter(({ resource }) => resource.resourceType === resourceType)
+      .map(({ resource }) => resource) as TType<TResource>[];
+
+  return resourceType !== 'Medication'
+    ? filterResourceByType(resourceType)
+    : [
+        ...filterResourceByType(resourceType),
+        ...filterResourceByType('MedicationStatement'),
+      ];
+};
