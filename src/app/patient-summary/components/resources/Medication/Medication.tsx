@@ -54,13 +54,7 @@ export default function Medication({
         {groupedMedication.medication?.code && (
           <InfoRow
             label="Medication"
-            value={
-              groupedMedication.medication?.code?.coding.find(
-                ({ system }) =>
-                  system ===
-                  'http://spor.ema.europa.eu/v2/marketing-authorisation-numbers',
-              )?.display
-            }
+            value={groupedMedication.medication?.code?.coding[0].display}
           />
         )}
 

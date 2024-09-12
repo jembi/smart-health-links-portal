@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 
 import { ArrayCaption } from '@/app/components/typography/ArrayCaption';
-import { IResourceType } from '@/types/fhir.types';
+import { IResource } from '@/types/fhir.types';
 
 export default function MedicationStatementDetails({
   medicationStatementDetails,
 }: {
-  medicationStatementDetails: IResourceType['MedicationStatement']['medicationCodeableConcept'];
+  medicationStatementDetails: IResource['MedicationStatement']['medicationCodeableConcept'];
 }) {
   return (
     <TableContainer component={Paper}>
