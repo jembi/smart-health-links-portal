@@ -96,7 +96,7 @@ export const mapDtoToModel = (
     : undefined;
 };
 
-const encodeSHLink = (shlink: SHLinkModel): string => {
+export const encodeSHLink = (shlink: SHLinkModel): string => {
   const result = {
     label: shlink.getName(),
     url: `${EXTERNAL_URL}/api/v1/share-links/${shlink.getId()}`,

@@ -28,6 +28,7 @@
     "next-auth": "^4.24.7",
     "next-swagger-doc": "^0.4.0",
     "prisma-field-encryption": "^1.5.2",
+    "qrcode": "^1.5.4",
     "react": "^18",
     "react-dom": "^18",
     "swagger-ui-react": "^5.17.14",
