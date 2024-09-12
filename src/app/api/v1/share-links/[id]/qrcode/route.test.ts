@@ -1,108 +1,84 @@
-
 /**
  * @jest-environment node
  */
 import { NextResponse } from 'next/server';
-import QRCode from 'qrcode';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { encodeSHLink } from '@/mappers/shlink-mapper';
+import { getSHLinkQRCodeUseCase } from '@/usecases/shlink-qrcode/get-shlink-qrcode';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
 import { POST } from './route';
 
-
 // Mock dependencies
-jest.mock('qrcode');
 jest.mock('@/usecases/shlinks/get-single-shlink');
-jest.mock('@/mappers/shlink-mapper');
+jest.mock('@/usecases/shlink-qrcode/get-shlink-qrcode');
 jest.mock('@/app/utils/error-handler');
 
 describe('POST /api/v1/shlinks/{id}/qrcode', () => {
-  const mockRequest = (body: any) => ({
-    json: jest.fn().mockResolvedValue(body),
-  } as unknown as Request);
+  const mockRequestDto = {
+    managementToken: 'mock-management-token',
+  };
 
-  const params = { id: '123' };
+  const mockSHLink = {
+    id: '123',
+    userId: 'user123',
+    name: 'Example SHLink',
+    passcodeFailuresRemaining: 5,
+    active: true,
+    managementToken: "token-xyz1234",
+    configPasscode: "passcode-abcde",
+    configExp: new Date("2024-01-01T00:00:00Z")
+  };
+
+  const mockParams = { id: '123' };
+
+  const mockRequest = {
+    json: jest.fn().mockResolvedValue(mockRequestDto),
+  } as unknown as Request;
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should return 200 and a PNG QR code when valid ID and management token are provided', async () => {
-    const requestDto = { managementToken: 'test-token' };
-    const mockSHLink = { id: '123', url: 'https://example.com' };
-    const mockQrCodeData = 'mock-qr-code-data';
-    const mockQrCodeDataUrl = 'data:image/png;base64,mock-qr-code-url';
+  it('should return 200 with the QR code image buffer', async () => {
+    const mockImageBuffer = Buffer.from('mock-image-buffer');
 
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockSHLink);
-    (encodeSHLink as jest.Mock).mockReturnValue(mockQrCodeData);
-    (QRCode.toDataURL as jest.Mock).mockResolvedValue(mockQrCodeDataUrl);
+    (getSHLinkQRCodeUseCase as jest.Mock).mockResolvedValue(mockImageBuffer);
 
-    const request = mockRequest(requestDto);
-    const response = await POST(request, { params });
-    
-    const result = await response.arrayBuffer();
+    const response = await POST(mockRequest, { params: mockParams });
 
-    // Check that the right use cases and functions were called
-    expect(getSingleSHLinkUseCase).toHaveBeenCalledWith(
-      { repo: expect.anything() },
-      { id: '123', managementToken: 'test-token' }
-    );
-    expect(encodeSHLink).toHaveBeenCalledWith(mockSHLink);
-    expect(QRCode.toDataURL).toHaveBeenCalledWith(mockQrCodeData);
-
-    // Check that the response is successful and returns the image
     expect(response.status).toBe(200);
     expect(response.headers.get('Content-Type')).toBe('image/png');
-    expect(result.byteLength).toBeGreaterThan(0); // Ensures the buffer is not empty
+    expect(response.headers.get('Content-Length')).toBe(mockImageBuffer.length.toString());
+
+    const buffer = await response.arrayBuffer();
+    expect(Buffer.from(buffer)).toEqual(mockImageBuffer);
+
+    expect(getSingleSHLinkUseCase).toHaveBeenCalledWith({ repo: expect.anything() }, { id: mockParams.id, managementToken: mockRequestDto.managementToken });
+    expect(getSHLinkQRCodeUseCase).toHaveBeenCalledWith(mockSHLink);
   });
 
   it('should return 404 if the SHLink is not found', async () => {
-    const requestDto = { managementToken: 'test-token' };
-
     (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(null);
 
-    const request = mockRequest(requestDto);
-    const response = await POST(request, { params });
-    const result = await response.json();
+    const response = await POST(mockRequest, { params: mockParams });
 
     expect(response.status).toBe(404);
-    expect(result.message).toBe(NOT_FOUND);
+    expect(await response.json()).toEqual({ message: NOT_FOUND });
+
+    expect(getSingleSHLinkUseCase).toHaveBeenCalledWith({ repo: expect.anything() }, { id: mockParams.id, managementToken: mockRequestDto.managementToken });
+    expect(getSHLinkQRCodeUseCase).not.toHaveBeenCalled();
   });
 
-  it('should return 500 if the QR code generation fails', async () => {
-    const requestDto = { managementToken: 'test-token' };
-    const mockSHLink = { id: '123', url: 'https://example.com' };
-    const mockQrCodeData = 'mock-qr-code-data';
-
-    (getSingleSHLinkUseCase as jest.Mock).mockResolvedValue(mockSHLink);
-    (encodeSHLink as jest.Mock).mockReturnValue(mockQrCodeData);
-    (QRCode.toDataURL as jest.Mock).mockResolvedValue('data:image/png;base64,');
-
-    const request = mockRequest(requestDto);
-    const response = await POST(request, { params });
-    const result = await response.json();
-
-    expect(response.status).toBe(500);
-    expect(result.message).toBe('Failed to generate QR code');
-  });
-
-  it('should handle unexpected errors and return a 500 status', async () => {
-    const requestDto = { managementToken: 'test-token' };
-    const mockError = new Error('Unexpected error');
+  it('should handle errors by calling handleApiValidationError', async () => {
+    const mockError = new Error('Test error');
 
     (getSingleSHLinkUseCase as jest.Mock).mockRejectedValue(mockError);
 
-    const mockHandleError = (handleApiValidationError as jest.Mock).mockReturnValue(
-      NextResponse.json({ message: 'Error' }, { status: 500 })
-    );
-
-    const request = mockRequest(requestDto);
-    const response = await POST(request, { params });
+    await POST(mockRequest, { params: mockParams });
 
     expect(handleApiValidationError).toHaveBeenCalledWith(mockError);
-    expect(response.status).toBe(500);
   });
 });

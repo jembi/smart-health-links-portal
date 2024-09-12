@@ -11,6 +11,7 @@ import { container, SHLinkEndpointRepositoryToken, SHLinkRepositoryToken } from 
 import { SHLinkQRCodeRequestDto } from '@/domain/dtos/shlink-qrcode';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { encodeSHLink } from '@/mappers/shlink-mapper';
+import { getSHLinkQRCodeUseCase } from '@/usecases/shlink-qrcode/get-shlink-qrcode';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
@@ -44,7 +45,6 @@ const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
  *               format: binary
  */
 
-
 export async function POST(request: Request, { params }: {params: { id: string } }) {
     
   try {
@@ -58,17 +58,7 @@ export async function POST(request: Request, { params }: {params: { id: string }
     if (!shlink)
       return NextResponse.json({message: NOT_FOUND}, {status: 404});
 
-    let qrCodeData = await encodeSHLink(shlink)
-
-    const qrCodeDataUrl = await QRCode.toDataURL(qrCodeData);
-
-    const base64Image = qrCodeDataUrl.split(';base64,').pop();
-    
-    if (!base64Image) {
-      return NextResponse.json({message: 'Failed to generate QR code'}, {status: 500});
-    }
-
-    const imageBuffer = Buffer.from(base64Image, 'base64');
+    const imageBuffer = await getSHLinkQRCodeUseCase(shlink);
 
     return new NextResponse(imageBuffer, {
       status: 200,
