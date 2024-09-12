@@ -7,13 +7,24 @@ import {
   IResource,
 } from '@/types/fhir.types';
 
+//export const extractResource = <TResource extends keyof IResource>(
+
 export const extractResource = <TResource extends keyof IResource>(
   bundle: TBundle,
   resourceType: TResource,
-) =>
-  bundle.entry
-    ?.filter(({ resource }) => resource.resourceType === resourceType)
-    .map(({ resource }) => resource) as TType<TResource>[];
+) => {
+  const filterResourceByType = (resourceType) =>
+    bundle.entry
+      ?.filter(({ resource }) => resource.resourceType === resourceType)
+      .map(({ resource }) => resource) as TType<TResource>[];
+
+  return resourceType !== 'Medication'
+    ? filterResourceByType(resourceType)
+    : [
+        ...filterResourceByType(resourceType),
+        ...filterResourceByType('MedicationStatement'),
+      ];
+};
 
 export const getCodings = <TResource extends TSupportedResource>({
   resource,

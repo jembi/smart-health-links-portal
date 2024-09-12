@@ -27,10 +27,21 @@ export default function Medication({
       medicationStatements: IResource['MedicationStatement'][];
     },
   );
-  const groupedMedicationInfo = medications.map((medication, index) => ({
-    medication,
-    medicationStatement: medicationStatements[index],
-  }));
+  const groupedMedicationInfo = medicationStatements.map(
+    (medicationStatement) => ({
+      medicationStatement,
+      medication: medications.find(
+        ({ id }) =>
+          id ===
+          medicationStatement?.medicationReference?.reference.replace(
+            'Medication/',
+            '',
+          ),
+      ),
+    }),
+  );
+
+  console.log({ groupedMedicationInfo });
   return groupedMedicationInfo.map((groupedMedication, index) => {
     return (
       <React.Fragment key={index}>
