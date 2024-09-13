@@ -56,7 +56,7 @@ const logger = new Logger(route)
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}:
+ * /api/v1/share-links/{id}:
  *   post:
  *     tags: [Share Links]
  *     description: Get a share link.
@@ -85,19 +85,17 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   logger.log('Updating a share link with a ticket and creating share link access');
-  let requestDto: SHLinkRequestDto = await request.json();
+  let { managementToken, passcode, recipient }: SHLinkRequestDto =
+    await request.json();
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
-      { id: params.id, managementToken: requestDto.managementToken },
+      { id: params.id, managementToken },
     );
     if (!shlink)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
 
-    const valid = await validateSHLinkUseCase({
-      shlink,
-      passcode: requestDto.passcode,
-    });
+    const valid = await validateSHLinkUseCase({ shlink, passcode });
     if (!valid) {
       await decreasePasswordFailureCountUseCase({ repo }, shlink);
       return NextResponse.json(
@@ -107,7 +105,7 @@ export async function POST(
     }
     await logSHLinkAccessUseCase(
       { repo: accessRepo },
-      new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient),
+      new SHLinkAccessModel(shlink.getId(), new Date(), recipient),
     );
     const ticket = await addAccessTicketUseCase(
       { repo: ticketRepo },
@@ -121,7 +119,7 @@ export async function POST(
       { shlinkId: shlink.getId() },
     );
     return NextResponse.json(
-      mapModelToMiniDto(shlink, [endpoint], ticket.getId()),
+      mapModelToMiniDto(shlink, endpoint ? [endpoint] : [], ticket.getId()),
       { status: 200 },
     );
   } catch (error) {
@@ -131,7 +129,7 @@ export async function POST(
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}:
+ * /api/v1/share-links/{id}:
  *   put:
  *     tags: [Share Links]
  *     description: Update A Share link.
@@ -160,12 +158,13 @@ export async function PUT(
   { params }: { params: { id: string } },
 ) {
   logger.log('Updating a share link passcode and expiry date API');
-  let requestDto: SHLinkUpdateDto = await request.json();
+  let { managementToken, oldPasscode, passcode, expiryDate }: SHLinkUpdateDto =
+    await request.json();
 
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
-      { id: params.id, managementToken: requestDto.managementToken },
+      { id: params.id, managementToken },
     );
 
     if (!shlink)
@@ -173,7 +172,7 @@ export async function PUT(
 
     const valid: boolean = await validateSHLinkUseCase({
       shlink,
-      passcode: requestDto.oldPasscode,
+      passcode: oldPasscode,
     });
 
     if (!valid) {
@@ -187,8 +186,8 @@ export async function PUT(
       { repo, validator: validateSHLinkUseCase },
       {
         id: params.id,
-        passcode: requestDto.passcode,
-        expiryDate: requestDto.expiryDate && new Date(requestDto.expiryDate),
+        passcode,
+        expiryDate: expiryDate && new Date(expiryDate),
       },
     );
 

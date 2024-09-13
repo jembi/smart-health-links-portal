@@ -25,7 +25,7 @@ const logger = new Logger(route)
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}/accesses:
+ * /api/v1/share-links/{id}/accesses:
  *   post:
  *     tags: [Share Link Accesses]
  *     description: Get Share link Accesses.
@@ -53,10 +53,10 @@ const logger = new Logger(route)
 export async function POST(request: Request, params: { id: string }) {
   logger.log('Getting share link access for a user');
   try {
-    const dto: SHLinkAccessRequestDto = await request.json();
+    const { managementToken }: SHLinkAccessRequestDto = await request.json();
     const shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
-      { id: params.id, managementToken: dto.managementToken },
+      { id: params.id, managementToken: managementToken },
     );
     if (!shlink) {
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });

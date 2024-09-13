@@ -16,7 +16,7 @@ const logger = new Logger(route)
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}/deactivate:
+ * /api/v1/share-links/{id}/deactivate:
  *   delete:
  *     tags: [Share Links]
  *     description: Deactivate a share link.

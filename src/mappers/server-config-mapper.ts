@@ -68,7 +68,7 @@ export const mapDtoToModel = (
         serverDto.tokenEndpoint,
         serverDto.refreshTime,
         serverDto.id,
-        serverDto.accessTokenResponse,
+        serverDto.accessTokenResponse || '',
         serverDto.refreshToken,
       )
     : undefined;

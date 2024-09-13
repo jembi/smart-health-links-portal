@@ -20,7 +20,7 @@ const route = "api/v1/share-links/"
 const logger = new Logger(route)
 /**
  * @swagger
- * /api/v1/shlinks:
+ * /api/v1/share-links:
  *   post:
  *     tags: [Share Links]
  *     description: Create a server config.
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
 /**
  * @swagger
- * /api/v1/shlinks:
+ * /api/v1/share-links:
  *   get:
  *     tags: [Share Links]
  *     description: Get share links.
@@ -71,9 +71,9 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   logger.log('Getting all share links by user');
   try {
-    const user = await getUserProfile(request);
+    const { id } = await getUserProfile(request);
 
-    const newShlink = await getSHLinkUseCase({ repo }, { user_id: user.id });
+    const newShlink = await getSHLinkUseCase({ repo }, { user_id: id });
     return NextResponse.json(
       newShlink.map((shlink) => mapModelToMiniDto(shlink)),
       { status: 200 },

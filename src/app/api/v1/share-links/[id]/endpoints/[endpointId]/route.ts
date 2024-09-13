@@ -37,7 +37,7 @@ const logger = new Logger(route)
 
 /**
  * @swagger
- * /api/v1/shlinks/{id}/endpoints/{endpointId}:
+ * /api/v1/share-links/{id}/endpoints/{endpointId}:
  *   get:
  *     tags: [Share Link Endpoints]
  *     description: Get a share link endpoint.
