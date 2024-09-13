@@ -16,7 +16,7 @@ export const SectionTitle = ({ title }: { title: string }) => (
   <StyledSectionTypography>{title}</StyledSectionTypography>
 );
 
-export const SectionRow = <T,>({
+export const SectionRow = ({
   data,
   label,
 }: {
