@@ -66,9 +66,9 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
   try {
-    const user = await getUserProfile(request);
+    const { id } = await getUserProfile(request);
 
-    const newShlink = await getSHLinkUseCase({ repo }, { user_id: user.id });
+    const newShlink = await getSHLinkUseCase({ repo }, { user_id: id });
     return NextResponse.json(
       newShlink.map((shlink) => mapModelToMiniDto(shlink)),
       { status: 200 },

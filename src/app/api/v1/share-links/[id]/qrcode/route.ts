@@ -43,12 +43,12 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   try {
-    const requestDto: SHLinkQRCodeRequestDto = await request.json();
+    const { managementToken }: SHLinkQRCodeRequestDto = await request.json();
     const { id } = params;
 
     let shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
-      { id: id, managementToken: requestDto.managementToken },
+      { id, managementToken },
     );
     if (!shlink)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });

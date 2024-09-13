@@ -48,10 +48,10 @@ const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
  */
 export async function POST(request: Request, params: { id: string }) {
   try {
-    const dto: SHLinkAccessRequestDto = await request.json();
+    const { managementToken }: SHLinkAccessRequestDto = await request.json();
     const shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
-      { id: params.id, managementToken: dto.managementToken },
+      { id: params.id, managementToken: managementToken },
     );
     if (!shlink) {
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });

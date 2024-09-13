@@ -80,19 +80,17 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  let requestDto: SHLinkRequestDto = await request.json();
+  let { managementToken, passcode, recipient }: SHLinkRequestDto =
+    await request.json();
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
-      { id: params.id, managementToken: requestDto.managementToken },
+      { id: params.id, managementToken },
     );
     if (!shlink)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
 
-    const valid = await validateSHLinkUseCase({
-      shlink,
-      passcode: requestDto.passcode,
-    });
+    const valid = await validateSHLinkUseCase({ shlink, passcode });
     if (!valid) {
       await decreasePasswordFailureCountUseCase({ repo }, shlink);
       return NextResponse.json(
@@ -102,7 +100,7 @@ export async function POST(
     }
     await logSHLinkAccessUseCase(
       { repo: accessRepo },
-      new SHLinkAccessModel(shlink.getId(), new Date(), requestDto.recipient),
+      new SHLinkAccessModel(shlink.getId(), new Date(), recipient),
     );
     const ticket = await addAccessTicketUseCase(
       { repo: ticketRepo },
@@ -154,12 +152,13 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  let requestDto: SHLinkUpdateDto = await request.json();
+  let { managementToken, oldPasscode, passcode, expiryDate }: SHLinkUpdateDto =
+    await request.json();
 
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
-      { id: params.id, managementToken: requestDto.managementToken },
+      { id: params.id, managementToken },
     );
 
     if (!shlink)
@@ -167,7 +166,7 @@ export async function PUT(
 
     const valid: boolean = await validateSHLinkUseCase({
       shlink,
-      passcode: requestDto.oldPasscode,
+      passcode: oldPasscode,
     });
 
     if (!valid) {
@@ -181,8 +180,8 @@ export async function PUT(
       { repo, validator: validateSHLinkUseCase },
       {
         id: params.id,
-        passcode: requestDto.passcode,
-        expiryDate: requestDto.expiryDate && new Date(requestDto.expiryDate),
+        passcode,
+        expiryDate: expiryDate && new Date(expiryDate),
       },
     );
 
