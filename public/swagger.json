@@ -428,7 +428,7 @@
         }
       }
     },
-    "/api/v1/shlinks/{id}/accesses": {
+    "/api/v1/share-links/{id}/accesses": {
       "post": {
         "tags": [
           "Share Link Accesses"
@@ -469,7 +469,7 @@
         }
       }
     },
-    "/api/v1/shlinks/{id}/deactivate": {
+    "/api/v1/share-links/{id}/deactivate": {
       "delete": {
         "tags": [
           "Share Links"
@@ -498,7 +498,7 @@
         }
       }
     },
-    "/api/v1/shlinks/{id}/endpoints/{endpointId}": {
+    "/api/v1/share-links/{id}/endpoints/{endpointId}": {
       "get": {
         "tags": [
           "Share Link Endpoints"
@@ -532,7 +532,7 @@
         }
       }
     },
-    "/api/v1/shlinks/{id}/endpoints": {
+    "/api/v1/share-links/{id}/endpoints": {
       "post": {
         "tags": [
           "Share Link Endpoints"
@@ -571,7 +571,7 @@
         }
       }
     },
-    "/api/v1/shlinks/{id}/qrcode": {
+    "/api/v1/share-links/{id}/qrcode": {
       "post": {
         "tags": [
           "Share Link QR Code"
@@ -612,7 +612,7 @@
         }
       }
     },
-    "/api/v1/shlinks/{id}": {
+    "/api/v1/share-links/{id}": {
       "post": {
         "tags": [
           "Share Links"
@@ -688,7 +688,7 @@
         }
       }
     },
-    "/api/v1/shlinks": {
+    "/api/v1/share-links": {
       "post": {
         "tags": [
           "Share Links"

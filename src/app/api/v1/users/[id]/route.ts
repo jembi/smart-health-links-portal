@@ -35,9 +35,10 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   try {
-    validateUser(request, params.id);
+    const { id } = params;
+    validateUser(request, id);
 
-    const result = await getUserUseCase({ repo }, { userId: params.id });
+    const result = await getUserUseCase({ repo }, { userId: id });
     if (result)
       return NextResponse.json(mapModelToDto(result), { status: 200 });
 
