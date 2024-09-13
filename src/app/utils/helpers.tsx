@@ -7,6 +7,7 @@ import {
   IResource,
   TSupportedResource,
   EResource,
+  TSupportedSection,
 } from '@/types/fhir.types';
 
 export const findResourceReferences = <TResource extends TSupportedResource>({
@@ -82,11 +83,11 @@ export const getCodings = <TResource extends TSupportedResource>({
       if (Array.isArray(value)) {
         acc.push(
           ...value.flatMap((val) =>
-            val.coding ? val.coding.map((code) => [key, code]) : [],
+            val.coding ? val.coding?.map((code) => [key, code]) : [],
           ),
         );
       } else if (value.coding) {
-        acc.push(...value.coding.map((code) => [key, code]));
+        acc.push(...value.coding?.map((code) => [key, code]));
       }
       return acc;
     }, []);
@@ -109,5 +110,10 @@ export const periodUnitToText = (str: string) => {
 
   return unitMap[str];
 };
+
+export const findSectionByTitle = (
+  sections: IResource['Composition']['section'],
+  section: TSupportedSection,
+) => sections.find(({ title }) => title === section) || {};
 
 export const uuid = () => uuidv4();

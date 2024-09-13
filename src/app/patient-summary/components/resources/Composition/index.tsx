@@ -1,4 +1,4 @@
-import { camelCaseToFlat, uuid } from '@/app/utils/helpers';
+import { camelCaseToFlat, findSectionByTitle, uuid } from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -121,14 +121,19 @@ const rows: TRow<TComposition>[] = [
     type: 'row',
     config: {
       label: '',
-      renderRow: ({ section }) => <SectionTitle title={section[0].title} />,
+      renderRow: ({ section }) => (
+        <SectionTitle
+          title={findSectionByTitle(section, 'Active Problems').title}
+        />
+      ),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Title',
-      renderRow: ({ section }) => section[0].title,
+      renderRow: ({ section }) =>
+        findSectionByTitle(section, 'Active Problems').title,
     },
   },
   {
@@ -138,7 +143,10 @@ const rows: TRow<TComposition>[] = [
       columns: ['Condition', 'Status', 'Severity'],
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const condition = (
-          references[row.section[0].entry[0].reference] as {
+          references[
+            findSectionByTitle(row.section, 'Active Problems').entry[0]
+              .reference
+          ] as {
             resource: TType<EResource.Condition>;
           }
         ).resource;
@@ -163,14 +171,17 @@ const rows: TRow<TComposition>[] = [
     type: 'row',
     config: {
       label: '',
-      renderRow: ({ section }) => <SectionTitle title={section[1].title} />,
+      renderRow: ({ section }) => (
+        <SectionTitle title={findSectionByTitle(section, 'Medication').title} />
+      ),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Title',
-      renderRow: ({ section }) => section[1].title,
+      renderRow: ({ section }) =>
+        findSectionByTitle(section, 'Medication').title,
     },
   },
   {
@@ -180,7 +191,9 @@ const rows: TRow<TComposition>[] = [
       columns: ['Medication', 'Status', 'Period Start', 'Period End'],
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const medicationStatement = (
-          references[row.section[1].entry[0].reference] as {
+          references[
+            findSectionByTitle(row.section, 'Medication').entry[0].reference
+          ] as {
             resource: TType<EResource.MedicationStatement>;
           }
         )?.resource;
@@ -209,14 +222,21 @@ const rows: TRow<TComposition>[] = [
     type: 'row',
     config: {
       label: '',
-      renderRow: ({ section }) => <SectionTitle title={section[2].title} />,
+      renderRow: ({ section }) => (
+        <SectionTitle
+          title={
+            findSectionByTitle(section, 'Allergies and Intolerances').title
+          }
+        />
+      ),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Title',
-      renderRow: ({ section }) => section[2].title,
+      renderRow: ({ section }) =>
+        findSectionByTitle(section, 'Allergies and Intolerances').title,
     },
   },
   {
@@ -226,7 +246,10 @@ const rows: TRow<TComposition>[] = [
       columns: ['Category', 'Display', 'Criticality'],
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const allergyIntolerance = (
-          references[row.section[2].entry[0].reference] as {
+          references[
+            findSectionByTitle(row.section, 'Allergies and Intolerances')
+              .entry[0].reference
+          ] as {
             resource: TType<EResource.AllergyIntolerance>;
           }
         )?.resource;
@@ -249,14 +272,19 @@ const rows: TRow<TComposition>[] = [
     type: 'row',
     config: {
       label: '',
-      renderRow: ({ section }) => <SectionTitle title={section[3].title} />,
+      renderRow: ({ section }) => (
+        <SectionTitle
+          title={findSectionByTitle(section, 'History of Past Illness').title}
+        />
+      ),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Title',
-      renderRow: ({ section }) => section[3].title,
+      renderRow: ({ section }) =>
+        findSectionByTitle(section, 'History of Past Illness').title,
     },
   },
   {
@@ -266,7 +294,10 @@ const rows: TRow<TComposition>[] = [
       columns: ['Condition', 'Status', 'Severity'],
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const condition = (
-          references[row.section[3].entry[0].reference] as {
+          references[
+            findSectionByTitle(row.section, 'History of Past Illness').entry[0]
+              .reference
+          ] as {
             resource: TType<EResource.Condition>;
           }
         )?.resource;
@@ -291,28 +322,35 @@ const rows: TRow<TComposition>[] = [
     type: 'row',
     config: {
       label: '',
-      renderRow: ({ section }) => <SectionTitle title={section[4].title} />,
+      renderRow: ({ section }) => (
+        <SectionTitle
+          title={findSectionByTitle(section, 'Plan of Treatment').title}
+        />
+      ),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Title',
-      renderRow: ({ section }) => section[4].title,
+      renderRow: ({ section }) =>
+        findSectionByTitle(section, 'Plan of Treatment').title,
     },
   },
   {
     type: 'row',
     config: {
       label: '',
-      renderRow: ({ section }) => <SectionTitle title={section[5].title} />,
+      renderRow: ({ section }) => (
+        <SectionTitle title={findSectionByTitle(section, 'Results').title} />
+      ),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Title',
-      renderRow: ({ section }) => section[5].title,
+      renderRow: ({ section }) => findSectionByTitle(section, 'Results').title,
     },
   },
   {
@@ -322,7 +360,9 @@ const rows: TRow<TComposition>[] = [
       columns: ['Category', 'Code Display', 'Result', 'Status', 'Performed by'],
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const observation = (
-          references[row.section[5].entry[0].reference] as {
+          references[
+            findSectionByTitle(row.section, 'Results').entry[0].reference
+          ] as {
             resource: TType<EResource.Observation>;
           }
         )?.resource;

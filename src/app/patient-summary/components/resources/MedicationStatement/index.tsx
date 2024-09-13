@@ -45,7 +45,7 @@ const rows: TRow<TMedicationStatement>[] = [
           references[row.medicationReference.reference] as {
             resource: TType<EResource.Medication>;
           }
-        ).resource.code.coding.map(({ code, display, system }) => (
+        ).resource.code.coding?.map(({ code, display, system }) => (
           <StyledTableRow key={uuid()}>
             {[camelCaseToFlat('Medication'), code, display, system].map(
               (cell) => (

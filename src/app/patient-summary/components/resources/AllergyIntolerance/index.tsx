@@ -24,7 +24,7 @@ const rows: TRow<TAllergyIntolerance>[] = [
     type: 'row',
     config: {
       label: 'Allergy',
-      renderRow: ({ code }) => code.coding.map(({ display }) => display),
+      renderRow: ({ code }) => code.coding?.map(({ display }) => display),
     },
   },
   { type: 'row', config: { field: 'criticality', label: 'Criticality' } },
@@ -33,7 +33,7 @@ const rows: TRow<TAllergyIntolerance>[] = [
     config: {
       label: 'Status',
       renderRow: ({ clinicalStatus }) =>
-        clinicalStatus.coding.map(({ code }) => code),
+        clinicalStatus.coding?.map(({ code }) => code),
     },
   },
   {

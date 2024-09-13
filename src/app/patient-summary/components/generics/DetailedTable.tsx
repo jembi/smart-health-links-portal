@@ -15,7 +15,7 @@ export const StyledTableRow = styled(TableRow)(() => ({}));
 export const StyledTableCell = styled(TableCell, {
   shouldForwardProp: (prop) => prop !== 'cellNumber',
 })(({ cellNumber }: { cellNumber: number }) => ({
-  width: `${100 / cellNumber}%`,
+  width: `${100 / (cellNumber || 1)}%`,
   border: '1px solid #eee',
 }));
 

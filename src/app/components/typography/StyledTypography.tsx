@@ -6,12 +6,6 @@ export const StyledSectionTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   fontSize: '1.1em',
   width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    width: '100%',
-  },
-  [theme.breakpoints.down('sm')]: {
-    width: 'auto',
-  },
 }));
 
 export const StyledTableCaptionTypography = styled(Typography)({

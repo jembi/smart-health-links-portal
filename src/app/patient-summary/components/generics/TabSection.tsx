@@ -20,7 +20,7 @@ export const SectionRow = <T,>({
   data,
   label,
 }: {
-  data: string | JSX.Element | string[] | JSX.Element[] | T[keyof T];
+  data: string | JSX.Element | string[] | JSX.Element[];
   label: string;
 }) => {
   if (Array.isArray(data)) {
@@ -48,7 +48,7 @@ export const TabSection = <
         if (type === 'row') {
           const { field, label, value = '', renderRow = () => {} } = config;
           const data =
-            value || renderRow(resource, references) || resource[field];
+            value || renderRow(resource, references) || String(resource[field]);
           return <SectionRow key={uuid()} data={data} label={label} />;
         } else if (type === 'table') {
           const { title, columns, renderRow } = config;
