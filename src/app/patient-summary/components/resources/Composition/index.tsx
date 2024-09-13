@@ -34,11 +34,13 @@ const rows: TRow<TComposition>[] = [
       renderRow: ({ row, StyledTableRow, StyledTableCell }) => [
         <StyledTableRow key={uuid()}>
           <StyledTableCell>
-            {row.event[0].code[0].coding[0].code}
+            {row.event?.[0].code?.[0].coding?.[0].code}
           </StyledTableCell>
-          <StyledTableCell></StyledTableCell>
           <StyledTableCell>
-            {row.event[0].code[0].coding[0].system}
+            {row.event?.[0].code?.[0].coding?.[0].display}
+          </StyledTableCell>
+          <StyledTableCell>
+            {row.event?.[0].code?.[0].coding?.[0].system}
           </StyledTableCell>
         </StyledTableRow>,
       ],
@@ -53,7 +55,7 @@ const rows: TRow<TComposition>[] = [
           references[subject.reference] as {
             resource: TType<EResource.Patient>;
           }
-        ).resource.name[0];
+        ).resource.name?.[0];
 
         return `${given}, ${family}`;
       },
@@ -65,14 +67,14 @@ const rows: TRow<TComposition>[] = [
       label: 'Author',
       renderRow: ({ author }, references) => {
         const { name, qualification } = (
-          references[author[0].reference] as {
+          references[author?.[0]?.reference] as {
             resource: TType<EResource.Practitioner>;
           }
         ).resource;
         const [{ given, family }] = name;
         const [{ code }] = qualification;
 
-        return `${given}, ${family}, ${code.coding[0].display}`;
+        return `${given}, ${family}, ${code.coding?.[0]?.display}`;
       },
     },
   },
@@ -91,7 +93,7 @@ const rows: TRow<TComposition>[] = [
             const [{ given, family }] = name;
             const [{ code }] = qualification;
 
-            return `${given}, ${family}, ${code.coding[0].display}`;
+            return `${given}, ${family}, ${code.coding?.[0]?.display}`;
           } else if (
             attesterItem.party.reference.startsWith(EResource.Organization)
           ) {
@@ -144,8 +146,8 @@ const rows: TRow<TComposition>[] = [
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const condition = (
           references[
-            findSectionByTitle(row.section, 'Active Problems').entry[0]
-              .reference
+            findSectionByTitle(row.section, 'Active Problems').entry?.[0]
+              ?.reference
           ] as {
             resource: TType<EResource.Condition>;
           }
@@ -154,13 +156,13 @@ const rows: TRow<TComposition>[] = [
         return [
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {condition.code.coding[1].display}
+              {condition.code?.coding?.[0]?.display}
             </StyledTableCell>
             <StyledTableCell>
-              {condition.clinicalStatus.coding[0].code}
+              {condition.clinicalStatus?.coding?.[0]?.code}
             </StyledTableCell>
             <StyledTableCell>
-              {condition.severity.coding[0].display}
+              {condition.severity?.coding?.[0]?.display}
             </StyledTableCell>
           </StyledTableRow>,
         ];
@@ -192,7 +194,7 @@ const rows: TRow<TComposition>[] = [
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const medicationStatement = (
           references[
-            findSectionByTitle(row.section, 'Medication').entry[0].reference
+            findSectionByTitle(row.section, 'Medication').entry?.[0]?.reference
           ] as {
             resource: TType<EResource.MedicationStatement>;
           }
@@ -207,7 +209,7 @@ const rows: TRow<TComposition>[] = [
         return [
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {medication?.code?.coding?.[0].display}
+              {medication?.code?.coding?.[0]?.display}
             </StyledTableCell>
             <StyledTableCell>{medicationStatement.status}</StyledTableCell>
             <StyledTableCell>
@@ -260,7 +262,7 @@ const rows: TRow<TComposition>[] = [
               {camelCaseToFlat(`${allergyIntolerance.type} to medication`)}
             </StyledTableCell>
             <StyledTableCell>
-              {allergyIntolerance.code.coding?.[0].display}
+              {allergyIntolerance.code?.coding?.[0]?.display}
             </StyledTableCell>
             <StyledTableCell>{allergyIntolerance.criticality}</StyledTableCell>
           </StyledTableRow>,
@@ -305,13 +307,13 @@ const rows: TRow<TComposition>[] = [
         return [
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {condition.code.coding?.[0].display}
+              {condition.code?.coding?.[0]?.display}
             </StyledTableCell>
             <StyledTableCell>
-              {condition.clinicalStatus.coding?.[0].code}
+              {condition.clinicalStatus?.coding?.[0]?.code}
             </StyledTableCell>
             <StyledTableCell>
-              {condition.severity.coding?.[0].display}
+              {condition.severity?.coding?.[0]?.display}
             </StyledTableCell>
           </StyledTableRow>,
         ];
@@ -361,14 +363,14 @@ const rows: TRow<TComposition>[] = [
       renderRow: ({ row, references, StyledTableRow, StyledTableCell }) => {
         const observation = (
           references[
-            findSectionByTitle(row.section, 'Results').entry[0].reference
+            findSectionByTitle(row.section, 'Results').entry?.[0]?.reference
           ] as {
             resource: TType<EResource.Observation>;
           }
         )?.resource;
 
         const organization = (
-          references[observation.performer[0].reference] as {
+          references[observation.performer?.[0]?.reference] as {
             resource: TType<EResource.Organization>;
           }
         )?.resource;
@@ -376,9 +378,9 @@ const rows: TRow<TComposition>[] = [
         return [
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {observation.category[0].coding[0].code} (text)
+              {observation.category?.[0]?.coding?.[0]?.code} (text)
             </StyledTableCell>
-            <StyledTableCell>{observation.code.text}</StyledTableCell>
+            <StyledTableCell>{observation.code?.text}</StyledTableCell>
             <StyledTableCell>
               {observation.valueQuantity?.value}
             </StyledTableCell>

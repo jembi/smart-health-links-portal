@@ -33,7 +33,7 @@ export const DetailedTable = <T extends TSupportedResource>({
     (row) => !!row,
   ).length ? (
     <>
-      {title ? <Typography fontWeight={700}>{title}:</Typography> : null}
+      {title && <Typography fontWeight={700}>{title}:</Typography>}
       <Table
         sx={{
           minWidth: 650,
