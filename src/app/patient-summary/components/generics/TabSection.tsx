@@ -51,9 +51,9 @@ export const TabSection = <
             value || renderRow(resource, references) || resource[field];
           return <SectionRow key={uuid()} data={data} label={label} />;
         } else if (type === 'table') {
-          const { title, columns, renderRow, getResource } = config;
+          const { title, columns, renderRow } = config;
           const rows = renderRow({
-            row: getResource(resource),
+            row: resource,
             references,
             StyledTableRow: (props) => <StyledTableRow {...props} />,
             StyledTableCell: (props) => (

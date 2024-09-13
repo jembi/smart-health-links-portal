@@ -54,7 +54,6 @@ const rows: TRow<TMedicationStatement>[] = [
             )}
           </StyledTableRow>
         )),
-      getResource: (datum) => datum,
     },
   },
   {
@@ -75,7 +74,6 @@ const rows: TRow<TMedicationStatement>[] = [
             <StyledTableCell>{route?.coding?.[0].display}</StyledTableCell>
           </StyledTableRow>
         )),
-      getResource: (datum) => datum,
     },
   },
 ];

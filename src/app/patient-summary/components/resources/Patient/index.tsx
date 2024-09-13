@@ -33,7 +33,6 @@ const rows: TRow<TPatient>[] = [
             <StyledTableCell>{data.system}</StyledTableCell>
           </StyledTableRow>
         )),
-      getResource: (datum) => datum,
     },
   },
   {
@@ -57,7 +56,6 @@ const rows: TRow<TPatient>[] = [
           </StyledTableRow>
         )),
       ],
-      getResource: (datum) => datum,
     },
   },
 ];

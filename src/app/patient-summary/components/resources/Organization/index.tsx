@@ -34,7 +34,6 @@ const rows: TRow<TOrganization>[] = [
           </StyledTableRow>
         )),
       ],
-      getResource: (datum) => datum,
     },
   },
 ];

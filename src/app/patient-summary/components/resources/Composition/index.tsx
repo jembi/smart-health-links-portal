@@ -42,7 +42,6 @@ const rows: TRow<TComposition>[] = [
           </StyledTableCell>
         </StyledTableRow>,
       ],
-      getResource: (datum) => datum,
     },
   },
   {
@@ -158,7 +157,6 @@ const rows: TRow<TComposition>[] = [
           </StyledTableRow>,
         ];
       },
-      getResource: (datum) => datum,
     },
   },
   {
@@ -205,7 +203,6 @@ const rows: TRow<TComposition>[] = [
           </StyledTableRow>,
         ];
       },
-      getResource: (datum) => datum,
     },
   },
   {
@@ -246,7 +243,6 @@ const rows: TRow<TComposition>[] = [
           </StyledTableRow>,
         ];
       },
-      getResource: (datum) => datum,
     },
   },
   {
@@ -289,7 +285,6 @@ const rows: TRow<TComposition>[] = [
           </StyledTableRow>,
         ];
       },
-      getResource: (datum) => datum,
     },
   },
   {
@@ -352,7 +347,6 @@ const rows: TRow<TComposition>[] = [
           </StyledTableRow>,
         ];
       },
-      getResource: (datum) => datum,
     },
   },
 ];

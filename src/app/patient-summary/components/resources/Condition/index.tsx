@@ -59,7 +59,6 @@ const rows: TRow<TCondition>[] = [
             </StyledTableRow>
           ),
         ),
-      getResource: (datum) => datum,
     },
   },
 ];

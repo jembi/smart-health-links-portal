@@ -37,7 +37,6 @@ const rows: TRow<TPractitioner>[] = [
           </StyledTableCell>
         </StyledTableRow>,
       ],
-      getResource: (datum) => datum,
     },
   },
 ];

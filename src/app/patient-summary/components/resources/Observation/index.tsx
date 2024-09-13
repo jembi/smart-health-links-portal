@@ -33,7 +33,6 @@ const rows: TRow<TObservation>[] = [
             </StyledTableRow>
           ),
         ),
-      getResource: (datum) => datum,
     },
   },
   {

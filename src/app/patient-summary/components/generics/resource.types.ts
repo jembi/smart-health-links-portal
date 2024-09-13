@@ -28,7 +28,6 @@ export type tableConfig<T> = {
     StyledTableRow: FC<TableRowProps>;
     StyledTableCell: FC<TableCellProps & { cellNumber?: number }>;
   }) => JSX.Element[] | JSX.Element[][];
-  getResource: (resource: T) => T;
 };
 
 type TRowRow<T> = {

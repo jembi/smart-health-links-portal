@@ -51,7 +51,6 @@ const rows: TRow<TAllergyIntolerance>[] = [
             </StyledTableRow>
           ),
         ),
-      getResource: (datum) => datum,
     },
   },
 ];
