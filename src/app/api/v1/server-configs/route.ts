@@ -1,4 +1,5 @@
 import { handleApiValidationError } from "@/app/utils/error-handler";
+import logger from "@/app/utils/logger";
 import { CreateServerConfigDto, ServerConfigDto } from "@/domain/dtos/server-config";
 import prisma from "@/infrastructure/clients/prisma";
 import { ServerConfigPrismaRepository } from "@/infrastructure/repositories/prisma/server-config-repository";
@@ -10,6 +11,7 @@ import { NextResponse } from "next/server";
 const repo = new ServerConfigPrismaRepository(prisma);
 
 export async function POST(request: Request) {
+    logger.info('Fetching create server config API');
     let dto: CreateServerConfigDto = await request.json();
     try{
         const model = mapDtoToModel(dto as ServerConfigDto)
@@ -17,6 +19,7 @@ export async function POST(request: Request) {
         return NextResponse.json(mapModelToDto(newServerConfig), { status: 201 });
     }
     catch(error){
+        logger.error('Error fetching data: ' + error.message);
         return handleApiValidationError(error);
     }
 }
