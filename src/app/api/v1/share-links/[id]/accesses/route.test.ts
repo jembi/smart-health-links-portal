@@ -34,6 +34,8 @@ jest.mock('@/app/utils/error-handler', () => ({
   handleApiValidationError: jest.fn(),
 }));
 
+const mockRoute = '/api/v1/share-links/{id}/accesses';
+
 describe('POST function', () => {
   let mockGetSingleSHLinkUseCase: jest.Mock;
   let mockGetSHLinkAccessesUseCase: jest.Mock;

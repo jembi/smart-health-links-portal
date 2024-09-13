@@ -11,7 +11,7 @@ import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-const route = "api/v1/share-links/{id}/qrcode"
+const route = "/api/v1/share-links/{id}/qrcode"
 const logger = new Logger(route)
 
 /**

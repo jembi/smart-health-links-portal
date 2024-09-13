@@ -40,9 +40,11 @@ describe('GET /api/users/[id]', () => {
     patientId: 'user-patient-id',
   };
 
+  const mockRoute = '/api/v1/users/{id}'
+
   it('should return user DTO and status 200 when user is found and validation passes', async () => {
     // Mock implementations
-    (validateUser as jest.Mock).mockResolvedValue(undefined); // Assuming validateUser returns undefined on success
+    (validateUser as jest.Mock).mockResolvedValue(undefined); 
     (getUserUseCase as jest.Mock).mockResolvedValue(mockUser);
     (mapModelToDto as jest.Mock).mockReturnValue(mockDto);
 
@@ -60,7 +62,7 @@ describe('GET /api/users/[id]', () => {
   });
 
   it('should return NOT_FOUND message and status 404 when user is not found', async () => {
-    (validateUser as jest.Mock).mockResolvedValue(undefined); // Assuming validateUser returns undefined on success
+    (validateUser as jest.Mock).mockResolvedValue(undefined);
     (getUserUseCase as jest.Mock).mockResolvedValue(null);
 
     const mockRequest = new NextRequest(
@@ -93,7 +95,7 @@ describe('GET /api/users/[id]', () => {
     const response = await GET(mockRequest, { params: { id: 'user-id' } });
 
     expect(validateUser).toHaveBeenCalledWith(mockRequest, 'user-id');
-    expect(handleApiValidationError).toHaveBeenCalledWith(error);
+    expect(handleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 

@@ -53,6 +53,8 @@ describe('POST /api/v1/server-configs', () => {
     endpointUrl: 'https://dto-endpoint-url.com',
   };
 
+  const mockRoute = '/api/v1/server-configs';
+
   const mockRequest = (body: any) =>
     new NextRequest('http://localhost/api/v1/server-configs', {
       method: 'POST',

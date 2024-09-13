@@ -33,6 +33,8 @@ describe('POST /api/v1/shlinks/{id}/qrcode', () => {
 
   const mockParams = { id: '123' };
 
+  const mockRoute = '/api/v1/share-links/{id}/qrcode';
+
   const mockRequest = {
     json: jest.fn().mockResolvedValue(mockRequestDto),
   } as unknown as Request;
@@ -79,6 +81,6 @@ describe('POST /api/v1/shlinks/{id}/qrcode', () => {
 
     await POST(mockRequest, { params: mockParams });
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(mockError);
+    expect(handleApiValidationError).toHaveBeenCalledWith(mockError, mockRoute);
   });
 });

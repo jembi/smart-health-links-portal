@@ -16,7 +16,7 @@ import { getSHLinkUseCase } from '@/usecases/shlinks/get-shlink';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-const route = "api/v1/share-links/"
+const route = "/api/v1/share-links"
 const logger = new Logger(route)
 /**
  * @swagger

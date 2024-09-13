@@ -20,7 +20,7 @@ const repo = container.get<ISHLinkAccessRepository>(
 );
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-const route = "api/v1/share-links/{id}/accesses"
+const route = "/api/v1/share-links/{id}/accesses"
 const logger = new Logger(route)
 
 /**

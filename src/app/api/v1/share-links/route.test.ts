@@ -46,6 +46,8 @@ jest.mock('@/app/constants/http-constants', () => ({
 }));
 
 // Constants
+const mockRoute = '/api/v1/share-links'
+
 const dataDto = {
   userId: '1234567890',
   name: 'name',
@@ -132,7 +134,7 @@ describe('API Route Handlers', () => {
       const response = await POST(request);
 
       expect(validateUser).toHaveBeenCalledWith(request, mockDto.userId);
-      expect(handleApiValidationError).toHaveBeenCalledWith(error);
+      expect(handleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
       expect(response).toBeInstanceOf(NextResponse);
       expect(response.status).toBe(400);
 
@@ -187,7 +189,7 @@ describe('API Route Handlers', () => {
       const response = await GET(request);
 
       expect(getUserProfile).toHaveBeenCalledWith(request);
-      expect(handleApiValidationError).toHaveBeenCalledWith(error);
+      expect(handleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
       expect(response).toBeInstanceOf(NextResponse);
       expect(response.status).toBe(500);
 

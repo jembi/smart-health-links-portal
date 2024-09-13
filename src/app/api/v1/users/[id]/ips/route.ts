@@ -19,7 +19,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
-const route = "api/v1/users/{id}/ips"
+const route = "/api/v1/users/{id}/ips"
 const logger = new Logger(route)
 
 

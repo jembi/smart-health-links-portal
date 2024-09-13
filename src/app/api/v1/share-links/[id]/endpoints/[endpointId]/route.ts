@@ -32,7 +32,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
-const route = "api/v1/share-links/{id}/endpoints/{endpointId}"
+const route = "/api/v1/share-links/{id}/endpoints/{endpointId}"
 const logger = new Logger(route)
 
 /**

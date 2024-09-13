@@ -51,7 +51,7 @@ const getPasswordErrorMessage = (shlink: SHLinkModel): string => {
   );
 };
 
-const route = "api/v1/share-links/{id}"
+const route = "/api/v1/share-links/{id}"
 const logger = new Logger(route)
 
 /**

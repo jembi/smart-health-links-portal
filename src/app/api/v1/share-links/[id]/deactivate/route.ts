@@ -11,7 +11,7 @@ import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-const route = "api/v1/share-links/{id}/deactivate"
+const route = "/api/v1/share-links/{id}/deactivate"
 const logger = new Logger(route)
 
 /**

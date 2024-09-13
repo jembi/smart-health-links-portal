@@ -15,7 +15,7 @@ import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-co
 const repo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
-const route = "/api/v16/server-configs"
+const route = "/api/v1/server-configs"
 const logger = new Logger(route)
 
 /**

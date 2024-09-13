@@ -11,7 +11,7 @@ import { getUserUseCase } from '@/usecases/users/get-user';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 
-const route = "api/v1/users/{id}"
+const route = "/api/v1/users/{id}"
 const logger = new Logger(route)
 
 /**
