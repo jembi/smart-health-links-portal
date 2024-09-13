@@ -18,11 +18,11 @@ interface TokenPayload {
 }
 
 export const getUserProfile = async (req: Request): Promise<UserProfile> => {
-  const token = (await getToken({
+  const { user } = (await getToken({
     req: req as NextRequest,
   })) as unknown as TokenPayload;
 
-  return { name: token.user.name, id: token.user.id, email: token.user.email };
+  return { name: user.name, id: user.id, email: user.email };
 };
 
 export const validateUser = async (req: Request, userId: string) => {
