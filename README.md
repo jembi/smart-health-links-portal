@@ -33,9 +33,9 @@ To get started with the project, follow these steps:
    ```
 4. Open your browser and navigate to `http://localhost:3000` to view the portal.
 
-## Generating swagger docs.
+## Generating swagger docs
 
-To generate the swagger.json file for this application run the following command.
+To generate the swagger.json file for this application, run the following command.
 
 ```bash
 yarn next-swagger-doc-cli next-swagger-doc.json

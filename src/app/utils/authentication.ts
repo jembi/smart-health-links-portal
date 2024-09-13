@@ -9,8 +9,18 @@ export interface UserProfile {
   email: string;
 }
 
+interface TokenPayload {
+  user: {
+    name: string;
+    id: string;
+    email: string;
+  };
+}
+
 export const getUserProfile = async (req: Request): Promise<UserProfile> => {
-  const token = (await getToken({ req: req as NextRequest })) as any;
+  const token = (await getToken({
+    req: req as NextRequest,
+  })) as unknown as TokenPayload;
 
   return { name: token.user.name, id: token.user.id, email: token.user.email };
 };
