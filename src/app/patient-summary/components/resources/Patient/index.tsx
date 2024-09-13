@@ -27,10 +27,10 @@ const rows: TRow<TPatient>[] = [
       title: 'Patient Identifiers',
       columns: ['Identifier', 'System'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        row.identifier?.map((data) => (
+        row.identifier?.map(({ value, system }) => (
           <StyledTableRow key={uuid()}>
-            <StyledTableCell>{data.value}</StyledTableCell>
-            <StyledTableCell>{data.system}</StyledTableCell>
+            <StyledTableCell>{value}</StyledTableCell>
+            <StyledTableCell>{system}</StyledTableCell>
           </StyledTableRow>
         )),
     },
@@ -41,18 +41,18 @@ const rows: TRow<TPatient>[] = [
       title: 'Connection Details',
       columns: ['Type', 'Info'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) => [
-        row.address?.map((data) => (
+        row.address?.map(({ line, city, postalCode, country }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>Address</StyledTableCell>
-            <StyledTableCell>{`${data.line},${data.city}, ${data.postalCode}, ${data.country}`}</StyledTableCell>
+            <StyledTableCell>{`${line},${city}, ${postalCode}, ${country}`}</StyledTableCell>
           </StyledTableRow>
         )),
-        row.telecom?.map((data) => (
+        row.telecom?.map(({ use, system, value }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {camelCaseToFlat(`${data.use} ${data.system}`)}
+              {camelCaseToFlat(`${use} ${system}`)}
             </StyledTableCell>
-            <StyledTableCell>{data.value}</StyledTableCell>
+            <StyledTableCell>{value}</StyledTableCell>
           </StyledTableRow>
         )),
       ],
