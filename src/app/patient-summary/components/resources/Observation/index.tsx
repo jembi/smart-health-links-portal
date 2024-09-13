@@ -13,10 +13,7 @@ const rows: TRow<TObservation>[] = [
   },
   {
     type: 'row',
-    config: {
-      field: 'status',
-      label: 'Status',
-    },
+    config: { field: 'status', label: 'Status' },
   },
   {
     type: 'table',

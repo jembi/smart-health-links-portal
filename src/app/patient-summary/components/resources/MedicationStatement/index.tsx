@@ -16,7 +16,8 @@ const rows: TRow<TMedicationStatement>[] = [
     type: 'row',
     config: {
       label: 'Effective Period',
-      renderRow: ({ effectivePeriod }) => `Start: ${effectivePeriod.start}`,
+      renderRow: ({ effectivePeriod }) =>
+        effectivePeriod?.start && `Start: ${effectivePeriod.start}`,
     },
   },
   {

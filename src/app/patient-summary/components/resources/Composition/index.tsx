@@ -13,7 +13,7 @@ const rows: TRow<TComposition>[] = [
   },
   {
     type: 'row',
-    config: { field: 'date', label: 'date' },
+    config: { field: 'date', label: 'Date' },
   },
   {
     type: 'row',
@@ -23,7 +23,7 @@ const rows: TRow<TComposition>[] = [
     type: 'row',
     config: {
       label: 'Event Period',
-      renderRow: ({ date }) => `End: ${date}`,
+      renderRow: ({ date }) => date && `End: ${date}`,
     },
   },
   {
