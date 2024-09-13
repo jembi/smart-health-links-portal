@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { camelCaseToFlat, uuid } from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -11,10 +12,8 @@ const rows: TRow<TPatient>[] = [
   {
     type: 'row',
     config: {
-      field: 'name',
       label: 'Name',
-      renderRow: (field) =>
-        `${field['name']?.[0].given[0]}, ${field['name']?.[0].family}`,
+      renderRow: ({ name }) => `${name[0].given[0]}, ${name[0].family}`,
     },
   },
   {
@@ -28,13 +27,13 @@ const rows: TRow<TPatient>[] = [
       title: 'Patient Identifiers',
       columns: ['Identifier', 'System'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        row.identifier?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
+        row.identifier?.map((data) => (
+          <StyledTableRow key={uuid()}>
             <StyledTableCell>{data.value}</StyledTableCell>
             <StyledTableCell>{data.system}</StyledTableCell>
           </StyledTableRow>
         )),
-      resource: (datum) => datum,
+      getResource: (datum) => datum,
     },
   },
   {
@@ -43,22 +42,22 @@ const rows: TRow<TPatient>[] = [
       title: 'Connection Details',
       columns: ['Type', 'Info'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) => [
-        row.address?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
+        row.address?.map((data) => (
+          <StyledTableRow key={uuid()}>
             <StyledTableCell>Address</StyledTableCell>
             <StyledTableCell>{`${data.line},${data.city}, ${data.postalCode}, ${data.country}`}</StyledTableCell>
           </StyledTableRow>
         )),
-        row.telecom?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
+        row.telecom?.map((data) => (
+          <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {data.use} {data.system}
+              {camelCaseToFlat(`${data.use} ${data.system}`)}
             </StyledTableCell>
             <StyledTableCell>{data.value}</StyledTableCell>
           </StyledTableRow>
         )),
       ],
-      resource: (datum) => datum,
+      getResource: (datum) => datum,
     },
   },
 ];

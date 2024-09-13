@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { camelCaseToFlat, getCodings } from '@/app/utils/helpers';
+import { camelCaseToFlat, getCodings, uuid } from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -11,17 +11,30 @@ type TAllergyIntolerance = TType<EResource.AllergyIntolerance>;
 const rows: TRow<TAllergyIntolerance>[] = [
   {
     type: 'row',
-    config: { field: 'category', label: 'Category', prefix: 'Allergy to ' },
+    config: {
+      label: 'Category',
+      renderRow: ({ category }) => category?.[0] && `Allergy to ${category[0]}`,
+    },
   },
   {
     type: 'row',
     config: { field: 'onsetDateTime', label: 'Onset Date Time' },
   },
-  { type: 'row', config: { field: 'code', label: 'Allergy' } },
+  {
+    type: 'row',
+    config: {
+      label: 'Allergy',
+      renderRow: ({ code }) => code.coding.map(({ display }) => display),
+    },
+  },
   { type: 'row', config: { field: 'criticality', label: 'Criticality' } },
   {
     type: 'row',
-    config: { field: 'clinicalStatus', label: 'Status', value: 'code' },
+    config: {
+      label: 'Status',
+      renderRow: ({ clinicalStatus }) =>
+        clinicalStatus.coding.map(({ code }) => code),
+    },
   },
   {
     type: 'table',
@@ -30,15 +43,15 @@ const rows: TRow<TAllergyIntolerance>[] = [
       columns: ['Name', 'Code', 'Display', 'System'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
         getCodings({ resource: row }).map(
-          ([field, { code, display, system }], index) => (
-            <StyledTableRow key={`${system}_${index}`}>
+          ([field, { code, display, system }]) => (
+            <StyledTableRow key={uuid()}>
               {[camelCaseToFlat(field), code, display, system].map((cell) => (
-                <StyledTableCell key={system}>{cell}</StyledTableCell>
+                <StyledTableCell key={uuid()}>{cell}</StyledTableCell>
               ))}
             </StyledTableRow>
           ),
         ),
-      resource: (datum) => datum,
+      getResource: (datum) => datum,
     },
   },
 ];

@@ -9,6 +9,7 @@ import {
   Observation,
   Bundle,
   FhirResource,
+  MedicationStatement,
 } from 'fhir/r4';
 
 export enum EResource {
@@ -17,6 +18,7 @@ export enum EResource {
   Practitioner = 'Practitioner',
   Organization = 'Organization',
   Condition = 'Condition',
+  MedicationStatement = 'MedicationStatement',
   Medication = 'Medication',
   AllergyIntolerance = 'AllergyIntolerance',
   Observation = 'Observation',
@@ -29,6 +31,7 @@ export interface IResource {
   [EResource.Practitioner]: Practitioner;
   [EResource.Organization]: Organization;
   [EResource.Condition]: Condition;
+  [EResource.MedicationStatement]: MedicationStatement;
   [EResource.Medication]: Medication;
   [EResource.AllergyIntolerance]: AllergyIntolerance;
   [EResource.Observation]: Observation;

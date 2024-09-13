@@ -1,4 +1,4 @@
-import { camelCaseToFlat, getCodings } from '@/app/utils/helpers';
+import { camelCaseToFlat, getCodings, uuid } from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -18,7 +18,6 @@ const rows: TRow<TCondition>[] = [
   {
     type: 'row',
     config: {
-      field: 'code',
       label: 'Condition',
       renderRow: ({ code }) =>
         code.coding
@@ -32,7 +31,6 @@ const rows: TRow<TCondition>[] = [
   {
     type: 'row',
     config: {
-      field: 'severity',
       label: 'Severity',
       renderRow: ({ severity }) =>
         severity.coding?.map(({ display }) => display).join(', '),
@@ -41,7 +39,6 @@ const rows: TRow<TCondition>[] = [
   {
     type: 'row',
     config: {
-      field: 'clinicalStatus',
       label: 'Status',
       renderRow: ({ clinicalStatus }) =>
         clinicalStatus.coding?.map(({ code }) => code).join(', '),
@@ -54,15 +51,15 @@ const rows: TRow<TCondition>[] = [
       columns: ['Name', 'Code', 'Display', 'System'],
       renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
         getCodings({ resource: row }).map(
-          ([field, { code, display, system }], index) => (
-            <StyledTableRow key={`${system}_${index}`}>
+          ([field, { code, display, system }]) => (
+            <StyledTableRow key={uuid()}>
               {[camelCaseToFlat(field), code, display, system].map((cell) => (
-                <StyledTableCell key={system}>{cell}</StyledTableCell>
+                <StyledTableCell key={uuid()}>{cell}</StyledTableCell>
               ))}
             </StyledTableRow>
           ),
         ),
-      resource: (datum) => datum,
+      getResource: (datum) => datum,
     },
   },
 ];
