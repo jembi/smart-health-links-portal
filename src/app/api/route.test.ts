@@ -3,10 +3,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import { GET } from './route'; // Import your API route handler
 
 // Mock the NextRequest object (optional, but useful for more complex tests)
-const mockRequest = new NextRequest('http://localhost/api', { method: 'GET' }); 
+const mockRequest = new NextRequest('http://localhost/api', { method: 'GET' });
 
 describe('API /api', () => {
   it('should return a health check response', async () => {

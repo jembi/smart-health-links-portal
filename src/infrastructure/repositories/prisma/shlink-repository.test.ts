@@ -1,6 +1,8 @@
-import { SHLinkEntity } from "@/entities/shlink";
-import { PrismaClient } from "@prisma/client";
-import { SHLinkPrismaRepository } from "./shlink-repository";
+import { PrismaClient } from '@prisma/client';
+
+import { SHLinkEntity } from '@/entities/shlink';
+
+import { SHLinkPrismaRepository } from './shlink-repository';
 
 // Create a mock for PrismaClient
 const prismaMock = {
@@ -14,14 +16,24 @@ const prismaMock = {
   },
 };
 
-const entity: SHLinkEntity = { id: '1', config_passcode: 'unique', management_token: '1', user_id: '1', active: false, config_exp: 2, passcode_failures_remaining: 0};
+const entity: SHLinkEntity = {
+  id: '1',
+  config_passcode: 'unique',
+  management_token: '1',
+  user_id: '1',
+  active: false,
+  config_exp: 2,
+  passcode_failures_remaining: 0,
+};
 
 describe('SHLinkPrismaRepository', () => {
   let repository: SHLinkPrismaRepository;
 
   beforeEach(() => {
     // Instantiate the repository before each test
-    repository = new SHLinkPrismaRepository(prismaMock as unknown as PrismaClient);
+    repository = new SHLinkPrismaRepository(
+      prismaMock as unknown as PrismaClient,
+    );
   });
 
   test('should call getModel and create a new entity', async () => {
@@ -34,12 +46,25 @@ describe('SHLinkPrismaRepository', () => {
   });
 
   test('should call getModel and create many entities', async () => {
-    const entities: SHLinkEntity[] = [entity, { id: '2', config_passcode: 'Jane Doe', management_token: '1', user_id: '1', active: false, config_exp: 0, passcode_failures_remaining: 0 }];
+    const entities: SHLinkEntity[] = [
+      entity,
+      {
+        id: '2',
+        config_passcode: 'Jane Doe',
+        management_token: '1',
+        user_id: '1',
+        active: false,
+        config_exp: 0,
+        passcode_failures_remaining: 0,
+      },
+    ];
     prismaMock.shlink.createMany.mockResolvedValue(entities);
 
     const result = await repository.insertMany(entities);
 
-    expect(prismaMock.shlink.createMany).toHaveBeenCalledWith({ data: entities });
+    expect(prismaMock.shlink.createMany).toHaveBeenCalledWith({
+      data: entities,
+    });
     expect(result).toEqual(entities);
   });
 
@@ -48,7 +73,9 @@ describe('SHLinkPrismaRepository', () => {
 
     const result = await repository.findById('1');
 
-    expect(prismaMock.shlink.findFirst).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.shlink.findFirst).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 
@@ -78,7 +105,10 @@ describe('SHLinkPrismaRepository', () => {
 
     const result = await repository.update(entity);
 
-    expect(prismaMock.shlink.update).toHaveBeenCalledWith({ where: { id: '1' }, data: entity });
+    expect(prismaMock.shlink.update).toHaveBeenCalledWith({
+      where: { id: '1' },
+      data: entity,
+    });
     expect(result).toBe(entity);
   });
 
@@ -87,7 +117,9 @@ describe('SHLinkPrismaRepository', () => {
 
     const result = await repository.delete(entity);
 
-    expect(prismaMock.shlink.delete).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.shlink.delete).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 });

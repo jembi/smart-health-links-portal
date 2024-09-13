@@ -1,33 +1,20 @@
-import { createLogger, format, transports, Logger } from 'winston';
-import 'winston-daily-rotate-file';
-import DailyRotateFile from 'winston-daily-rotate-file'; 
+import { getLogger } from '@/lib/logger';
 
 
-const { combine, timestamp, printf } = format;
+export class Logger{
+  route: string;
 
-const customFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} [${level}]: ${message}`;
-});
+  constructor(route: string = "/api/v1") {
+    this.route = route;
+  }
 
+  log(message = "api connected", type = "info", route = this.route){
+    const logger = getLogger()
 
-const dailyRotateFileTransport = new DailyRotateFile({
-  filename: 'logs/logs-%DATE%.log',
-  datePattern: 'YYYY-MM-DD',
-  zippedArchive: true,
-  maxSize: '20m',
-  maxFiles: '14d',
-});
+    logger.log({
+      level: type,
+      message: `[${route}]: ${message}`
+    });
+  }
 
-const logger: Logger = createLogger({
-  level: 'info',
-  format: combine(
-    timestamp(),
-    customFormat
-  ),
-  transports: [
-    new transports.Console(),
-    dailyRotateFileTransport
-  ],
-});
-
-export default logger;
+}

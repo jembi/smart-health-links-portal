@@ -1,17 +1,53 @@
-import { NOT_FOUND } from "@/app/constants/http-constants";
-import prisma from "@/infrastructure/clients/prisma";
-import { UserPrismaRepository } from "@/infrastructure/repositories/prisma/user-repository";
-import { mapModelToDto } from "@/mappers/user-mapper";
-import { getUserUseCase } from "@/usecases/users/get-user";
+import { NextResponse } from 'next/server';
 
-const repo = new UserPrismaRepository(prisma);
+import { NOT_FOUND } from '@/app/constants/http-constants';
+import { validateUser } from '@/app/utils/authentication';
+import { handleApiValidationError } from '@/app/utils/error-handler';
+import { Logger } from '@/app/utils/logger';
+import { container, UserRepositoryToken } from '@/container';
+import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { mapModelToDto } from '@/mappers/user-mapper';
+import { getUserUseCase } from '@/usecases/users/get-user';
 
-import { NextResponse } from "next/server";
+const repo = container.get<IUserRepository>(UserRepositoryToken);
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const result = await getUserUseCase({repo}, {id: params.id});
+const route = "api/v1/users/{id}"
+const logger = new Logger(route)
 
-  if(result) return NextResponse.json(mapModelToDto(result), { status: 200 });
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   get:
+ *     tags: [Users]
+ *     description: Get a user by id
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: A string representing the user's unique identifier.
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: User
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/User'
+ */
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  logger.log("Retrieving a user")
+  try {
+    validateUser(request, params.id);
 
-  return NextResponse.json({message: NOT_FOUND}, { status: 404});
+    const result = await getUserUseCase({ repo }, { userId: params.id });
+    if (result)
+      return NextResponse.json(mapModelToDto(result), { status: 200 });
+
+    return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
+  } catch (error) {
+    return handleApiValidationError(error, route);
+  }
 }

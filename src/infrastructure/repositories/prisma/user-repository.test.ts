@@ -1,7 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-import { BaseEntity } from "@/entities/base-entity";
-import { UserEntity } from "@/entities/user";
-import { UserPrismaRepository } from "./user-repository";
+import { PrismaClient } from '@prisma/client';
+
+import { BaseEntity } from '@/entities/base-entity';
+import { UserEntity } from '@/entities/user';
+
+import { UserPrismaRepository } from './user-repository';
 
 // Create a mock for PrismaClient
 const prismaMock = {
@@ -22,7 +24,9 @@ describe('UserPrismaRepository', () => {
 
   beforeEach(() => {
     // Instantiate the repository before each test
-    repository = new UserPrismaRepository(prismaMock as unknown as PrismaClient);
+    repository = new UserPrismaRepository(
+      prismaMock as unknown as PrismaClient,
+    );
   });
 
   test('should call getModel and create a new entity', async () => {
@@ -35,7 +39,10 @@ describe('UserPrismaRepository', () => {
   });
 
   test('should call getModel and create many entities', async () => {
-    const entities = [entity, { id: '2', user_id: 'Jane Doe', patient_id: 'John Doe' }] as UserEntity[];
+    const entities = [
+      entity,
+      { id: '2', user_id: 'Jane Doe', patient_id: 'John Doe' },
+    ] as UserEntity[];
     prismaMock.user.createMany.mockResolvedValue(entities);
 
     const result = await repository.insertMany(entities);
@@ -49,7 +56,9 @@ describe('UserPrismaRepository', () => {
 
     const result = await repository.findById('1');
 
-    expect(prismaMock.user.findFirst).toHaveBeenCalledWith({ where: { id: '1' } });
+    expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
+      where: { id: '1' },
+    });
     expect(result).toBe(entity);
   });
 
@@ -79,7 +88,10 @@ describe('UserPrismaRepository', () => {
 
     const result = await repository.update(entity);
 
-    expect(prismaMock.user.update).toHaveBeenCalledWith({ where: { id: '1' }, data: entity });
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: { id: '1' },
+      data: entity,
+    });
     expect(result).toBe(entity);
   });
 

@@ -5,7 +5,6 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("POSTGRES_PRISMA_URL")
-    directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model cas_item {
@@ -44,7 +43,8 @@ model shlink_access {
 model shlink {
     id                         String           @id @unique @default(cuid()) @db.VarChar(43)
     passcode_failures_remaining Int             @default(5)
-    config_passcode            String?
+    config_passcode            String?          /// @encrypted
+    config_passcode_hash        String?         /// @encryption:hash(config_passcode)
     config_exp                 DateTime?
     active                     Boolean          @default(true)
     management_token           String           @db.VarChar(43) @unique @default(cuid())
@@ -53,6 +53,8 @@ model shlink {
     shlink_file                 shlink_file[]
     shlink_endpoint             shlink_endpoint[]
     shlink_access               shlink_access[]
+    access_ticket               access_ticket[]
+    name                       String           @default("nameless shlink")
     
 
     @@index([id], name: "idx_shlink_id")
@@ -71,16 +73,17 @@ model user {
 
 
 model server_config {
-    id                    String  @id @unique @default(cuid()) @db.VarChar(43)
-    endpoint_url          String
-    config_key            String?  @db.VarChar(43)
-    config_client_id      String?
-    config_client_secret  String?
-    config_token_endpoint String?
-    config_refresh_token  String?
-    refresh_time          DateTime @default(now())
-    access_token_response String
-    shlink_endpoints      shlink_endpoint[]
+    id                          String  @id @unique @default(cuid()) @db.VarChar(43)
+    endpoint_url                String
+    config_key                  String?  @db.VarChar(43)
+    config_client_id            String?
+    config_client_secret        String?   /// @encrypted
+    config_client_secret_hash   String?   /// @encryption:hash(config_client_secret)
+    config_token_endpoint       String?
+    config_refresh_token        String?
+    refresh_time                DateTime @default(now())
+    access_token_response       String
+    shlink_endpoints            shlink_endpoint[]
 
     @@index([id], name: "idx_server_config_id")
 }
@@ -97,3 +100,11 @@ model shlink_endpoint {
     @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
 }
 
+
+model access_ticket {
+    id           String   @id @default(cuid()) @db.VarChar(43)
+    shlink_id    String    
+    shlink       shlink   @relation(fields: [shlink_id], references: [id])
+
+    @@index([id], name: "idx_access_ticket_id")
+}

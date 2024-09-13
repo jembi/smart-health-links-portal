@@ -42,9 +42,10 @@ model shlink_access {
 
 
 model shlink {
-    id                         String           @id @unique @default(cuid()) 
+    id                         String           @id @unique @default(cuid())
     passcode_failures_remaining Int             @default(5)
-    config_passcode            String?
+    config_passcode            String?          /// @encrypted
+    config_passcode_hash        String?         /// @encryption:hash(config_passcode)
     config_exp                 DateTime?
     active                     Boolean          @default(true)
     management_token           String           @unique @default(cuid())
@@ -53,13 +54,14 @@ model shlink {
     shlink_file                 shlink_file[]
     shlink_endpoint             shlink_endpoint[]
     shlink_access               shlink_access[]
-    
+    access_ticket               access_ticket[]
+    name                       String           @default("nameless shlink")
 
     @@index([id], name: "idx_shlink_id")
 }
 
 model user {
-    id           String   @id @default(cuid()) 
+    id           String   @id @unique @default(cuid()) 
     user_id       String    @unique
     patient_id    String
     shlink       shlink[]
@@ -75,11 +77,11 @@ model server_config {
     endpoint_url          String
     config_key            String?  
     config_client_id      String?
-    config_client_secret  String?
+    config_client_secret  String?   /// @encrypted
     config_token_endpoint String?
     config_refresh_token  String?
     refresh_time          DateTime @default(now())
-    access_token_response String
+    access_token_response String?
     shlink_endpoints      shlink_endpoint[]
 
     @@index([id], name: "idx_server_config_id")
@@ -97,3 +99,11 @@ model shlink_endpoint {
     @@index([server_config_id], name: "idx_shlink_endpoint_serverConfigID")
 }
 
+
+model access_ticket {
+    id           String   @id @default(cuid())
+    shlink_id    String    
+    shlink       shlink   @relation(fields: [shlink_id], references: [id])
+
+    @@index([id], name: "idx_access_ticket_id")
+}

@@ -13,14 +13,57 @@ services:
       - ./public:/app/public
       - /app/.next
     ports:
-      - "3000:3000"
+      - '3080:3000'
     networks:
       - smart-health-links-portal-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
       interval: 30s
       timeout: 3s
       retries: 10
+
+  postgres:
+    image: postgres:16.2
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+    networks:
+      - smart-health-links-portal-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    command: start --import-realm
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/${POSTGRES_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 8082:8080
+    volumes:
+      - ./import/config/shlp:/opt/keycloak/data/import
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - smart-health-links-portal-network
+
+volumes:
+  postgres_data:
+    driver: local
 
 networks:
   smart-health-links-portal-network:

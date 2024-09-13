@@ -1,4 +1,6 @@
-import { SHLinkAccessEntity } from "@/entities/shlink-access";
-import { IRepository } from "./repository.interface";
+import { SHLinkAccessEntity } from '@/entities/shlink-access';
 
-export interface ISHLinkAccessRepository extends IRepository<SHLinkAccessEntity>{};
+import { IRepository } from './repository.interface';
+
+export interface ISHLinkAccessRepository
+  extends IRepository<SHLinkAccessEntity> {}

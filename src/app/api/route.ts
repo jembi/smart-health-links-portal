@@ -1,8 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
-import logger from '@/app/utils/logger';
 
+import {Logger} from '@/app/utils/logger';
+
+const logger = new Logger("/api/v1")
 
 export async function GET(request) {
-  logger.info('API connected successfully');
+  logger.log("API connected successfully");
   return NextResponse.json({ message: "API Health Check" }, { status: 200 });
 }

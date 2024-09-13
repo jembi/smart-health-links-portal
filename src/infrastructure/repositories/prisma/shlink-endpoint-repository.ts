@@ -1,10 +1,15 @@
-import { SHLinkEndpointEntity } from "@/entities/shlink-endpoint";
-import { BasePrismaRepository } from "./base-repository";
-import { PrismaClient } from "@prisma/client";
-import { ISHLinkEndpointRepository } from "../interfaces/shlink-endpoint-repository";
+import { PrismaClient } from '@prisma/client';
 
-export class SHLinkEndpointPrismaRepository extends BasePrismaRepository<SHLinkEndpointEntity> implements ISHLinkEndpointRepository{
-    constructor(prismaClient: PrismaClient){
-        super(prismaClient, 'shlink_endpoint');
-    }
-};
+import { SHLinkEndpointEntity } from '@/entities/shlink-endpoint';
+
+import { BasePrismaRepository } from './base-repository';
+import { ISHLinkEndpointRepository } from '../interfaces/shlink-endpoint-repository';
+
+export class SHLinkEndpointPrismaRepository
+  extends BasePrismaRepository<SHLinkEndpointEntity>
+  implements ISHLinkEndpointRepository
+{
+  constructor(prismaClient: PrismaClient) {
+    super(prismaClient, 'shlink_endpoint');
+  }
+}

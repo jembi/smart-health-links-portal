@@ -1,4 +1,4 @@
-import { BaseEntity } from "./base-entity";
+import { BaseEntity } from './base-entity';
 
 export class SHLinkEntity extends BaseEntity {
   passcode_failures_remaining: number;
@@ -7,4 +7,5 @@ export class SHLinkEntity extends BaseEntity {
   management_token: string;
   user_id: string;
   active: boolean;
+  name: string;
 }
