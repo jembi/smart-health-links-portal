@@ -54,7 +54,7 @@ export const extractResources = <TResource extends keyof IResource>(
     bundle,
     bundle.entry.map(({ resource }) => resource) as TType<TResource>[],
   )
-    .flatMap((subArray) => subArray)
+    .flat()
     .reduce((acc, cur) => {
       const uuid = `${cur.resource.resourceType}/${cur.resource.id}`;
       if (!acc[uuid]) {
