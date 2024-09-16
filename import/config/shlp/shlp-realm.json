@@ -523,7 +523,7 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "secret" : "gX0nfIp57bO3bY68br3kdTXung2Auwpr",
+    "secret" : "keycloak_client_secret",
     "redirectUris" : [ "http://localhost:3000/api/auth/callback/keycloak" ],
     "webOrigins" : [ "http://localhost:3000" ],
     "notBefore" : 0,

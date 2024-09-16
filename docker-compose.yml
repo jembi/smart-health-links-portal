@@ -13,7 +13,7 @@ services:
       - ./public:/app/public
       - /app/.next
     ports:
-      - '3080:3000'
+      - '3000:3000'
     networks:
       - smart-health-links-portal-network
     healthcheck:
@@ -26,8 +26,8 @@ services:
     image: postgres:16.2
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -48,11 +48,11 @@ services:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres/${POSTGRES_DB}
-      KC_DB_USERNAME: ${POSTGRES_USER}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://postgres/${KEYCLOAK_POSTGRES_DB}
+      KC_DB_USERNAME: ${KEYCLOAK_POSTGRES_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
     ports:
-      - 8082:8080
+      - 8080:8080
     volumes:
       - ./import/config/shlp:/opt/keycloak/data/import
     restart: always
