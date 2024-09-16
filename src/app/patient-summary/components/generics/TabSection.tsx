@@ -1,63 +1,78 @@
 import React from 'react';
 
 import { StyledSectionTypography } from '@/app/components/typography/StyledTypography';
+import { camelCaseToFlat, uuid } from '@/app/utils/helpers';
 import { TSupportedResource } from '@/types/fhir.types';
 
-import { DetailedTable } from './DetailedTable';
-import { TTabProps } from './resource.types';
+import {
+  DetailedTable,
+  StyledTableCell,
+  StyledTableRow,
+} from './DetailedTable';
+import { TRowData, TTabProps } from './resource.types';
 import InfoRow from '../InfoRow';
 
-export const TabSection = <T extends TSupportedResource>({
-  rows,
+export const SectionTitle = ({ title }: { title?: string }) =>
+  title && <StyledSectionTypography>{title}</StyledSectionTypography>;
+
+export const SectionRow = ({
   data,
-  title = '',
-}: TTabProps<T>) =>
-  data.map((datum, index) => (
-    <React.Fragment key={index}>
-      <StyledSectionTypography key={index}>
-        {title} {index > -1 && `(${index + 1})`}
-      </StyledSectionTypography>
+  label,
+}: {
+  data: TRowData;
+  label?: string;
+}) => {
+  if (Array.isArray(data)) {
+    return data
+      .filter((field) => !!field)
+      .map(
+        (field) =>
+          field && <InfoRow key={uuid()} label={label} value={field} />,
+      );
+  }
+  return data ? <InfoRow key={uuid()} label={label} value={data} /> : null;
+};
 
-      {rows.map((row, index) => {
-        const { type, config } = row;
+export const TabSection = <
+  T extends TSupportedResource,
+  R extends T & TSupportedResource = T & TSupportedResource,
+>({
+  rows,
+  resources,
+  references,
+}: TTabProps<T, R>) =>
+  resources?.map((resource, index) => (
+    <React.Fragment key={uuid()}>
+      <SectionTitle
+        title={
+          resource.resourceType === 'Composition'
+            ? 'General Information'
+            : `${camelCaseToFlat(resource.resourceType)} ${resources.length > 1 ? `(${index + 1})` : ``}`
+        }
+      />
+      {rows?.map(({ type, config }, index) => {
         if (type === 'row') {
-          const {
-            field,
-            label,
-            value = '',
-            prefix = '',
-            renderRow = () => {},
-          } = config;
-          if (field) {
-            const selectedField = renderRow(datum) || datum[field];
+          const { field, label, value = '', render = () => {} } = config;
+          const renderData = render(resource, references);
+          const data =
+            renderData ||
+            value ||
+            (field && resource?.[field] ? String(resource?.[field]) : '');
 
-            if (Array.isArray(selectedField?.['coding'])) {
-              return selectedField['coding'].map((item) => {
-                const title = item[value] || item.display;
-
-                return title ? (
-                  <InfoRow
-                    key={title}
-                    label={label}
-                    value={`${prefix}${title}`}
-                  />
-                ) : null;
-              });
-            }
-            return selectedField ? (
-              <InfoRow
-                key={label}
-                label={label}
-                value={`${prefix}${selectedField}`}
-              />
-            ) : null;
-          }
+          return <SectionRow key={uuid()} data={data} label={label} />;
         } else if (type === 'table') {
+          const { title, columns, render } = config;
+          const rows = render({
+            row: resource,
+            references,
+            StyledTableRow: (props) => <StyledTableRow {...props} />,
+            StyledTableCell: (props) => (
+              <StyledTableCell {...props} cellNumber={columns.length} />
+            ),
+          });
+
           return (
-            <DetailedTable
-              key={index}
-              {...{ ...config, resource: config.resource(datum) }}
-            />
+            <DetailedTable key={index} data={{ rows, columns }} title={title} />
           );
         }
       })}

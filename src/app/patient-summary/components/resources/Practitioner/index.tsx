@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { uuid } from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -11,30 +12,43 @@ const rows: TRow<TPractitioner>[] = [
   {
     type: 'row',
     config: {
-      field: 'name',
       label: 'Name',
-      renderRow: (field) =>
-        field.name
-          .map(
-            ({ given, family }) =>
-              `${given?.join(' ')}${family && `, ${family}`}`,
+      render: ({ name }) => {
+        const authorText = [name?.[0].given, name?.[0].family]
+          .filter((name) => !!name)
+          .join(', ');
+
+        return (
+          authorText && (
+            <>
+              {name?.[0].prefix}
+              {authorText}
+            </>
           )
-          .join(),
+        );
+      },
     },
   },
   {
     type: 'table',
     config: {
-      title: 'Patient Identifiers',
+      title: 'Qualifications',
       columns: ['Qualification', 'System'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        row.identifier?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
-            <StyledTableCell>{data.value}</StyledTableCell>
-            <StyledTableCell>{data.system}</StyledTableCell>
-          </StyledTableRow>
-        )),
-      resource: (datum) => datum,
+      render: ({ row, StyledTableRow, StyledTableCell }) =>
+        row.qualification?.[0]
+          ? [
+              <StyledTableRow key={uuid()}>
+                <StyledTableCell>
+                  {row.qualification?.[0]?.code?.coding?.[0].display}{' '}
+                  {row.qualification?.[0]?.code?.coding?.[0].code &&
+                    `(${row.qualification?.[0]?.code?.coding?.[0].code})`}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {row.qualification?.[0]?.code?.coding?.[0].system}
+                </StyledTableCell>
+              </StyledTableRow>,
+            ]
+          : [],
     },
   },
 ];
