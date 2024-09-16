@@ -69,7 +69,7 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
   try {
-    await validateUserRoles(request, 'admins');
+    await validateUserRoles(request, 'admin');
     const serverConfigs = await getServerConfigsUseCase({ repo });
     return NextResponse.json(
       serverConfigs.map((x) => mapModelToDto(x)),
