@@ -10,6 +10,7 @@ import { IServerConfigRepository } from '@/infrastructure/repositories/interface
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
+import { validateUserRoles } from '@/app/utils/authentication';
 
 const repo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
@@ -39,6 +40,7 @@ const repo = container.get<IServerConfigRepository>(
 export async function POST(request: Request) {
   let dto: CreateServerConfigDto = await request.json();
   try {
+    await validateUserRoles(request, 'admin');
     const model = mapDtoToModel(dto as ServerConfigDto);
     const newServerConfig = await addServerConfigUseCase(
       { repo },
@@ -66,9 +68,14 @@ export async function POST(request: Request) {
  *               $ref: '#/components/schemas/ServerConfig'
  */
 export async function GET(request: Request) {
-  const serverConfigs = await getServerConfigsUseCase({ repo });
-  return NextResponse.json(
-    serverConfigs.map((x) => mapModelToDto(x)),
-    { status: 200 },
-  );
+  try {
+    await validateUserRoles(request, 'admins');
+    const serverConfigs = await getServerConfigsUseCase({ repo });
+    return NextResponse.json(
+      serverConfigs.map((x) => mapModelToDto(x)),
+      { status: 200 },
+    );
+  } catch (error) {
+    return handleApiValidationError(error);
+  }
 }
