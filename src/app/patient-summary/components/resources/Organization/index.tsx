@@ -1,3 +1,4 @@
+import { camelCaseToFlat, uuid } from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -15,23 +16,26 @@ const rows: TRow<TOrganization>[] = [
     config: {
       title: 'Connection Details',
       columns: ['Type', 'Info'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) => [
-        row.address?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
-            <StyledTableCell>Address</StyledTableCell>
-            <StyledTableCell>{`${data.line},${data.city}, ${data.postalCode}, ${data.country}`}</StyledTableCell>
-          </StyledTableRow>
-        )),
-        row.telecom?.map((data, index) => (
-          <StyledTableRow key={`${JSON.stringify(data)}_${index}`}>
+      render: ({ row, StyledTableRow, StyledTableCell }) => [
+        row.address?.map(({ use, line, city, postalCode, country }) => (
+          <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {data.use} {data.system}
+              {camelCaseToFlat(`${use ? `${use} ` : ''}address`)}
             </StyledTableCell>
-            <StyledTableCell>{data.value}</StyledTableCell>
+            <StyledTableCell>
+              {[line, city, postalCode, country].filter(Boolean).join(', ')}
+            </StyledTableCell>
           </StyledTableRow>
-        )),
+        )) || [],
+        row.telecom?.map(({ use, system = '', value }) => (
+          <StyledTableRow key={uuid()}>
+            <StyledTableCell>
+              {camelCaseToFlat(`${use ? `${use} ` : ''}${system}`)}
+            </StyledTableCell>
+            <StyledTableCell>{value}</StyledTableCell>
+          </StyledTableRow>
+        )) || [],
       ],
-      resource: (datum) => datum,
     },
   },
 ];

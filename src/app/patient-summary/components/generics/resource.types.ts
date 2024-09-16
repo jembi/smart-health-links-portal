@@ -1,47 +1,59 @@
 import { TableCellProps, TableRowProps } from '@mui/material';
-import { ElementType, FC } from 'react';
+import { ElementType, FC, JSX } from 'react';
 
-import { EResource } from '@/types/fhir.types';
+import { EResource, TSupportedResource } from '@/types/fhir.types';
+
+export type TRowData =
+  | string
+  | JSX.Element
+  | JSX.Element[]
+  | (string | undefined)[]
+  | undefined;
 
 export type rowConfig<T> = {
-  field: keyof T;
-  label: string;
-  value?: string;
-  prefix?: string;
-  renderRow?: (field: T) => string;
+  label?: string;
+  field?: keyof T;
+  value?: string | string[];
+  render?: (
+    row: T,
+    references?: Record<string, { resource: TSupportedResource }>,
+  ) => TRowData;
 };
 
 export type tableConfig<T> = {
-  title: string;
+  title?: string;
   columns: string[];
-  resource: (resource: T) => T;
-  renderRow: ({
+  references?: Record<string, { resource: TSupportedResource }>;
+  render: ({
     row,
+    references,
     StyledTableRow,
     StyledTableCell,
   }: {
     row: T;
+    references?: Record<string, { resource: TSupportedResource }>;
     StyledTableRow: FC<TableRowProps>;
     StyledTableCell: FC<TableCellProps & { cellNumber?: number }>;
   }) => JSX.Element[] | JSX.Element[][];
 };
 
-type TRowRow<T> = {
+type TRowConfigRow<T> = {
   type: 'row';
   config: rowConfig<T>;
 };
 
-type TRowTable<T> = {
+type TRowConfigTable<T> = {
   type: 'table';
   config: tableConfig<T>;
 };
 
-export type TRow<T> = TRowRow<T> | TRowTable<T>;
+export type TRow<T> = TRowConfigRow<T> | TRowConfigTable<T>;
 
-export type TTabProps<T> = {
-  data: T[];
+export type TTabProps<T, R = never> = {
   rows: TRow<T>[];
   title: string;
+  resources?: R[];
+  references: Record<string, { resource: TSupportedResource }>;
 };
 
 export type TComponentMap = Partial<

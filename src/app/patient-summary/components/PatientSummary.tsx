@@ -5,7 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
 import { useState } from 'react';
 
-import { extractResource } from '@/app/utils/helpers';
+import { extractResources } from '@/app/utils/helpers';
 import { IResource, TBundle } from '@/types/fhir.types';
 
 import { COMPONENT_MAP } from './generics/constants';
@@ -16,26 +16,48 @@ export default function PatientSummary({
 }: {
   fhirBundle: TBundle;
 }) {
-  const dataTabs: string[] = Array.from(
-    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
+  const dataTabs: (string | undefined)[] = Array.from(
+    new Set(fhirBundle?.entry?.map(({ resource }) => resource?.resourceType)),
   );
   const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>
-    dataTabs.map((resourceType: keyof IResource) => {
-      if (COMPONENT_MAP[resourceType]) {
-        const { Component, ...rest } = COMPONENT_MAP[resourceType];
-        const resource = extractResource(fhirBundle, resourceType);
-        return (
-          <TabPanel value={resourceType} index={selectedTab} key={resourceType}>
-            {<Component data={resource} {...rest} />}
-          </TabPanel>
-        );
-      }
-    });
+    Object.keys(COMPONENT_MAP)
+      .filter((tab) => tab && dataTabs.includes(tab))
+      .map((resourceType) => {
+        if (resourceType && COMPONENT_MAP[resourceType]) {
+          const { Component, ...rest } = COMPONENT_MAP[resourceType];
+          const { resources, references } = extractResources(
+            fhirBundle,
+            resourceType as keyof IResource,
+          );
+
+          return (
+            <TabPanel
+              key={resourceType}
+              value={resourceType}
+              index={selectedTab}
+            >
+              {
+                <Component
+                  resources={resources}
+                  references={references}
+                  {...rest}
+                />
+              }
+            </TabPanel>
+          );
+        }
+      });
   const renderTabs = () =>
-    dataTabs.map((resourceType) => (
-      <Tab label={resourceType} key={resourceType} value={resourceType} />
-    ));
+    Object.keys(COMPONENT_MAP)
+      .filter((tab) => tab && dataTabs.includes(tab))
+      .map((resourceType) => (
+        <Tab
+          label={COMPONENT_MAP[resourceType].title}
+          key={resourceType}
+          value={resourceType}
+        />
+      ));
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
