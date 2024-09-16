@@ -10,6 +10,7 @@ import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
 import { SectionTitle, TabSection } from '../../generics/TabSection';
+
 type TComposition = TType<EResource.Composition>;
 
 const rows: TRow<TComposition>[] = [
