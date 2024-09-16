@@ -20,15 +20,17 @@ const rows: TRow<TOrganization>[] = [
         row.address?.map(({ use, line, city, postalCode, country }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {camelCaseToFlat(use ? `${use} address` : 'address')}
+              {camelCaseToFlat(`${use ? `${use} ` : ''}address`)}
             </StyledTableCell>
-            <StyledTableCell>{`${line}, ${city}, ${postalCode}, ${country}`}</StyledTableCell>
+            <StyledTableCell>
+              {[line, city, postalCode, country].filter(Boolean).join(', ')}
+            </StyledTableCell>
           </StyledTableRow>
         )) || [],
-        row.telecom?.map(({ use, system, value }) => (
+        row.telecom?.map(({ use, system = '', value }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {camelCaseToFlat(use ? `${use} ${system}` : `${system}`)}
+              {camelCaseToFlat(`${use ? `${use} ` : ''}${system}`)}
             </StyledTableCell>
             <StyledTableCell>{value}</StyledTableCell>
           </StyledTableRow>
