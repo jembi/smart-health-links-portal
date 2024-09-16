@@ -9,10 +9,22 @@ export interface UserProfile {
   email: string;
 }
 
-export const getUserProfile = async (req: Request): Promise<UserProfile> => {
-  const token = await getToken({ req: req as NextRequest });
+interface TokenPayload {
+  user: {
+    name: string;
+    id: string;
+    email: string;
+  };
+}
 
-  return { name: token.name, id: token.sub, email: token.email };
+export const getUserProfile = async (req: Request): Promise<UserProfile> => {
+  const {
+    user: { name, id, email },
+  } = (await getToken({
+    req: req as NextRequest,
+  })) as unknown as TokenPayload;
+
+  return { name, id, email };
 };
 
 export const validateUser = async (req: Request, userId: string) => {
