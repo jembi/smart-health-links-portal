@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import { JSX } from 'react';
 
-export default function InfoRow<T>({
-  label,
+export default function InfoRow({
   value,
+  label,
 }: {
-  label: string;
   value: string | JSX.Element;
+  label?: string;
 }) {
   return (
     <Box display="flex" alignItems="center" gap="4px">

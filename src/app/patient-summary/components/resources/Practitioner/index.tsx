@@ -13,13 +13,20 @@ const rows: TRow<TPractitioner>[] = [
     type: 'row',
     config: {
       label: 'Name',
-      renderRow: ({ name }) =>
-        name
-          .map(
-            ({ given, family }) =>
-              `${given?.join(' ')}${family && `, ${family}`}`,
+      render: ({ name }) => {
+        const authorText = [name?.[0].given, name?.[0].family]
+          .filter((name) => !!name)
+          .join(', ');
+
+        return (
+          authorText && (
+            <>
+              {name?.[0].prefix}
+              {authorText}
+            </>
           )
-          .join(),
+        );
+      },
     },
   },
   {
@@ -27,16 +34,21 @@ const rows: TRow<TPractitioner>[] = [
     config: {
       title: 'Qualifications',
       columns: ['Qualification', 'System'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) => [
-        <StyledTableRow key={uuid()}>
-          <StyledTableCell>
-            {`${row.qualification[0].code.coding[0].display} (${row.qualification[0].code.coding[0].code})`}
-          </StyledTableCell>
-          <StyledTableCell>
-            {row.qualification[0].code.coding[0].system}
-          </StyledTableCell>
-        </StyledTableRow>,
-      ],
+      render: ({ row, StyledTableRow, StyledTableCell }) =>
+        row.qualification?.[0]
+          ? [
+              <StyledTableRow key={uuid()}>
+                <StyledTableCell>
+                  {row.qualification?.[0]?.code?.coding?.[0].display}{' '}
+                  {row.qualification?.[0]?.code?.coding?.[0].code &&
+                    `(${row.qualification?.[0]?.code?.coding?.[0].code})`}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {row.qualification?.[0]?.code?.coding?.[0].system}
+                </StyledTableCell>
+              </StyledTableRow>,
+            ]
+          : [],
     },
   },
 ];

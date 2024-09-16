@@ -9,24 +9,26 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from './DetailedTable';
-import { TTabProps } from './resource.types';
+import { TRowData, TTabProps } from './resource.types';
 import InfoRow from '../InfoRow';
 
-export const SectionTitle = ({ title }: { title: string }) => (
-  <StyledSectionTypography>{title}</StyledSectionTypography>
-);
+export const SectionTitle = ({ title }: { title?: string }) =>
+  title && <StyledSectionTypography>{title}</StyledSectionTypography>;
 
 export const SectionRow = ({
   data,
   label,
 }: {
-  data: string | JSX.Element | string[] | JSX.Element[];
-  label: string;
+  data: TRowData;
+  label?: string;
 }) => {
   if (Array.isArray(data)) {
     return data
       .filter((field) => !!field)
-      .map((field) => <InfoRow key={uuid()} label={label} value={field} />);
+      .map(
+        (field) =>
+          field && <InfoRow key={uuid()} label={label} value={field} />,
+      );
   }
   return data ? <InfoRow key={uuid()} label={label} value={data} /> : null;
 };
@@ -39,20 +41,28 @@ export const TabSection = <
   resources,
   references,
 }: TTabProps<T, R>) =>
-  resources.map((resource, index) => (
+  resources?.map((resource, index) => (
     <React.Fragment key={uuid()}>
       <SectionTitle
-        title={`${camelCaseToFlat(resource.resourceType)} ${resources.length > 1 ? `(${index + 1})` : ``}`}
+        title={
+          resource.resourceType === 'Composition'
+            ? 'General Information'
+            : `${camelCaseToFlat(resource.resourceType)} ${resources.length > 1 ? `(${index + 1})` : ``}`
+        }
       />
       {rows?.map(({ type, config }, index) => {
         if (type === 'row') {
-          const { field, label, value = '', renderRow = () => {} } = config;
+          const { field, label, value = '', render = () => {} } = config;
+          const renderData = render(resource, references);
           const data =
-            value || renderRow(resource, references) || String(resource[field]);
+            renderData ||
+            value ||
+            (field && resource?.[field] ? String(resource?.[field]) : '');
+
           return <SectionRow key={uuid()} data={data} label={label} />;
         } else if (type === 'table') {
-          const { title, columns, renderRow } = config;
-          const rows = renderRow({
+          const { title, columns, render } = config;
+          const rows = render({
             row: resource,
             references,
             StyledTableRow: (props) => <StyledTableRow {...props} />,

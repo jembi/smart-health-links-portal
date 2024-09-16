@@ -16,26 +16,26 @@ export default function PatientSummary({
 }: {
   fhirBundle: TBundle;
 }) {
-  const dataTabs: string[] = Array.from(
-    new Set(fhirBundle.entry.map((entry) => entry.resource.resourceType)),
+  const dataTabs: (string | undefined)[] = Array.from(
+    new Set(fhirBundle?.entry?.map(({ resource }) => resource?.resourceType)),
   );
   const [selectedTab, setSelectedTab] = useState(String(dataTabs[0]));
   const renderPanels = () =>
-    dataTabs
-      .filter((tab) => Object.keys(COMPONENT_MAP).includes(tab))
-      .map((resourceType: keyof IResource) => {
-        if (COMPONENT_MAP[resourceType]) {
+    Object.keys(COMPONENT_MAP)
+      .filter((tab) => tab && dataTabs.includes(tab))
+      .map((resourceType) => {
+        if (resourceType && COMPONENT_MAP[resourceType]) {
           const { Component, ...rest } = COMPONENT_MAP[resourceType];
           const { resources, references } = extractResources(
             fhirBundle,
-            resourceType,
+            resourceType as keyof IResource,
           );
 
           return (
             <TabPanel
+              key={resourceType}
               value={resourceType}
               index={selectedTab}
-              key={resourceType}
             >
               {
                 <Component
@@ -49,9 +49,9 @@ export default function PatientSummary({
         }
       });
   const renderTabs = () =>
-    dataTabs
-      .filter((tab) => Object.keys(COMPONENT_MAP).includes(tab))
-      .map((resourceType: keyof IResource) => (
+    Object.keys(COMPONENT_MAP)
+      .filter((tab) => tab && dataTabs.includes(tab))
+      .map((resourceType) => (
         <Tab
           label={COMPONENT_MAP[resourceType].title}
           key={resourceType}

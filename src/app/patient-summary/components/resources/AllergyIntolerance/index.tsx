@@ -13,7 +13,7 @@ const rows: TRow<TAllergyIntolerance>[] = [
     type: 'row',
     config: {
       label: 'Category',
-      renderRow: ({ category }) => category?.[0] && `Allergy to ${category[0]}`,
+      render: ({ category }) => category?.[0] && `Allergy to ${category[0]}`,
     },
   },
   {
@@ -24,7 +24,7 @@ const rows: TRow<TAllergyIntolerance>[] = [
     type: 'row',
     config: {
       label: 'Allergy',
-      renderRow: ({ code }) => code.coding?.map(({ display }) => display),
+      render: ({ code }) => code?.coding?.map(({ display }) => display),
     },
   },
   { type: 'row', config: { field: 'criticality', label: 'Criticality' } },
@@ -32,8 +32,8 @@ const rows: TRow<TAllergyIntolerance>[] = [
     type: 'row',
     config: {
       label: 'Status',
-      renderRow: ({ clinicalStatus }) =>
-        clinicalStatus.coding?.map(({ code }) => code),
+      render: ({ clinicalStatus }) =>
+        clinicalStatus?.coding?.map(({ code }) => code),
     },
   },
   {
@@ -41,7 +41,7 @@ const rows: TRow<TAllergyIntolerance>[] = [
     config: {
       title: 'Allergy Details',
       columns: ['Name', 'Code', 'Display', 'System'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
+      render: ({ row, StyledTableRow, StyledTableCell }) =>
         getCodings({ resource: row }).map(
           ([field, { code, display, system }]) => (
             <StyledTableRow key={uuid()}>
@@ -51,6 +51,13 @@ const rows: TRow<TAllergyIntolerance>[] = [
             </StyledTableRow>
           ),
         ),
+    },
+  },
+  {
+    type: 'row',
+    config: {
+      label: 'Code Text',
+      render: ({ code }) => code?.text,
     },
   },
 ];

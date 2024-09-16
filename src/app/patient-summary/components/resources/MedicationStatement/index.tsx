@@ -1,6 +1,6 @@
 import {
   camelCaseToFlat,
-  getCodings,
+  getResource,
   periodUnitToText,
   uuid,
 } from '@/app/utils/helpers';
@@ -14,10 +14,14 @@ type TMedicationStatement = TType<EResource.MedicationStatement>;
 const rows: TRow<TMedicationStatement>[] = [
   {
     type: 'row',
+    config: { field: 'effectiveDateTime', label: 'Effective Date Time' },
+  },
+  {
+    type: 'row',
     config: {
       label: 'Effective Period',
-      renderRow: ({ effectivePeriod }) =>
-        effectivePeriod?.start && `Start: ${effectivePeriod.start}`,
+      render: ({ effectivePeriod }) =>
+        `${effectivePeriod?.start ? `Start: ${effectivePeriod.start}` : ''}${effectivePeriod?.end ? ` - End: ${effectivePeriod.end}` : ''}`,
     },
   },
   {
@@ -28,12 +32,13 @@ const rows: TRow<TMedicationStatement>[] = [
     type: 'row',
     config: {
       label: 'Medication',
-      renderRow: ({ medicationReference }, references) =>
-        (
-          references[medicationReference.reference] as {
-            resource: TType<EResource.Medication>;
-          }
-        ).resource.code.coding[0].display,
+      render: ({ status, medicationReference }, references) =>
+        status !== 'unknown'
+          ? getResource<EResource.Medication>(
+              references,
+              medicationReference?.reference,
+            )?.code?.coding?.[0].display
+          : '',
     },
   },
   {
@@ -41,40 +46,44 @@ const rows: TRow<TMedicationStatement>[] = [
     config: {
       title: 'Medication Details',
       columns: ['Name', 'Code', 'Display', 'System'],
-      renderRow: ({ row, references, StyledTableRow, StyledTableCell }) =>
-        (
-          references[row.medicationReference.reference] as {
-            resource: TType<EResource.Medication>;
-          }
-        ).resource.code.coding?.map(({ code, display, system }) => (
-          <StyledTableRow key={uuid()}>
-            {[camelCaseToFlat('Medication'), code, display, system].map(
-              (cell) => (
-                <StyledTableCell key={uuid()}>{cell}</StyledTableCell>
-              ),
-            )}
-          </StyledTableRow>
-        )),
+      render: ({ row, references, StyledTableRow, StyledTableCell }) =>
+        (row.status !== 'unknown' &&
+          getResource<EResource.Medication>(
+            references,
+            row.medicationReference?.reference,
+          )?.code?.coding?.map(({ code, display, system }) => (
+            <StyledTableRow key={uuid()}>
+              {[camelCaseToFlat('Medication'), code, display, system].map(
+                (cell) => (
+                  <StyledTableCell key={uuid()}>{cell}</StyledTableCell>
+                ),
+              )}
+            </StyledTableRow>
+          ))) ||
+        [],
     },
   },
   {
     type: 'table',
     config: {
-      title: 'Medication Details',
+      title: 'Dosage',
       columns: ['Quantity', 'Dosage', 'Usage'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        row.dosage.map(({ doseAndRate, timing, route }) => (
+      render: ({ row, StyledTableRow, StyledTableCell }) =>
+        row.dosage?.map(({ doseAndRate, timing, route }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {`${doseAndRate?.[0].doseQuantity.value || ''} ${doseAndRate?.[0].doseQuantity.unit || ''}`}
+              {doseAndRate?.[0]?.doseQuantity?.value}{' '}
+              {doseAndRate?.[0]?.doseQuantity?.unit}
             </StyledTableCell>
             <StyledTableCell>
-              {timing?.repeat.count}{' '}
-              {periodUnitToText(timing?.repeat.periodUnit)}
+              {periodUnitToText(
+                timing?.repeat?.periodUnit,
+                timing?.repeat?.period || timing?.repeat?.count,
+              )}
             </StyledTableCell>
             <StyledTableCell>{route?.coding?.[0].display}</StyledTableCell>
           </StyledTableRow>
-        )),
+        )) || [],
     },
   },
 ];

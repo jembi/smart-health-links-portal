@@ -1,23 +1,30 @@
 import { TableCellProps, TableRowProps } from '@mui/material';
-import { ElementType, FC } from 'react';
+import { ElementType, FC, JSX } from 'react';
 
 import { EResource, TSupportedResource } from '@/types/fhir.types';
 
+export type TRowData =
+  | string
+  | JSX.Element
+  | JSX.Element[]
+  | (string | undefined)[]
+  | undefined;
+
 export type rowConfig<T> = {
-  label: string;
+  label?: string;
   field?: keyof T;
   value?: string | string[];
-  renderRow?: (
+  render?: (
     row: T,
     references?: Record<string, { resource: TSupportedResource }>,
-  ) => string | string[] | JSX.Element | JSX.Element[];
+  ) => TRowData;
 };
 
 export type tableConfig<T> = {
-  title: string;
+  title?: string;
   columns: string[];
   references?: Record<string, { resource: TSupportedResource }>;
-  renderRow: ({
+  render: ({
     row,
     references,
     StyledTableRow,

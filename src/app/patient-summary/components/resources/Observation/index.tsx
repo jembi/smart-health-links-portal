@@ -1,4 +1,9 @@
-import { getCodings, camelCaseToFlat, uuid } from '@/app/utils/helpers';
+import {
+  uuid,
+  getCodings,
+  getResource,
+  camelCaseToFlat,
+} from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -19,9 +24,10 @@ const rows: TRow<TObservation>[] = [
     type: 'table',
     config: {
       title: 'Observation Details',
+      //TODO: sample/AT_ELGA_GmbH_01.json
       columns: ['Name', 'Code', 'Display', 'System'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
-        getCodings({ resource: row }).map(
+      render: ({ row, StyledTableRow, StyledTableCell }) =>
+        getCodings({ resource: row, ignoredFields: ['interpretation'] }).map(
           ([field, { code, display, system }]) => (
             <StyledTableRow key={uuid()}>
               {[camelCaseToFlat(field), code, display, system].map((cell) => (
@@ -36,19 +42,18 @@ const rows: TRow<TObservation>[] = [
     type: 'row',
     config: {
       label: 'Note',
-      renderRow: ({ note }) => note?.map(({ text }) => text).join(', '),
+      render: ({ note }) => note?.map(({ text }) => text).join(', '),
     },
   },
   {
     type: 'row',
     config: {
       label: 'Performed by',
-      renderRow: ({ performer }, references) =>
-        (
-          references[performer[0].reference] as {
-            resource: TType<EResource.Organization>;
-          }
-        ).resource.name,
+      render: ({ performer }, references) =>
+        getResource<EResource.Organization>(
+          references,
+          performer?.[0]?.reference,
+        )?.name,
     },
   },
 ];

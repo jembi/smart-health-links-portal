@@ -16,23 +16,23 @@ const rows: TRow<TOrganization>[] = [
     config: {
       title: 'Connection Details',
       columns: ['Type', 'Info'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) => [
+      render: ({ row, StyledTableRow, StyledTableCell }) => [
         row.address?.map(({ use, line, city, postalCode, country }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {camelCaseToFlat(`${use} address`)}
+              {camelCaseToFlat(use ? `${use} address` : 'address')}
             </StyledTableCell>
-            <StyledTableCell>{`${line},${city}, ${postalCode}, ${country}`}</StyledTableCell>
+            <StyledTableCell>{`${line}, ${city}, ${postalCode}, ${country}`}</StyledTableCell>
           </StyledTableRow>
-        )),
+        )) || [],
         row.telecom?.map(({ use, system, value }) => (
           <StyledTableRow key={uuid()}>
             <StyledTableCell>
-              {camelCaseToFlat(`${use} ${system}`)}
+              {camelCaseToFlat(use ? `${use} ${system}` : `${system}`)}
             </StyledTableCell>
             <StyledTableCell>{value}</StyledTableCell>
           </StyledTableRow>
-        )),
+        )) || [],
       ],
     },
   },

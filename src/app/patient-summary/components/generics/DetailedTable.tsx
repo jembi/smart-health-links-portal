@@ -7,10 +7,13 @@ import {
   styled,
   Typography,
 } from '@mui/material';
+import { JSX } from 'react';
 
-import { TSupportedResource } from '@/types/fhir.types';
-
-export const StyledTableRow = styled(TableRow)(() => ({}));
+export const StyledTableRow = styled(TableRow)(() => ({
+  '&:hover': {
+    backgroundColor: ' #fafafa',
+  },
+}));
 
 export const StyledTableCell = styled(TableCell, {
   shouldForwardProp: (prop) => prop !== 'cellNumber',
@@ -19,7 +22,7 @@ export const StyledTableCell = styled(TableCell, {
   border: '1px solid #eee',
 }));
 
-export const DetailedTable = <T extends TSupportedResource>({
+export const DetailedTable = ({
   data,
   title,
 }: {
@@ -27,11 +30,15 @@ export const DetailedTable = <T extends TSupportedResource>({
     rows: string | string[] | JSX.Element[] | JSX.Element[][];
     columns: string[];
   };
-  title: string;
+  title?: string;
 }) => {
-  return (Array.isArray(data.rows) ? data.rows : [data.rows])?.filter(
-    (row) => !!row,
-  ).length ? (
+  return (Array.isArray(data.rows)
+    ? data.rows.filter((row) => {
+        if (Array.isArray(row) && row.length === 0) return false;
+        return true;
+      })
+    : [data.rows]
+  )?.filter((row) => !!row).length ? (
     <>
       {title && <Typography fontWeight={700}>{title}:</Typography>}
       <Table
@@ -51,6 +58,7 @@ export const DetailedTable = <T extends TSupportedResource>({
                   bgcolor: '#f8f8f8',
                   border: '1px solid #ddda',
                   fontWeight: 700,
+                  padding: '4px 16px',
                 }}
               >
                 {column}
