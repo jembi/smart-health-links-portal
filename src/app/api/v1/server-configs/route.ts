@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { validateUserRoles } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import { container, ServerConfigRepositoryToken } from '@/container';
 import {
@@ -10,7 +11,6 @@ import { IServerConfigRepository } from '@/infrastructure/repositories/interface
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
-import { validateUserRoles } from '@/app/utils/authentication';
 
 const repo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,

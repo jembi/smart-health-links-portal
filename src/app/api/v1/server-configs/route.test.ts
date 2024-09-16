@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { POST, GET } from '@/app/api/v1/server-configs/route';
+import { validateUserRoles } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   CreateServerConfigDto,
@@ -13,7 +14,6 @@ import {
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
-import { validateUserRoles } from '@/app/utils/authentication';
 
 jest.mock('@/app/utils/authentication', () => ({
   validateUserRoles: jest.fn(),
