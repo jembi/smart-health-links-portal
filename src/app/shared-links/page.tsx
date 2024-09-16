@@ -12,7 +12,7 @@ export default function SharedLinksPage() {
         justifyContent="center"
         paddingTop={8}
         paddingBottom={8}
-      ></Box>
+      />
       <LinksTable />
     </Container>
   );
