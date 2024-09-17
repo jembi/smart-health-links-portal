@@ -44,7 +44,7 @@ const logger = new LogHandler(__dirname);
  */
 export async function POST(request: Request) {
   let dto: CreateUserDto = await request.json();
-  logger.log(`Creating a user with, ${dto}`);
+  logger.log(`Creating a user with,  ${JSON.stringify(dto)}`);
   try {
     const patientId = await searchPatientUseCase(
       { repo: serverConfigRepo },

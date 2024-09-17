@@ -49,7 +49,7 @@ export async function POST(
   try {
     const { managementToken }: SHLinkQRCodeRequestDto = await request.json();
     const { id } = params;
-    logger.log(`Creating a QR COde API with share link id: ${id} and managementToken: ${managementToken}`);
+    logger.log(`Creating a QR COde API with share link id: ${id} and management token: ${managementToken}`);
 
     let shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },

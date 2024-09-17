@@ -40,7 +40,7 @@ const logger = new LogHandler(__dirname);
  */
 export async function POST(request: Request) {
     let dto: CreateServerConfigDto = await request.json();
-    logger.log(`Creating server config API with request: ${dto}`);
+    logger.log(`Creating server config API with request: ${JSON.stringify(dto)}`);
     try{
         const model = mapDtoToModel(dto as ServerConfigDto)
         const newServerConfig = await addServerConfigUseCase({ repo}, {server: model})

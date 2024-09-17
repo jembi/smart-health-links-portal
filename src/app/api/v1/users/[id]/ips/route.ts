@@ -54,7 +54,7 @@ export async function GET(
     );
     if (!user)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
-    logger.log(`Retrieving patient summary data from FHIR with user: ${user}`)
+    logger.log(`Retrieving patient summary data from FHIR with user: ${JSON.stringify(user)}`)
     const result = await getPatientDataUseCase(
       { repo: serverConfigRepo },
       { user },

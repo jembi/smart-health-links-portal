@@ -54,6 +54,12 @@ function getFormat(){
     )
 }
 
+const formatFunctions = {
+    timestamp: timestamp,
+    colorize: colorize,
+    json: json,
+  };
+
 function getFormatFromConfig(config:any){
     return config.format.map(x => {
         if(Array.isArray(x) && typeof(x) !== "string"){
@@ -68,9 +74,9 @@ function getFormatFromConfig(config:any){
                 return logParts.join(' ');
             });
         }
-        else if(['timestamp', 'colorize', 'json'].includes(x)){
-            return eval(x)()
-        }   
+        else if (typeof x === 'string' && x in formatFunctions) {
+            return formatFunctions[x]();
+        }
     }).filter(x => x)
 }
 

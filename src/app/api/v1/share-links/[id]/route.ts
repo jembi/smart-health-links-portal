@@ -113,7 +113,7 @@ export async function POST(
       new AccessTicketModel(shlink.getId()),
     );
     setTimeout(() => {
-      logger.log(`Deleting share link access ticket with ticket: ${ticket}`);
+      logger.log(`Deleting share link access ticket with ticket: ${JSON.stringify(ticket)}`);
       deleteAccessTicketUseCase({ repo: ticketRepo }, { id: ticket.getId() });
     }, DELETE_DELAY);
     const endpoint = await getEndpointUseCase(
