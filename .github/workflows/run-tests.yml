@@ -32,9 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Branch Name
-          id: get_branch  # Add an ID to this step to reference its output
-          run: |
-            echo "::set-output name=branch_name::${{ github.head_ref }}"
+        id: get_branch  # Add an ID to this step to reference its output
+        run: |
+          echo "::set-output name=branch_name::${{ github.head_ref }}"
 
       - name: Checkout
         uses: actions/checkout@v4
