@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-      - fix/production-build-prisma-field-encryption
 
 jobs:
   test:
