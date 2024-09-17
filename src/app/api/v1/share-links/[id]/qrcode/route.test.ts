@@ -81,6 +81,6 @@ describe('POST /api/v1/shlinks/{id}/qrcode', () => {
 
     await POST(mockRequest, { params: mockParams });
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(mockError, mockRoute);
+    expect(handleApiValidationError).toHaveBeenCalledWith(mockError, expect.anything());
   });
 });

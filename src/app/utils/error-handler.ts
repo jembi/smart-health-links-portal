@@ -1,21 +1,22 @@
 import { NextResponse } from 'next/server';
 
 import { ModelValidationError } from '@/domain/models/base-model';
+import { LogHandler } from '@/lib/logger';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
 
 import { AuthenticationError } from './authentication';
-import { Logger } from './logger';
 import {
   BAD_REQUEST,
   PRECONDITION_FAILED,
   SERVER_ERROR,
 } from '../constants/http-constants';
 
-const logger = new Logger()
 
-export function handleApiValidationError(error: unknown, route?:string) {
-  logger.log(`API route error: ${error}`, route);
+
+
+export function handleApiValidationError(error: unknown, logger:LogHandler) {
+  logger.log(`API route error: ${error}`, 'error');
 
   if (error instanceof ModelValidationError) {
     return NextResponse.json(

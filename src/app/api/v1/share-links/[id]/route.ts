@@ -6,7 +6,6 @@ import {
   UNAUTHORIZED_REQUEST,
 } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import {
   AccessTicketRepositoryToken,
   container,
@@ -22,6 +21,7 @@ import { IAccessTicketRepository } from '@/infrastructure/repositories/interface
 import { ISHLinkAccessRepository } from '@/infrastructure/repositories/interfaces/shlink-access-repository';
 import { ISHLinkEndpointRepository } from '@/infrastructure/repositories/interfaces/shlink-endpoint-repository';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapModelToMiniDto, mapModelToDto } from '@/mappers/shlink-mapper';
 import { addAccessTicketUseCase } from '@/usecases/access-tickets/add-access-ticket';
 import { deleteAccessTicketUseCase } from '@/usecases/access-tickets/delete-access-ticket';
@@ -51,8 +51,7 @@ const getPasswordErrorMessage = (shlink: SHLinkModel): string => {
   );
 };
 
-const route = "/api/v1/share-links/{id}"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -84,9 +83,9 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log('Updating a share link with a ticket and creating share link access');
   let { managementToken, passcode, recipient }: SHLinkRequestDto =
     await request.json();
+  logger.log(`Creating share link access with share link id: ${params.id} and parameters: ${{ managementToken, passcode, recipient }}`);
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
@@ -107,11 +106,14 @@ export async function POST(
       { repo: accessRepo },
       new SHLinkAccessModel(shlink.getId(), new Date(), recipient),
     );
+
+    logger.log(`Creating a share link access ticket with share link id: ${params.id}`);
     const ticket = await addAccessTicketUseCase(
       { repo: ticketRepo },
       new AccessTicketModel(shlink.getId()),
     );
     setTimeout(() => {
+      logger.log(`Deleting share link access ticket with ticket: ${ticket}`);
       deleteAccessTicketUseCase({ repo: ticketRepo }, { id: ticket.getId() });
     }, DELETE_DELAY);
     const endpoint = await getEndpointUseCase(
@@ -123,7 +125,7 @@ export async function POST(
       { status: 200 },
     );
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }
 
@@ -157,10 +159,9 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log('Updating a share link passcode and expiry date API');
   let { managementToken, oldPasscode, passcode, expiryDate }: SHLinkUpdateDto =
     await request.json();
-
+  logger.log(`Updating a share link passcode and expiry date API with share link id: ${params.id} and parameters: ${{managementToken, oldPasscode, passcode, expiryDate}}`);
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
@@ -194,6 +195,6 @@ export async function PUT(
     if (updateShlink)
       return NextResponse.json(mapModelToDto(updateShlink), { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

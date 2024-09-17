@@ -90,7 +90,7 @@ describe('POST /api/users', () => {
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
+    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 
@@ -108,7 +108,7 @@ describe('POST /api/users', () => {
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
+    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(500);
 

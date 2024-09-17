@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 
-import {Logger} from '@/app/utils/logger';
+import { LogHandler } from "@/lib/logger";
 
-const logger = new Logger("/api/v1")
+const logger = new LogHandler(__dirname)
 
 export async function GET(request) {
   logger.log("API connected successfully");

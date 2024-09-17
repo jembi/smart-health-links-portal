@@ -3,16 +3,15 @@ import { NextResponse } from 'next/server';
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import { container, UserRepositoryToken } from '@/container';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/user-mapper';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 
-const route = "/api/v1/users/{id}"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname)
 
 /**
  * @swagger
@@ -38,7 +37,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log("Retrieving a user")
+  logger.log(`Retrieving a user with user id: ${params.id}`)
   try {
     const { id } = params;
     validateUser(request, id);
@@ -49,6 +48,6 @@ export async function GET(
 
     return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import {
   container,
   ServerConfigRepositoryToken,
@@ -16,6 +15,7 @@ import {
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { ISHLinkEndpointRepository } from '@/infrastructure/repositories/interfaces/shlink-endpoint-repository';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import {
   mapDtoToModel,
   mapModelToDto as mapModelToDtoEndpoint,
@@ -33,8 +33,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
-const route = "/api/v1/share-links/{id}/endpoints"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -66,8 +65,8 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log('Creating an endpoint');
   let dto: CreateSHLinkEndpointDto = await request.json();
+  logger.log(`Creating a share link endpoint with parameters: ${dto}`);
 
   try {
     const serverConfig = (
@@ -97,6 +96,6 @@ export async function POST(
       status: 200,
     });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import {
   container,
   ServerConfigRepositoryToken,
@@ -10,6 +9,7 @@ import {
 import { CreateUserDto, UserDto } from '@/domain/dtos/user';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { searchPatientUseCase } from '@/usecases/patient/search-patient';
 import { addUserUseCase } from '@/usecases/users/add-user';
@@ -19,8 +19,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
-const route = "/api/v1/users"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -44,8 +43,8 @@ const logger = new Logger(route)
  *               $ref: '#/components/schemas/User'
  */
 export async function POST(request: Request) {
-  logger.log('Creating a user');
   let dto: CreateUserDto = await request.json();
+  logger.log(`Creating a user with, ${dto}`);
   try {
     const patientId = await searchPatientUseCase(
       { repo: serverConfigRepo },
@@ -56,6 +55,6 @@ export async function POST(request: Request) {
     const newUser = await addUserUseCase({ repo }, { user: model });
     return NextResponse.json(mapModelToDto(newUser), { status: 201 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

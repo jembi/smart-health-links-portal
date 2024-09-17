@@ -5,7 +5,6 @@ import {
   UNAUTHORIZED_REQUEST,
 } from '@/app/constants/http-constants';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import {
   AccessTicketRepositoryToken,
   container,
@@ -18,6 +17,7 @@ import { IAccessTicketRepository } from '@/infrastructure/repositories/interface
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { getAccessTicketUseCase } from '@/usecases/access-tickets/get-access-ticket';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
@@ -32,8 +32,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
-const route = "/api/v1/share-links/{id}/endpoints/{endpointId}"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -62,10 +61,10 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string; endpointId: string } },
 ) {
-  logger.log('Getting an endpoint data');
   const url = new URL(request.url);
 
   const ticketId = url.searchParams.get('ticket');
+  logger.log(`Getting an endpoint data with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
 
   try {
     const ticket: AccessTicketModel = await getAccessTicketUseCase(
@@ -100,6 +99,6 @@ export async function GET(
 
     return NextResponse.json(patient, { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

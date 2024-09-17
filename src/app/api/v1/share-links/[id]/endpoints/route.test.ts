@@ -146,7 +146,7 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
 
     const response = await POST(mockRequest, { params: { id: mockShlinkId } });
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(mockError, mockRoute);
+    expect(handleApiValidationError).toHaveBeenCalledWith(mockError, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 

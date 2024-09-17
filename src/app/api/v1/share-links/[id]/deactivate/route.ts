@@ -3,16 +3,15 @@ import { NextResponse } from 'next/server';
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { getUserProfile } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import { container, SHLinkRepositoryToken } from '@/container';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/shlink-mapper';
 import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-const route = "/api/v1/share-links/{id}/deactivate"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -38,7 +37,7 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log('Deactivating a share link API');
+  logger.log(`Deactivating a share link API with share link id: ${params.id}`);
   try {
     const user = await getUserProfile(request);
     const result = await deactivateSHLinksUseCase(
@@ -49,6 +48,6 @@ export async function DELETE(
     if (result) return NextResponse.json(data, { status: 200 });
     return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

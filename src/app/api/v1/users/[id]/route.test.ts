@@ -95,7 +95,7 @@ describe('GET /api/users/[id]', () => {
     const response = await GET(mockRequest, { params: { id: 'user-id' } });
 
     expect(validateUser).toHaveBeenCalledWith(mockRequest, 'user-id');
-    expect(handleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
+    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 

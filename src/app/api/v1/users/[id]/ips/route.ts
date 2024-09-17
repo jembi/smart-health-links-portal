@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import { NOT_FOUND } from '@/app/constants/http-constants';
 import { validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import {
   container,
   ServerConfigRepositoryToken,
@@ -11,6 +10,7 @@ import {
 } from '@/container';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
@@ -19,8 +19,7 @@ const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
 
-const route = "/api/v1/users/{id}/ips"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname)
 
 
 /**
@@ -46,7 +45,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log("Retrieving user's patient summary data")
+  logger.log(`Retrieving user's patient summary data with user id: ${params.id}`)
   try {
     await validateUser(request, params.id);
     const user = await getUserUseCase(
@@ -55,6 +54,7 @@ export async function GET(
     );
     if (!user)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
+    logger.log(`Retrieving patient summary data from FHIR with user: ${user}`)
     const result = await getPatientDataUseCase(
       { repo: serverConfigRepo },
       { user },
@@ -62,6 +62,6 @@ export async function GET(
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

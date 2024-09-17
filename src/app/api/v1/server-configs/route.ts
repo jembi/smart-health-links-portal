@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import {Logger} from '@/app/utils/logger';
 import { container, ServerConfigRepositoryToken } from '@/container';
 import {
   CreateServerConfigDto,
   ServerConfigDto,
 } from '@/domain/dtos/server-config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
@@ -15,8 +15,7 @@ import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-co
 const repo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
-const route = "/api/v1/server-configs"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -40,15 +39,15 @@ const logger = new Logger(route)
  *               $ref: '#/components/schemas/ServerConfig'
  */
 export async function POST(request: Request) {
-    logger.log('Creating server config API');
     let dto: CreateServerConfigDto = await request.json();
+    logger.log(`Creating server config API with request: ${dto}`);
     try{
         const model = mapDtoToModel(dto as ServerConfigDto)
         const newServerConfig = await addServerConfigUseCase({ repo}, {server: model})
         return NextResponse.json(mapModelToDto(newServerConfig), { status: 201 });
     }
     catch(error){
-        return handleApiValidationError(error, route);
+        return handleApiValidationError(error, logger);
     }
 }
 
@@ -68,7 +67,7 @@ export async function POST(request: Request) {
  *               $ref: '#/components/schemas/ServerConfig'
  */
 export async function GET(request: Request) {
-    logger.log('Getting all server configs API');
+    logger.log(`Getting all available server configs data `);
     const serverConfigs = await getServerConfigsUseCase({ repo });
     return NextResponse.json(
         serverConfigs.map((x) => mapModelToDto(x)),

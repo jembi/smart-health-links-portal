@@ -34,6 +34,7 @@
     "react-dom": "^18",
     "winston-daily-rotate-file": "^5.0.0",
     "swagger-ui-react": "^5.17.14",
+    "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -46,6 +47,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/winston": "^2.4.4",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.8",

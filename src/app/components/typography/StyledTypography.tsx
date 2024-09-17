@@ -5,6 +5,7 @@ export const StyledSectionTypography = styled(Typography)({
   marginBlock: '.62rem',
   fontWeight: 700,
   fontSize: '1.1em',
+  width: '100%',
 });
 
 export const StyledTableCaptionTypography = styled(Typography)({

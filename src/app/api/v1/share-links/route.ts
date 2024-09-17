@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 
 import { getUserProfile, validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
-import { Logger } from '@/app/utils/logger';
 import { container, SHLinkRepositoryToken } from '@/container';
 import { CreateSHLinkDto, SHLinkDto } from '@/domain/dtos/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import {
   mapDtoToModel,
   mapModelToDto,
@@ -16,8 +16,8 @@ import { getSHLinkUseCase } from '@/usecases/shlinks/get-shlink';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
-const route = "/api/v1/share-links"
-const logger = new Logger(route)
+const logger = new LogHandler(__dirname);
+
 /**
  * @swagger
  * /api/v1/share-links:
@@ -40,15 +40,15 @@ const logger = new Logger(route)
  *               $ref: '#/components/schemas/SHLink'
  */
 export async function POST(request: Request) {
-  logger.log('Creating a share link API');
   try {
     const dto: CreateSHLinkDto = await request.json();
+    logger.log(`Creating a share link API with parameters, ${dto}`);
     await validateUser(request, dto.userId);
     const model = mapDtoToModel(dto as SHLinkDto);
     const newShlink = await addShlinkUseCase({ repo }, { shlink: model });
     return NextResponse.json(mapModelToDto(newShlink), { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }
 
@@ -69,9 +69,10 @@ export async function POST(request: Request) {
  *                 $ref: '#/components/schemas/SHLinkMini'
  */
 export async function GET(request: Request) {
-  logger.log('Getting all share links by user');
   try {
     const { id } = await getUserProfile(request);
+
+    logger.log(`Getting all share links by user with user id: ${id}`);
 
     const newShlink = await getSHLinkUseCase({ repo }, { user_id: id });
     return NextResponse.json(
@@ -79,6 +80,6 @@ export async function GET(request: Request) {
       { status: 200 },
     );
   } catch (error) {
-    return handleApiValidationError(error, route);
+    return handleApiValidationError(error, logger);
   }
 }

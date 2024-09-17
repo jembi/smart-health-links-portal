@@ -11,6 +11,6 @@
             }
         }
     ],
-    "format": ["timestamp", ["timestamp", "level", "message"]]
+    "format": ["timestamp", "json"]
     
 }

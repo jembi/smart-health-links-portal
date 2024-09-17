@@ -224,7 +224,7 @@ describe('POST handler', () => {
 
     const response = await POST(request, { params });
 
-    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });
@@ -337,7 +337,7 @@ describe('PUT handler', () => {
 
     const response = await PUT(request, { params });
 
-    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, mockRoute);
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });

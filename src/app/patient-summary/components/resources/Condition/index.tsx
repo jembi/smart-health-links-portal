@@ -1,4 +1,9 @@
-import { camelCaseToFlat, getCodings } from '@/app/utils/helpers';
+import {
+  camelCaseToFlat,
+  getCodings,
+  getResource,
+  uuid,
+} from '@/app/utils/helpers';
 import { EResource, TType } from '@/types/fhir.types';
 
 import { TRow, TTabProps } from '../../generics/resource.types';
@@ -18,51 +23,78 @@ const rows: TRow<TCondition>[] = [
   {
     type: 'row',
     config: {
-      field: 'code',
       label: 'Condition',
-      renderRow: ({ code }) =>
-        code.coding
-          ?.filter((row) => {
-            if (row._display) return row;
-          })
-          .map(({ display }) => display)
-          .join(', '),
+      render: ({ code }) => code?.coding?.[0].display,
     },
   },
   {
     type: 'row',
     config: {
-      field: 'severity',
       label: 'Severity',
-      renderRow: ({ severity }) =>
-        severity.coding?.map(({ display }) => display).join(', '),
+      render: ({ severity }) =>
+        severity?.coding?.map(({ display }) => display).join(', '),
     },
   },
   {
     type: 'row',
     config: {
-      field: 'clinicalStatus',
       label: 'Status',
-      renderRow: ({ clinicalStatus }) =>
-        clinicalStatus.coding?.map(({ code }) => code).join(', '),
+      render: ({ clinicalStatus }) =>
+        clinicalStatus?.coding?.map(({ code }) => code).join(', '),
     },
   },
   {
     type: 'table',
     config: {
-      title: 'Connection Details',
+      title: 'Condition Details',
       columns: ['Name', 'Code', 'Display', 'System'],
-      renderRow: ({ row, StyledTableRow, StyledTableCell }) =>
+      render: ({ row, StyledTableRow, StyledTableCell }) =>
         getCodings({ resource: row }).map(
-          ([field, { code, display, system }], index) => (
-            <StyledTableRow key={`${system}_${index}`}>
+          ([field, { code, display, system }]) => (
+            <StyledTableRow key={uuid()}>
               {[camelCaseToFlat(field), code, display, system].map((cell) => (
-                <StyledTableCell key={system}>{cell}</StyledTableCell>
+                <StyledTableCell key={uuid()}>{cell}</StyledTableCell>
               ))}
             </StyledTableRow>
           ),
         ),
-      resource: (datum) => datum,
+    },
+  },
+  {
+    type: 'row',
+    config: {
+      label: 'Code Text',
+      render: ({ code }) => code?.text,
+    },
+  },
+  {
+    type: 'row',
+    config: {
+      label: 'Asserter',
+      render: ({ asserter }, references) => {
+        const { name, qualification } =
+          getResource<EResource.Practitioner>(
+            references,
+            asserter?.reference,
+          ) || {};
+
+        const authorText = [
+          name?.[0].given,
+          name?.[0].family,
+          qualification?.[0].code.coding?.[0]?.display,
+        ]
+          .filter((name) => !!name)
+          .join(', ');
+
+        return (
+          authorText && (
+            <>
+              {name?.[0].prefix}
+              {authorText}
+            </>
+          )
+        );
+      },
     },
   },
 ];
