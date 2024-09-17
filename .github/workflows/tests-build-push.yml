@@ -42,7 +42,7 @@ jobs:
         if: ${{ steps.get_branch.outputs.branch_name != 'main' }}
         uses: docker/build-push-action@v5
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: false # dont push image - Used to confirm build success on branches
           file: docker/production/Dockerfile
 
