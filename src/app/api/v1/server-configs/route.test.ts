@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { POST, GET } from '@/app/api/v1/server-configs/route';
+import { validateUserRoles } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   CreateServerConfigDto,
@@ -13,6 +14,10 @@ import {
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
+
+jest.mock('@/app/utils/authentication', () => ({
+  validateUserRoles: jest.fn(),
+}));
 
 jest.mock('@/usecases/server-configs/add-server-config', () => ({
   addServerConfigUseCase: jest.fn(),
@@ -65,6 +70,7 @@ describe('POST /api/v1/server-configs', () => {
 
   it('should return server config DTO and status 201 when server config is successfully created', async () => {
     (mapDtoToModel as jest.Mock).mockReturnValue(mockServerConfigModel);
+    (validateUserRoles as jest.Mock).mockResolvedValue(true);
     (addServerConfigUseCase as jest.Mock).mockResolvedValue(
       mockServerConfigModel,
     );
@@ -83,6 +89,7 @@ describe('POST /api/v1/server-configs', () => {
   it('should handle validation errors and return status 422', async () => {
     const error = new Error('Validation error');
     (addServerConfigUseCase as jest.Mock).mockRejectedValue(error);
+    (validateUserRoles as jest.Mock).mockResolvedValue(true);
     (handleApiValidationError as jest.Mock).mockReturnValue(
       NextResponse.json({ message: 'Validation error' }, { status: 422 }),
     );
@@ -148,6 +155,7 @@ describe('GET /api/v1/server-configs', () => {
     (getServerConfigsUseCase as jest.Mock).mockResolvedValue([
       mockServerConfigModel,
     ]);
+    (validateUserRoles as jest.Mock).mockResolvedValue(true);
     (mapModelToDto as jest.Mock).mockReturnValue(mockServerConfigDto);
 
     const request = mockRequest();
