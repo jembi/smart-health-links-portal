@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-      - update-docker-production-image-build
+      - fix/production-build-prisma-field-encryption
 
 jobs:
   test:
@@ -27,7 +27,7 @@ jobs:
       - name: Run Jest Tests
         run: yarn test --collectCoverage=false
 
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
