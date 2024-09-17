@@ -64,7 +64,7 @@ export async function GET(
   const url = new URL(request.url);
 
   const ticketId = url.searchParams.get('ticket');
-  logger.log(`Getting an endpoint data with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
+  logger.info(`Getting an endpoint data with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
 
   try {
     const ticket: AccessTicketModel = await getAccessTicketUseCase(
@@ -91,7 +91,7 @@ export async function GET(
       { repo: userRepo },
       { userId: shlink.getUserId() },
     );
-    logger.log(`Getting an endpoint data of user id: ${shlink.getUserId()} with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
+    logger.info(`Getting an endpoint data of user id: ${shlink.getUserId()} with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
     const patient = await getPatientDataUseCase(
       { repo: serverConfigRepo },
       { user: user },

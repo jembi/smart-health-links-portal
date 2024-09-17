@@ -37,7 +37,7 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log(`Deactivating a share link API with share link id: ${params.id}`);
+  logger.info(`Deactivating a share link API with share link id: ${params.id}`);
   try {
     const user = await getUserProfile(request);
     const result = await deactivateSHLinksUseCase(

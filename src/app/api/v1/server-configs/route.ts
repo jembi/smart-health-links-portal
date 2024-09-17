@@ -41,7 +41,7 @@ const logger = new LogHandler(__dirname);
  */
 export async function POST(request: Request) {
   let dto: CreateServerConfigDto = await request.json();
-  logger.log(`Creating server config API with request: ${JSON.stringify(dto)}`)
+  logger.info(`Creating server config API with request: ${JSON.stringify(dto)}`)
   try {
     await validateUserRoles(request, 'admin');
     const model = mapDtoToModel(dto as ServerConfigDto);
@@ -72,6 +72,7 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
     try{
+    logger.info(`Getting all available server configs data `
     await validateUserRoles(request, 'admin');
   const serverConfigs = await getServerConfigsUseCase({ repo });
   return NextResponse.json(

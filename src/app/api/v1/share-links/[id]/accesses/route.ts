@@ -52,7 +52,7 @@ const logger = new LogHandler(__dirname);
 export async function POST(request: Request, params: { id: string }) {
   try {
     const { managementToken }: SHLinkAccessRequestDto = await request.json();
-    logger.log(`Getting share link access for a user with share link id: ${params.id} and management token: ${managementToken}`);
+    logger.info(`Getting share link access for a user with share link id: ${params.id} and management token: ${managementToken}`);
 
     const shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
