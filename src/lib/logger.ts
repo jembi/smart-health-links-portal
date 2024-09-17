@@ -58,7 +58,7 @@ const formatFunctions = {
     timestamp: timestamp,
     colorize: colorize,
     json: json,
-  };
+};
 
 function getFormatFromConfig(config:any){
     return config.format.map(x => {
@@ -95,18 +95,34 @@ export function getLogger(module:string){
 }
 
 
-export class LogHandler{
-  private logger:Logger;
-
-  constructor(module:string) {
-    this.logger = getLogger(module);
+export class LogHandler {
+    private logger: Logger;
+  
+    constructor(module: string) {
+      this.logger = getLogger(module);
+    }
+  
+    log( message: string, level: 'info' | 'debug' | 'warn' | 'error' = 'info') {
+      this.logger.log({
+        level,
+        message
+      });
+    }
+  
+    info(message: string) {
+      this.log(message, 'info');
+    }
+  
+    debug(message: string) {
+      this.log(message, 'debug');
+    }
+  
+    warn(message: string) {
+      this.log(message, 'warn');
+    }
+  
+    error(message: string) {
+      this.log(message, 'error');
+    }
   }
-
-  log(message:string, type:'info'|'warn'|'error' = "info"){
-    this.logger.log({
-      level: type,
-      message
-    });
-  }
-
-}
+  

@@ -14,7 +14,7 @@ import {
 
 
 export function handleApiValidationError(error: unknown, logger:LogHandler) {
-  logger.log(`API route error: ${error}`, 'error');
+  logger.error(`API route error: ${error}`);
 
   if (error instanceof ModelValidationError) {
     return NextResponse.json(

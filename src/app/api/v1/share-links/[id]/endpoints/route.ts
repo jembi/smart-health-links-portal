@@ -66,7 +66,7 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   let dto: CreateSHLinkEndpointDto = await request.json();
-  logger.log(`Creating a share link endpoint with parameters: ${JSON.stringify(dto)}`);
+  logger.info(`Creating a share link endpoint with parameters: ${JSON.stringify(dto)}`);
 
   try {
     const serverConfig = (

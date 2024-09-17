@@ -85,7 +85,7 @@ export async function POST(
 ) {
   let { managementToken, passcode, recipient }: SHLinkRequestDto =
     await request.json();
-  logger.log(`Creating share link access with share link id: ${params.id} and parameters: ${{ managementToken, passcode, recipient }}`);
+  logger.info(`Creating share link access with share link id: ${params.id} and parameters: ${JSON.stringify({ managementToken, recipient })}`);
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
@@ -107,13 +107,13 @@ export async function POST(
       new SHLinkAccessModel(shlink.getId(), new Date(), recipient),
     );
 
-    logger.log(`Creating a share link access ticket with share link id: ${params.id}`);
+    logger.info(`Creating a share link access ticket with share link id: ${params.id}`);
     const ticket = await addAccessTicketUseCase(
       { repo: ticketRepo },
       new AccessTicketModel(shlink.getId()),
     );
     setTimeout(() => {
-      logger.log(`Deleting share link access ticket with ticket: ${JSON.stringify(ticket)}`);
+      logger.info(`Deleting share link access ticket with ticket: ${JSON.stringify(ticket)}`);
       deleteAccessTicketUseCase({ repo: ticketRepo }, { id: ticket.getId() });
     }, DELETE_DELAY);
     const endpoint = await getEndpointUseCase(
@@ -161,7 +161,7 @@ export async function PUT(
 ) {
   let { managementToken, oldPasscode, passcode, expiryDate }: SHLinkUpdateDto =
     await request.json();
-  logger.log(`Updating a share link passcode and expiry date API with share link id: ${params.id} and parameters: ${{managementToken, oldPasscode, passcode, expiryDate}}`);
+  logger.info(`Updating a share link passcode and expiry date API with share link id: ${params.id} and parameters: ${JSON.stringify({managementToken, expiryDate})}`);
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },

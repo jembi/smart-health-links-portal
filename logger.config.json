@@ -1,5 +1,5 @@
 {
-    "transporters":[
+    "transporters": [
         {
             "transporterType": "file",
             "options": {
@@ -12,5 +12,4 @@
         }
     ],
     "format": ["timestamp", "json"]
-    
 }

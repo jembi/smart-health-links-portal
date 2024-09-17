@@ -42,7 +42,7 @@ const logger = new LogHandler(__dirname);
 export async function POST(request: Request) {
   try {
     const dto: CreateSHLinkDto = await request.json();
-    logger.log(`Creating a share link API with parameters, ${JSON.stringify(dto)}`);
+    logger.info(`Creating a share link API with parameters, ${JSON.stringify({name:dto.name, userId:dto.userId})}`);
     await validateUser(request, dto.userId);
     const model = mapDtoToModel(dto as SHLinkDto);
     const newShlink = await addShlinkUseCase({ repo }, { shlink: model });
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
   try {
     const { id } = await getUserProfile(request);
 
-    logger.log(`Getting all share links by user with user id: ${id}`);
+    logger.info(`Getting all share links by user with user id: ${id}`);
 
     const newShlink = await getSHLinkUseCase({ repo }, { user_id: id });
     return NextResponse.json(
