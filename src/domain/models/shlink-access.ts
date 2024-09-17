@@ -12,7 +12,7 @@ export class SHLinkAccessModel extends BaseModel {
     super(
       z.object({
         shlinkId: z.string().min(1),
-        id: z.string().optional(),
+        id: z.string().nullable().optional(),
         access_time: z.date().default(new Date()),
         recipient: z.string().min(1),
       }),

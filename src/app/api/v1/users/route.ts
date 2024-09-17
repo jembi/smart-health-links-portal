@@ -13,6 +13,7 @@ import { LogHandler } from '@/lib/logger';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { searchPatientUseCase } from '@/usecases/patient/search-patient';
 import { addUserUseCase } from '@/usecases/users/add-user';
+import { getUserProfile } from '@/app/utils/authentication';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(
@@ -46,9 +47,10 @@ export async function POST(request: Request) {
   let dto: CreateUserDto = await request.json();
   logger.log(`Creating a user with,  ${JSON.stringify(dto)}`);
   try {
+    const { email } = await getUserProfile(request);
     const patientId = await searchPatientUseCase(
       { repo: serverConfigRepo },
-      { patientId: dto.patientId },
+      { patientId: dto.patientId, email },
     );
     dto.patientId = patientId;
     const model = mapDtoToModel(dto as UserDto);

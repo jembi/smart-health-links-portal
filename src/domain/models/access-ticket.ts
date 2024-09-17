@@ -10,7 +10,7 @@ export class AccessTicketModel extends BaseModel {
     super(
       z.object({
         shlinkId: z.string().min(1),
-        id: z.string().optional(),
+        id: z.string().nullable().optional(),
       }),
     );
     this.validate();
