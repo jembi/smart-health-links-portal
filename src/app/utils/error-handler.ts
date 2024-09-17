@@ -13,8 +13,6 @@ import {
 } from '../constants/http-constants';
 
 
-
-
 export function handleApiValidationError(error: unknown, logger:LogHandler) {
   logger.log(`API route error: ${error}`, 'error');
 
