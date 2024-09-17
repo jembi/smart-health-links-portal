@@ -1,6 +1,6 @@
 import { Box, Container } from '@mui/material';
 
-import LinksTable from './LinksTable';
+import LinksTable from './Components/LinksTable';
 
 export default function SharedLinksPage() {
   return (
@@ -12,7 +12,7 @@ export default function SharedLinksPage() {
         justifyContent="center"
         paddingTop={8}
         paddingBottom={8}
-      />
+      ></Box>
       <LinksTable />
     </Container>
   );
