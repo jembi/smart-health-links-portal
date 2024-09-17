@@ -31,6 +31,11 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      - name: Get Branch Name
+          id: get_branch  # Add an ID to this step to reference its output
+          run: |
+            echo "::set-output name=branch_name::${{ github.head_ref }}"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -47,16 +52,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push tag
-        if: ${{ github.ref_name != 'main' }}
+        if: ${{ gsteps.get_branch.outputs.branch_name != 'main' }}
         uses: docker/build-push-action@v5
         with:
           platforms: linux/amd64,linux/arm64
           push: true
           file: docker/production/Dockerfile
-          tags: jembi/smart-health-links-portal:${{ github.ref_name }}
+          tags: jembi/smart-health-links-portal:${{ steps.get_branch.outputs.branch_name }}
 
       - name: Build and push latest
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ steps.get_branch.outputs.branch_name == 'main' }}
         uses: docker/build-push-action@v5
         with:
           platforms: linux/amd64,linux/arm64
