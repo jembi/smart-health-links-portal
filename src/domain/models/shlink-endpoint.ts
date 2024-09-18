@@ -14,7 +14,7 @@ export class SHLinkEndpointModel extends BaseModel {
         shlinkId: z.string(),
         serverConfigId: z.string(),
         urlPath: z.string(),
-        id: z.string().nullable().optional(),
+        id: z.string().optional(),
       }),
     );
     this.validate();

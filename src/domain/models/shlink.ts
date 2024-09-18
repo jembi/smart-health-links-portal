@@ -17,9 +17,9 @@ export class SHLinkModel extends BaseModel {
       z.object({
         userId: z.string().min(10),
         passcodeFailuresRemaining: z.number().default(5).optional().nullable(),
-        active: z.boolean().optional().nullable(),
-        managementToken: z.string().min(10).optional().nullable(),
-        configPasscode: z.string().min(4).optional().nullable(),
+        active: z.boolean().optional(),
+        managementToken: z.string().min(10).optional(),
+        configPasscode: z.string().min(4).optional(),
         configExp: z.date().optional().nullable(),
         id: z.string().optional(),
         name: z.string().default('unnamed shlink'),
