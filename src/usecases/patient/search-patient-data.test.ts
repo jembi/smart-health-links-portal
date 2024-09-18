@@ -16,6 +16,7 @@ jest.mock('@/infrastructure/repositories/interfaces/server-config-repository');
 describe('searchPatientUseCase', () => {
   let mockRepo: jest.Mocked<IServerConfigRepository>;
   let mockService: jest.Mocked<IHapiFhirService>;
+  const email = 'test@email.com';
 
   beforeEach(() => {
     mockRepo = {
@@ -43,7 +44,7 @@ describe('searchPatientUseCase', () => {
 
     const result = await searchPatientUseCase(
       { repo: mockRepo },
-      { patientId },
+      { patientId, email },
     );
 
     expect(result).toBe(expectedId);
@@ -54,7 +55,7 @@ describe('searchPatientUseCase', () => {
     mockRepo.findMany.mockResolvedValue([]);
 
     await expect(
-      searchPatientUseCase({ repo: mockRepo }, { patientId: '12345' }),
+      searchPatientUseCase({ repo: mockRepo }, { patientId: '12345', email }),
     ).rejects.toThrow(new ExternalDataFetchError('Missing Config error.'));
   });
 
@@ -70,7 +71,7 @@ describe('searchPatientUseCase', () => {
     } as FhirSearchResult<FhirPatient>);
 
     await expect(
-      searchPatientUseCase({ repo: mockRepo }, { patientId }),
+      searchPatientUseCase({ repo: mockRepo }, { patientId, email }),
     ).rejects.toThrow(
       new ExternalDataFetchError('Patient Data not found.', 404),
     );

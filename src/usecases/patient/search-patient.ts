@@ -12,16 +12,21 @@ export const searchPatientUseCase = async (
   context: { repo: IServerConfigRepository },
   data: { patientId: string; email: string },
 ): Promise<string> => {
-  const serviceConfig = (await context.repo.findMany({})).find((x) => x);
-  if (!serviceConfig) {
+  const serviceConfigs = await context.repo.findMany({});
+  if (!serviceConfigs.length) {
     throw new ExternalDataFetchError('Missing Config error.');
   }
 
-  const service: IHapiFhirService =
-    HapiFhirServiceFactory.getService(serviceConfig);
-  const result = await service.searchPatient<FhirSearchResult<FhirPatient>>(
-    data.patientId,
-  );
+  let result: FhirSearchResult<FhirPatient>;
+  for (const serviceConfig of serviceConfigs) {
+    try {
+      const service: IHapiFhirService =
+        HapiFhirServiceFactory.getService(serviceConfig);
+      result = await service.searchPatient<FhirSearchResult<FhirPatient>>(
+        data.patientId,
+      );
+    } catch {}
+  }
 
   if (
     !result ||
