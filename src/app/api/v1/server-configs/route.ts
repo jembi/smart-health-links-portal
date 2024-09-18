@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   let dto: CreateServerConfigDto = await request.json();
   logger.info(`Creating server config API with request: ${JSON.stringify(dto)}`);
   try {
-    await validateUserRoles(request, 'admin');
+    await validateUserRoles(request, 'admin');       
     const model = mapDtoToModel(dto as ServerConfigDto);
     const newServerConfig = await addServerConfigUseCase(
       { repo },

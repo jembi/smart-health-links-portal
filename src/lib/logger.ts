@@ -31,7 +31,7 @@ const getConfig = (): { transporters: any[], format: any[] } => {
 
 const loggerConfig = getConfig();
 
-const { combine, timestamp, printf, colorize, json } = format;
+const { combine, timestamp, printf, colorize, json, errors, prettyPrint } = format;
 
 function getTransporters(){
     return [
@@ -50,6 +50,8 @@ function getTransportersFromConfig(config:any){
 
 function getFormat(){
     return combine(
+        errors({ stack: true }),
+        prettyPrint(),
         ...getFormatFromConfig(loggerConfig)
     )
 }
@@ -121,8 +123,8 @@ export class LogHandler {
       this.log(message, 'warn');
     }
   
-    error(message: string) {
-      this.log(message, 'error');
+    error(error: Error) {
+      this.logger.error(error);
     }
   }
   

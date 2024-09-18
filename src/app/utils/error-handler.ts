@@ -13,8 +13,8 @@ import {
 } from '../constants/http-constants';
 
 
-export function handleApiValidationError(error: unknown, logger:LogHandler) {
-  logger.error(`API route error: ${error}`);
+export function handleApiValidationError(error: Error, logger:LogHandler) {
+  logger.error(error);
 
   if (error instanceof ModelValidationError) {
     return NextResponse.json(
