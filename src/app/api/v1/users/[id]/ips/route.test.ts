@@ -24,6 +24,8 @@ jest.mock('@/usecases/users/get-user', () => ({
   getUserUseCase: jest.fn(),
 }));
 
+const mockRoute = '/api/v1/users/ips'
+
 describe('GET handler', () => {
   const mockRequest = (id: string) =>
     new NextRequest(`http://localhost/api/users/${id}/ips`, {

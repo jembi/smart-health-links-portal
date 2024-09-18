@@ -10,6 +10,7 @@ import {
 } from '@/container';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
@@ -17,6 +18,9 @@ const userRepo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
+
+const logger = new LogHandler(__dirname)
+
 
 /**
  * @swagger
@@ -41,6 +45,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  logger.log(`Retrieving user's patient summary data with user id: ${params.id}`)
   try {
     await validateUser(request, params.id);
     const user = await getUserUseCase(
@@ -49,6 +54,7 @@ export async function GET(
     );
     if (!user)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
+    logger.log(`Retrieving patient summary data from FHIR with user: ${JSON.stringify(user)}`)
     const result = await getPatientDataUseCase(
       { repo: serverConfigRepo },
       { user },
@@ -56,6 +62,6 @@ export async function GET(
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }

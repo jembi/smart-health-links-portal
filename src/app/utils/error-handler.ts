@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { ModelValidationError } from '@/domain/models/base-model';
+import { LogHandler } from '@/lib/logger';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
 
@@ -11,8 +12,9 @@ import {
   SERVER_ERROR,
 } from '../constants/http-constants';
 
-export function handleApiValidationError(error: unknown) {
-  console.error('API route error:', error);
+
+export function handleApiValidationError(error: Error, logger:LogHandler) {
+  logger.error(error);
 
   if (error instanceof ModelValidationError) {
     return NextResponse.json(

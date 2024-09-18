@@ -17,6 +17,7 @@ import { IAccessTicketRepository } from '@/infrastructure/repositories/interface
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { getAccessTicketUseCase } from '@/usecases/access-tickets/get-access-ticket';
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
@@ -30,6 +31,8 @@ const userRepo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
+
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -61,6 +64,7 @@ export async function GET(
   const url = new URL(request.url);
 
   const ticketId = url.searchParams.get('ticket');
+  logger.info(`Getting an endpoint data with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
 
   try {
     const ticket: AccessTicketModel = await getAccessTicketUseCase(
@@ -87,7 +91,7 @@ export async function GET(
       { repo: userRepo },
       { userId: shlink.getUserId() },
     );
-
+    logger.info(`Getting an endpoint data of user id: ${shlink.getUserId()} with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
     const patient = await getPatientDataUseCase(
       { repo: serverConfigRepo },
       { user: user },
@@ -95,6 +99,6 @@ export async function GET(
 
     return NextResponse.json(patient, { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }

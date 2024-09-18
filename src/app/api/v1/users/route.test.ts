@@ -54,6 +54,8 @@ describe('POST /api/users', () => {
       method: 'POST',
       body: JSON.stringify(body),
     });
+
+  const mockRoute = '/api/v1/users'
   let mockService: jest.Mocked<IHapiFhirService>;
 
   HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);
@@ -88,7 +90,7 @@ describe('POST /api/users', () => {
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(error);
+    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 
@@ -106,7 +108,7 @@ describe('POST /api/users', () => {
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(error);
+    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(500);
 

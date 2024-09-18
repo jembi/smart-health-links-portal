@@ -5,10 +5,14 @@ import { handleApiValidationError } from '@/app/utils/error-handler';
 import { container, SHLinkRepositoryToken } from '@/container';
 import { SHLinkQRCodeRequestDto } from '@/domain/dtos/shlink-qrcode';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import { getSHLinkQRCodeUseCase } from '@/usecases/shlink-qrcode/get-shlink-qrcode';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
+
+const logger = new LogHandler(__dirname);
+
 
 /**
  * @swagger
@@ -39,12 +43,13 @@ const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
  */
 
 export async function POST(
-  request: Request,
-  { params }: { params: { id: string } },
+  request: Request, 
+  { params }: {params: { id: string } }, 
 ) {
   try {
     const { managementToken }: SHLinkQRCodeRequestDto = await request.json();
     const { id } = params;
+    logger.info(`Creating a QR Code with share link id: ${id} and management token: ${managementToken}`);
 
     let shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
@@ -63,6 +68,6 @@ export async function POST(
       },
     });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }

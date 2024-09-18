@@ -8,6 +8,7 @@ import {
   ServerConfigDto,
 } from '@/domain/dtos/server-config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/server-config-mapper';
 import { addServerConfigUseCase } from '@/usecases/server-configs/add-server-config';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
@@ -15,6 +16,7 @@ import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-co
 const repo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -39,8 +41,9 @@ const repo = container.get<IServerConfigRepository>(
  */
 export async function POST(request: Request) {
   let dto: CreateServerConfigDto = await request.json();
+  logger.info(`Creating server config API with request: ${JSON.stringify(dto)}`);
   try {
-    await validateUserRoles(request, 'admin');
+    await validateUserRoles(request, 'admin');       
     const model = mapDtoToModel(dto as ServerConfigDto);
     const newServerConfig = await addServerConfigUseCase(
       { repo },
@@ -48,7 +51,7 @@ export async function POST(request: Request) {
     );
     return NextResponse.json(mapModelToDto(newServerConfig), { status: 201 });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }
 
@@ -68,14 +71,15 @@ export async function POST(request: Request) {
  *               $ref: '#/components/schemas/ServerConfig'
  */
 export async function GET(request: Request) {
-  try {
+    try{
+    logger.info(`Getting all available server configs data`);
     await validateUserRoles(request, 'admin');
-    const serverConfigs = await getServerConfigsUseCase({ repo });
-    return NextResponse.json(
-      serverConfigs.map((x) => mapModelToDto(x)),
-      { status: 200 },
-    );
-  } catch (error) {
-    return handleApiValidationError(error);
+  const serverConfigs = await getServerConfigsUseCase({ repo });
+  return NextResponse.json(
+    serverConfigs.map((x) => mapModelToDto(x)),
+    { status: 200 },
+  );
+} catch (error) {
+    return handleApiValidationError(error, logger);
   }
 }
