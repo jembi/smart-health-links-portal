@@ -3,7 +3,6 @@ import BaseService from './base-service.service';
 import {
   IHapiFhirService,
   HapiFhirRequestOptions,
-  FhirSearchResult,
 } from './hapi-fhir.interface';
 
 export class ExternalDataFetchError extends Error {
@@ -23,10 +22,8 @@ export class HapiFhirService
   constructor(baseUrl: string) {
     super(baseUrl, 'fhir/Patient');
   }
-  async searchPatient<T>(patientId: string): Promise<FhirSearchResult<T>> {
-    return this.get('', { identifier: patientId }) as Promise<
-      FhirSearchResult<T>
-    >;
+  async searchPatient<T>(patientId: string): Promise<T> {
+    return this.get<T>('', { identifier: patientId });
   }
 
   async getAccessToken<T>(
