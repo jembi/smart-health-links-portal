@@ -25,6 +25,7 @@ export const searchPatientUseCase = async (
       result = await service.searchPatient<FhirSearchResult<FhirPatient>>(
         data.patientId,
       );
+      if (result) break;
     } catch {}
   }
 
