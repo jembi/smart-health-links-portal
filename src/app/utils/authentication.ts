@@ -27,7 +27,7 @@ export const getRoles = (token: any) => {
     const base64Payload = account.access_token.split('.')[1];
     const payload = Buffer.from(base64Payload, 'base64').toString('utf-8');
     const innerToken = JSON.parse(payload);
-    return innerToken.resource_access.nextjs.roles;
+    return innerToken.resource_access?.nextjs?.roles || [];
   }
   return [] as string[];
 };

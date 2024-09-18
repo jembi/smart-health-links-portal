@@ -5,15 +5,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { POST } from '@/app/api/v1/users/route';
+import { getUserProfile } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
-import { FhirPatient, IHapiFhirService } from '@/services/hapi-fhir.interface';
+import { IHapiFhirService } from '@/services/hapi-fhir.interface';
 import { searchPatientUseCase } from '@/usecases/patient/search-patient';
 import { addUserUseCase } from '@/usecases/users/add-user';
 
 jest.mock('@/usecases/users/add-user', () => ({
   addUserUseCase: jest.fn(),
+}));
+
+jest.mock('@/app/utils/authentication', () => ({
+  getUserProfile: jest.fn(),
 }));
 
 jest.mock('@/services/hapi-fhir-factory');
@@ -55,8 +60,9 @@ describe('POST /api/users', () => {
       body: JSON.stringify(body),
     });
 
-  const mockRoute = '/api/v1/users'
+  const mockRoute = '/api/v1/users';
   let mockService: jest.Mocked<IHapiFhirService>;
+  (getUserProfile as jest.Mock).mockResolvedValue(true);
 
   HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);
 
@@ -90,7 +96,10 @@ describe('POST /api/users', () => {
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
+    expect(handleApiValidationError).toHaveBeenCalledWith(
+      error,
+      expect.anything(),
+    );
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 
@@ -108,7 +117,10 @@ describe('POST /api/users', () => {
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
+    expect(handleApiValidationError).toHaveBeenCalledWith(
+      error,
+      expect.anything(),
+    );
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(500);
 

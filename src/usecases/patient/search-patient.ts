@@ -1,3 +1,5 @@
+import { Patient } from 'fhir/r4';
+
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
@@ -6,7 +8,6 @@ import {
   IHapiFhirService,
 } from '@/services/hapi-fhir.interface';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
-import { Patient } from 'fhir/r4';
 
 export const searchPatientUseCase = async (
   context: { repo: IServerConfigRepository },
@@ -42,7 +43,7 @@ export const searchPatientUseCase = async (
   return result.entry[0].resource.id;
 };
 
-const findEmailAddress = (patient: Patient, email: string) => {
+export const findEmailAddress = (patient: Patient, email: string) => {
   return patient.telecom?.find(
     (x) => x.system === 'email' && x.value === email,
   );

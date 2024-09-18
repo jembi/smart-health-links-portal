@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { getUserProfile } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   container,
@@ -13,7 +14,6 @@ import { LogHandler } from '@/lib/logger';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { searchPatientUseCase } from '@/usecases/patient/search-patient';
 import { addUserUseCase } from '@/usecases/users/add-user';
-import { getUserProfile } from '@/app/utils/authentication';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(
