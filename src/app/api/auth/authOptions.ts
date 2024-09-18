@@ -21,7 +21,22 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     session: async ({ session, token }) => {
-      return { ...session, token };
+      return { ...session, ...token };
+    },
+    jwt: (params) => {
+      const tokenParam = params['token'];
+      if (tokenParam?.['token']) {
+        const { user = {}, token = {}, account = {} } = tokenParam;
+
+        return {
+          user,
+          token,
+          account: {
+            access_token: account['access_token'],
+          },
+        };
+      }
+      return params;
     },
   },
 };
