@@ -9,7 +9,7 @@ export interface IHapiFhirService {
     params: any,
     options?: HapiFhirRequestOptions,
   ): Promise<T>;
-  searchPatient<T>(patientId: string): Promise<FhirSearchResult<T>>;
+  searchPatient<T>(patientId: string): Promise<T>;
 }
 
 interface FhirMeta {

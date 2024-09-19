@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { getUserProfile } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   container,
@@ -46,9 +47,10 @@ export async function POST(request: Request) {
   let dto: CreateUserDto = await request.json();
   logger.log(`Creating a user with,  ${JSON.stringify(dto)}`);
   try {
+    const { email } = await getUserProfile(request);
     const patientId = await searchPatientUseCase(
       { repo: serverConfigRepo },
-      { patientId: dto.patientId },
+      { patientId: dto.patientId, email },
     );
     dto.patientId = patientId;
     const model = mapDtoToModel(dto as UserDto);

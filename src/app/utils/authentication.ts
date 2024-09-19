@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { Account } from 'next-auth';
+import { Account, Session } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 
 import { UNAUTHORIZED_REQUEST } from '../constants/http-constants';
@@ -20,14 +20,14 @@ interface TokenPayload {
   roles?: string[];
 }
 
-export const getRoles = (token: any) => {
+export const getRoles = (token: Session) => {
   const account = token.account as Account;
 
   if (account?.access_token) {
     const base64Payload = account.access_token.split('.')[1];
     const payload = Buffer.from(base64Payload, 'base64').toString('utf-8');
     const innerToken = JSON.parse(payload);
-    return innerToken.resource_access.nextjs.roles;
+    return innerToken.resource_access?.nextjs?.roles || [];
   }
   return [] as string[];
 };
