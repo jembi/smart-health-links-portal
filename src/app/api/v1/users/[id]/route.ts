@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
@@ -9,9 +10,11 @@ import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/user-mapper';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
+export const dynamic = 'force-dynamic';
+
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 
-const logger = new LogHandler(__dirname)
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -37,8 +40,9 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  logger.log(`Retrieving a user with user id: ${params.id}`)
+  logger.log(`Retrieving a user with user id: ${params.id}`);
   try {
+    unstable_noStore();
     const { id } = params;
     validateUser(request, id);
 
