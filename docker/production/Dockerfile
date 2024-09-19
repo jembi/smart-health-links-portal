@@ -20,7 +20,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # This will do the trick, use the corresponding env file for each environment.
 COPY .env.production.example .env.production
-RUN npm run build --turbo
+
+RUN yarn build && \
+    yarn next-swagger-doc-cli next-swagger-doc.json
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
@@ -37,6 +39,12 @@ COPY --from=builder /app/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/prisma ./prisma
+
+# Ensure logs directory is created under the correct permissions
+RUN mkdir logs && \
+    chmod 755 logs && \
+    chown nextjs:nodejs logs
 
 USER nextjs
 
@@ -45,4 +53,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "npx --yes prisma migrate deploy --schema=./prisma/schema.prisma && node server.js"]
