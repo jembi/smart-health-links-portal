@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { Account } from 'next-auth';
+import { Account, Session } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 
 import { UNAUTHORIZED_REQUEST } from '../constants/http-constants';
@@ -20,7 +20,7 @@ interface TokenPayload {
   roles?: string[];
 }
 
-export const getRoles = (token: any) => {
+export const getRoles = (token: Session) => {
   const account = token.account as Account;
 
   if (account?.access_token) {

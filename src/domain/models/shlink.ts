@@ -16,7 +16,7 @@ export class SHLinkModel extends BaseModel {
     super(
       z.object({
         userId: z.string().min(10),
-        passcodeFailuresRemaining: z.number().default(5).optional().nullable(),
+        passcodeFailuresRemaining: z.number().default(5).optional(),
         active: z.boolean().optional(),
         managementToken: z.string().min(10).optional(),
         configPasscode: z.string().min(4).optional(),
