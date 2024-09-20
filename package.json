@@ -32,6 +32,7 @@
     "qrcode": "^1.5.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
     "winston-daily-rotate-file": "^5.0.0",
     "swagger-ui-react": "^5.17.14",
     "uuid": "^10.0.0",
