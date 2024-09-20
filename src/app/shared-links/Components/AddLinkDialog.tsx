@@ -8,7 +8,8 @@ import {
   Button,
   styled,
 } from '@mui/material';
-import { ChangeEvent, FC, useState } from 'react';
+import { FC, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { useSession } from '@/app/hooks/useSession';
 import { apiClient } from '@/app/utils/api.class';
@@ -21,7 +22,7 @@ const StyledDialogTitle = styled(DialogTitle)(() => ({
   backgroundImage: 'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #e6e6e6)',
 }));
 
-const StyledDialogContent = styled(DialogContent)(() => ({
+const StyledDialogContent = styled('div')(() => ({
   gap: '15px',
   margin: '15px',
   display: 'flex',
@@ -34,14 +35,6 @@ const StyledDialogActions = styled(DialogActions)(() => ({
   paddingBottom: '15px',
   backgroundImage: 'linear-gradient(to top, hsla(0, 0%, 90%, .05), #e6e6e6)',
 }));
-
-const createSHLink = (url: string, data: object, callback?: () => void) =>
-  apiClient
-    .create({
-      url,
-      data,
-    })
-    .then(() => callback?.());
 
 type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
   configExp?: string;
@@ -59,65 +52,81 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
   callback,
 }) => {
   const data = useSession();
-  const [payload, setPayload] = useState<Partial<TCreateSHLinkDto>>({});
+  const {
+    reset,
+    register,
+    formState: { errors },
+    resetField,
+    handleSubmit,
+  } = useForm<TCreateSHLinkDto>();
 
-  const handleChange =
-    (field: keyof TCreateSHLinkDto) =>
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setPayload((currentPayload) => ({
-        ...currentPayload,
-        [field]: event.target.value || undefined,
-      }));
-    };
+  const onSubmitForm = async (data: TCreateSHLinkDto) => {
+    await apiClient
+      .create({
+        url: '/share-links',
+        data: removeUndefinedValues(data),
+      })
+      .then(() => callback?.());
+  };
+
+  useEffect(() => {
+    if (open) reset();
+  }, [open]);
+
+  useEffect(() => {
+    if (data?.token?.sub)
+      resetField('userId', { defaultValue: data.token.sub });
+  }, [data?.token?.sub]);
 
   return (
     <Dialog open={!!open} fullWidth maxWidth="xs" onClose={() => onClose?.()}>
       <StyledDialogTitle>Create a new Link</StyledDialogTitle>
-      <StyledDialogContent style={{ padding: '5px 8px' }}>
-        <TextField
-          type="text"
-          label="User id *"
-          value={data?.token?.sub}
-          disabled
-          inputProps={{ readOnly: true }}
-        />
-        <TextField
-          type="text"
-          label="Name *"
-          onChange={handleChange('name')}
-          placeholder="Name"
-          defaultValue=""
-        />
-        <TextField
-          type="number"
-          label="PIN Code"
-          onChange={handleChange('configPasscode')}
-          defaultValue=""
-        />
-        <TextField
-          type="date"
-          label="Expiration Date"
-          onChange={handleChange('configExp')}
-          InputLabelProps={{ shrink: true }}
-        />
-      </StyledDialogContent>
+      <DialogContent style={{ padding: '5px 8px' }}>
+        <form onSubmit={handleSubmit(onSubmitForm)}>
+          <StyledDialogContent>
+            <TextField
+              label="User id"
+              error={!!errors.userId}
+              disabled
+              required
+              inputProps={{ readOnly: true }}
+              {...register('userId', {})}
+            />
+            <TextField
+              label="Name"
+              error={!!errors.name}
+              required
+              helperText={errors.name ? errors.name.message : null}
+              placeholder="Name"
+              {...register('name', { required: 'Required field' })}
+            />
+            <TextField
+              type="number"
+              label="PIN Code"
+              {...register('configPasscode', {
+                setValueAs: (value) => value || undefined,
+              })}
+            />
+            <TextField
+              type="date"
+              label="Expiration Date"
+              InputLabelProps={{ shrink: true }}
+              {...register('configExp', {
+                setValueAs: (value) => value || undefined,
+              })}
+            />
+          </StyledDialogContent>
+        </form>
+      </DialogContent>
       <StyledDialogActions>
         <Button color="inherit" variant="contained" onClick={onClose}>
           Cancel
         </Button>
         <Button
+          type="submit"
           color="success"
           variant="contained"
-          onClick={() =>
-            createSHLink(
-              '/share-links',
-              removeUndefinedValues({ ...payload, userId: data?.token?.sub }),
-              () => {
-                callback?.();
-                onClose?.();
-              },
-            )
-          }
+          onClick={handleSubmit(onSubmitForm)}
         >
           Create
         </Button>
