@@ -40,7 +40,7 @@ const columns: readonly Column[] = [
     label: 'Expiry Date',
     minWidth: 80,
     format: (value?: Date) =>
-      value?.toString() || (
+      value?.toString()?.substring(0, 10) || (
         <span
           style={{ display: 'flex', alignItems: 'center', color: '#9e9e9e' }}
         >
@@ -57,7 +57,7 @@ const columns: readonly Column[] = [
   },
 ];
 
-async function fetchPosts(id: string) {
+async function fetchLinks(id: string) {
   return axios.get(`http://localhost:3000/api/v1/share-links?user_id=${id}`);
 }
 
@@ -74,7 +74,7 @@ export default function LinksTable() {
 
   useEffect(() => {
     if (session?.user.id)
-      fetchPosts(session.user.id).then((response) => setLinks(response.data));
+      fetchLinks(session.user.id).then(({ data }) => setLinks(data));
   }, [session?.user.id]);
 
   const handleChangeRowsPerPage = (
@@ -94,7 +94,7 @@ export default function LinksTable() {
         open={addDialog}
         onClose={() => setAddDialog(false)}
         callback={() => {
-          fetchPosts(session.user.id).then((response) =>
+          fetchLinks(session.user.id).then((response) =>
             setLinks(response.data),
           );
         }}

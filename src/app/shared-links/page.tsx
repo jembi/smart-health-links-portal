@@ -1,8 +1,6 @@
 import { Box, Container } from '@mui/material';
-import { getServerSession } from 'next-auth';
 
 import LinksTable from './Components/LinksTable';
-import { authOptions } from '../api/auth/authOptions';
 
 export default async function SharedLinksPage() {
   return (
