@@ -32,6 +32,8 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
   const mockEndpointId = 'endpoint-67890';
   const mockManagementToken = 'token-xyz12345';
 
+  const mockRoute = '/api/v1/share-links/{id}/endpoints';
+
   const mockRequestBody = {
     url_path: mockUrlPath,
     management_token: mockManagementToken,
@@ -144,7 +146,7 @@ describe('POST /api/v1/shlinks/[id]/endpoint', () => {
 
     const response = await POST(mockRequest, { params: { id: mockShlinkId } });
 
-    expect(handleApiValidationError).toHaveBeenCalledWith(mockError);
+    expect(handleApiValidationError).toHaveBeenCalledWith(mockError, expect.anything());
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(400);
 

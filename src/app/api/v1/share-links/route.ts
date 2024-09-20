@@ -5,6 +5,7 @@ import { handleApiValidationError } from '@/app/utils/error-handler';
 import { container, SHLinkRepositoryToken } from '@/container';
 import { CreateSHLinkDto, SHLinkDto } from '@/domain/dtos/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import {
   mapDtoToModel,
   mapModelToDto,
@@ -14,6 +15,8 @@ import { addShlinkUseCase } from '@/usecases/shlinks/add-shlink';
 import { getSHLinkUseCase } from '@/usecases/shlinks/get-shlink';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
+
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -39,12 +42,13 @@ const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 export async function POST(request: Request) {
   try {
     const dto: CreateSHLinkDto = await request.json();
+    logger.info(`Creating a share link API with parameters, ${JSON.stringify({name:dto.name, userId:dto.userId})}`);
     await validateUser(request, dto.userId);
     const model = mapDtoToModel(dto as SHLinkDto);
     const newShlink = await addShlinkUseCase({ repo }, { shlink: model });
     return NextResponse.json(mapModelToDto(newShlink), { status: 200 });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }
 
@@ -68,12 +72,14 @@ export async function GET(request: Request) {
   try {
     const { id } = await getUserProfile(request);
 
+    logger.info(`Getting all share links by user with user id: ${id}`);
+
     const newShlink = await getSHLinkUseCase({ repo }, { user_id: id });
     return NextResponse.json(
       newShlink.map((shlink) => mapModelToMiniDto(shlink)),
       { status: 200 },
     );
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }

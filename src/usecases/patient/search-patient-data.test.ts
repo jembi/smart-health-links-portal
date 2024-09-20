@@ -1,3 +1,4 @@
+import { getUserProfile } from '@/app/utils/authentication';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
@@ -10,12 +11,18 @@ import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 import { searchPatientUseCase } from './search-patient';
 
 // Mock the HapiFhirServiceFactory and IServerConfigRepository
+jest.mock('@/app/utils/authentication', () => ({
+  getUserProfile: jest.fn(),
+}));
 jest.mock('@/services/hapi-fhir-factory');
 jest.mock('@/infrastructure/repositories/interfaces/server-config-repository');
 
 describe('searchPatientUseCase', () => {
   let mockRepo: jest.Mocked<IServerConfigRepository>;
   let mockService: jest.Mocked<IHapiFhirService>;
+  const email = 'test@email.com';
+
+  (getUserProfile as jest.Mock).mockResolvedValue(true);
 
   beforeEach(() => {
     mockRepo = {
@@ -38,12 +45,19 @@ describe('searchPatientUseCase', () => {
 
     // Mock patient search result
     mockService.searchPatient.mockResolvedValue({
-      entry: [{ resource: { id: expectedId } }],
-    } as FhirSearchResult<FhirPatient>);
+      entry: [
+        {
+          resource: {
+            id: expectedId,
+            telecom: [{ system: 'email', value: email }],
+          },
+        },
+      ],
+    });
 
     const result = await searchPatientUseCase(
       { repo: mockRepo },
-      { patientId },
+      { patientId, email },
     );
 
     expect(result).toBe(expectedId);
@@ -54,7 +68,7 @@ describe('searchPatientUseCase', () => {
     mockRepo.findMany.mockResolvedValue([]);
 
     await expect(
-      searchPatientUseCase({ repo: mockRepo }, { patientId: '12345' }),
+      searchPatientUseCase({ repo: mockRepo }, { patientId: '12345', email }),
     ).rejects.toThrow(new ExternalDataFetchError('Missing Config error.'));
   });
 
@@ -70,7 +84,7 @@ describe('searchPatientUseCase', () => {
     } as FhirSearchResult<FhirPatient>);
 
     await expect(
-      searchPatientUseCase({ repo: mockRepo }, { patientId }),
+      searchPatientUseCase({ repo: mockRepo }, { patientId, email }),
     ).rejects.toThrow(
       new ExternalDataFetchError('Patient Data not found.', 404),
     );

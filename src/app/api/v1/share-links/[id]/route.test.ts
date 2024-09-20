@@ -74,6 +74,8 @@ jest.mock('next/server', () => ({
   },
 }));
 
+const mockRoute = '/api/v1/share-links/{id}'
+
 describe('POST handler', () => {
   const mockResponseJson = NextResponse.json as jest.Mock;
   const mockHandleApiValidationError = handleApiValidationError as jest.Mock;
@@ -222,7 +224,7 @@ describe('POST handler', () => {
 
     const response = await POST(request, { params });
 
-    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error);
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });
@@ -335,7 +337,7 @@ describe('PUT handler', () => {
 
     const response = await PUT(request, { params });
 
-    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error);
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });

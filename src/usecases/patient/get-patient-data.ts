@@ -8,17 +8,24 @@ export const getPatientDataUseCase = async (
   context: { repo: IServerConfigRepository },
   data: { user: UserModel },
 ): Promise<any> => {
-  const serverConfig = (await context.repo.findMany()).find((x) => x);
+  const serverConfigs = await context.repo.findMany();
 
-  if (!serverConfig) {
+  if (!serverConfigs.length) {
     throw new ExternalDataFetchError('Missing Config error.');
   }
   try {
-    const service = HapiFhirServiceFactory.getService(serverConfig);
-    const result = await service.getPatientData<FhirBundle<any>>(
-      data.user.getPatientId(),
-      {},
-    );
+    let result: FhirBundle<any>;
+    for (const serverConfig of serverConfigs) {
+      try {
+        const service = HapiFhirServiceFactory.getService(serverConfig);
+        result = await service.getPatientData<FhirBundle<any>>(
+          data.user.getPatientId(),
+          {},
+        );
+        if (result) break;
+      } catch {}
+    }
+
     if (!result) {
       throw new ExternalDataFetchError('Unfullfilled request');
     }

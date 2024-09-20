@@ -15,6 +15,7 @@ import {
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { ISHLinkEndpointRepository } from '@/infrastructure/repositories/interfaces/shlink-endpoint-repository';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import {
   mapDtoToModel,
   mapModelToDto as mapModelToDtoEndpoint,
@@ -31,6 +32,8 @@ const shlEndpointRepo = container.get<ISHLinkEndpointRepository>(
 const serverConfigRepo = container.get<IServerConfigRepository>(
   ServerConfigRepositoryToken,
 );
+
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -63,6 +66,7 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   let dto: CreateSHLinkEndpointDto = await request.json();
+  logger.info(`Creating a share link endpoint with parameters: ${JSON.stringify(dto)}`);
 
   try {
     const serverConfig = (
@@ -81,6 +85,7 @@ export async function POST(
     const shlinkData = mapShlinkModelToDto(shl);
     dto.serverConfigId = serverConfig.getId();
     dto.shlinkId = shlinkData.id;
+
     const endpoint = mapDtoToModel(dto as SHLinkEndpointDto);
     const endpointResult = await addEndpointUseCase(
       { repo: shlEndpointRepo },
@@ -91,6 +96,6 @@ export async function POST(
       status: 200,
     });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }

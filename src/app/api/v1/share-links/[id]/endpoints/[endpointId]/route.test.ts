@@ -38,6 +38,8 @@ describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
     ticket: '123456789',
   };
 
+  const mockRoute = '/api/v1/share-links/{id}/endpoints/{endpointId}';
+
   const mockTicket = new AccessTicketModel('abc', 'ticket-123');
   const mockShlink = new SHLinkModel(
     'user-123456',

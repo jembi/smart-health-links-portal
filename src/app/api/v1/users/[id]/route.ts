@@ -5,10 +5,13 @@ import { validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import { container, UserRepositoryToken } from '@/container';
 import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/user-mapper';
 import { getUserUseCase } from '@/usecases/users/get-user';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
+
+const logger = new LogHandler(__dirname)
 
 /**
  * @swagger
@@ -34,6 +37,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  logger.log(`Retrieving a user with user id: ${params.id}`)
   try {
     const { id } = params;
     validateUser(request, id);
@@ -44,6 +48,6 @@ export async function GET(
 
     return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }

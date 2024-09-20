@@ -10,6 +10,7 @@ import {
 import { SHLinkAccessRequestDto } from '@/domain/dtos/shlink-access';
 import { ISHLinkAccessRepository } from '@/infrastructure/repositories/interfaces/shlink-access-repository';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
+import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/shlink-access-mapper';
 import { getSHLinkAccessesUseCase } from '@/usecases/shlink-access/get-shlink-accesses';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
@@ -18,6 +19,8 @@ const repo = container.get<ISHLinkAccessRepository>(
   SHLinkAccessRepositoryToken,
 );
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
+
+const logger = new LogHandler(__dirname);
 
 /**
  * @swagger
@@ -49,6 +52,8 @@ const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 export async function POST(request: Request, params: { id: string }) {
   try {
     const { managementToken }: SHLinkAccessRequestDto = await request.json();
+    logger.info(`Getting share link access for a user with share link id: ${params.id} and management token: ${managementToken}`);
+
     const shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
       { id: params.id, managementToken: managementToken },
@@ -66,6 +71,6 @@ export async function POST(request: Request, params: { id: string }) {
       { status: 200 },
     );
   } catch (error) {
-    return handleApiValidationError(error);
+    return handleApiValidationError(error, logger);
   }
 }
