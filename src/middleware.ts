@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-const FRONTEND_PATHNAMES = ['/', '/patient-summary'];
+const FRONTEND_PATHNAMES = ['/', '/patient-summary', '/shared-links'];
 const REDIRECTION_PATHNAME = '/';
 
 const isApiPathname = (pathname: string) => pathname.startsWith('/api/v1/');
