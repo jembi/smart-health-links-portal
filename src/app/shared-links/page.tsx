@@ -1,8 +1,11 @@
 import { Box, Container } from '@mui/material';
+import { getServerSession } from 'next-auth';
 
 import LinksTable from './Components/LinksTable';
+import { authOptions } from '../api/auth/authOptions';
 
-export default function SharedLinksPage() {
+export default async function SharedLinksPage() {
+  const session: { user: { id: string } } = await getServerSession(authOptions);
   return (
     <Container maxWidth={false}>
       <Box
@@ -13,7 +16,7 @@ export default function SharedLinksPage() {
         paddingTop={8}
         paddingBottom={8}
       ></Box>
-      <LinksTable />
+      <LinksTable session={session} />
     </Container>
   );
 }

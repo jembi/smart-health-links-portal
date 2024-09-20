@@ -10,7 +10,8 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import React from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
@@ -34,7 +35,7 @@ const columns: readonly Column[] = [
     label: 'Expiry Date',
     minWidth: 80,
     format: (value?: Date) =>
-      value?.toLocaleDateString() || (
+      value?.toString() || (
         <span
           style={{ display: 'flex', alignItems: 'center', color: '#9e9e9e' }}
         >
@@ -51,53 +52,30 @@ const columns: readonly Column[] = [
   },
 ];
 
-function createData(data: SHLinkMiniDto): SHLinkMiniDto {
-  return { ...data };
-}
-
-const apiDataMock: SHLinkMiniDto[] = [
-  {
-    name: 'Lab Results',
-    id: 'A9876',
-    managementToken: 'token-health1234abcd5678',
-    url: 'https://healthportal.com/share/johndoe/lab-results',
-    expiryDate: new Date('2024-11-01T09:30:00Z'),
-    passwordRequired: true,
-  },
-  {
-    name: 'MRI Report',
-    id: 'B6543',
-    managementToken: 'token-mri5678wxyz9012',
-    url: 'https://healthportal.com/share/janesmith/mri-report',
-    passwordRequired: false,
-  },
-  {
-    name: 'Prescription',
-    id: 'C3210',
-    managementToken: 'token-prescript123uvwx4567',
-    url: 'https://healthportal.com/share/patient/prescription-link',
-    expiryDate: new Date('2025-01-15T12:00:00Z'),
-    passwordRequired: true,
-  },
-  {
-    name: 'Surgery Notes',
-    id: 'D7891',
-    managementToken: 'token-surgery789abcd0123',
-    url: 'https://healthportal.com/share/emilybrown/surgery-notes',
-    expiryDate: new Date('2024-09-30T15:00:00Z'),
-    passwordRequired: false,
-  },
-];
-
-const rows = apiDataMock.map(createData);
-
-export default function LinksTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+export default function LinksTable({
+  session,
+}: {
+  session: { user: { id: string } };
+}) {
+  const [links, setLinks] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const id = session.user.id;
+      return axios
+        .get(`http://localhost:3000/api/v1/share-links?user_id=${id}`)
+        .then((response) => {
+          setLinks(response.data);
+        });
+    }
+    fetchPosts();
+  }, []);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -124,7 +102,7 @@ export default function LinksTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {links
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow hover tabIndex={-1} key={row.id}>
@@ -146,7 +124,7 @@ export default function LinksTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={links.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
