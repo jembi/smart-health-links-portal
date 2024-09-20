@@ -74,10 +74,11 @@ services:
       - hapi.fhir.bulk_export_enabled=true
       - hapi.fhir.ips_enabled=true
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080']
+      test: /bin/wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 2m
 
 volumes:
   postgres_data:
