@@ -72,19 +72,7 @@ services:
     environment:
       - hapi.fhir.allow_external_references=true
       - hapi.fhir.bulk_export_enabled=true
-      - HAPI_FHIR_IPS_ENABLED=true
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080']
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    image: jembi/hapi:v7.0.3-wget
-    ports:
-      - 3447:8080
-    networks:
-      - smart-health-links-portal-network
-    volumes:
-      - hapi_fhir_data:/var/lib/hapi-fhir
+      - hapi.fhir.ips_enabled=true
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:8080']
       interval: 30s
