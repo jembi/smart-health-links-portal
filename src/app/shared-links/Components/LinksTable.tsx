@@ -12,11 +12,11 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
 import { useSession } from '@/app/hooks/useSession';
+import { apiClient } from '@/app/utils/api.class';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
@@ -27,7 +27,6 @@ interface Column {
   label: string;
   minWidth?: number;
   align?: 'right' | 'left' | 'center';
-  // string | boolean | Date | SHLinkFileDto[]
   format?: (
     value: SHLinkMiniDto[keyof SHLinkMiniDto],
   ) => string | React.JSX.Element;
@@ -57,13 +56,14 @@ const columns: readonly Column[] = [
   },
 ];
 
-async function fetchLinks(id: string) {
-  return axios.get(`http://localhost:3000/api/v1/share-links?user_id=${id}`);
-}
+const fetchLinks = async (id: string) =>
+  apiClient.find({
+    url: `/share-links?user_id=${id}`,
+  });
 
 export default function LinksTable() {
   const session = useSession();
-  const [links, setLinks] = useState([]);
+  const [links, setLinks] = useState<SHLinkMiniDto[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [addDialog, setAddDialog] = React.useState<boolean>();
@@ -73,9 +73,9 @@ export default function LinksTable() {
   };
 
   useEffect(() => {
-    if (session?.user.id)
+    if (session?.user?.id)
       fetchLinks(session.user.id).then(({ data }) => setLinks(data));
-  }, [session?.user.id]);
+  }, [session?.user?.id]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -94,9 +94,10 @@ export default function LinksTable() {
         open={addDialog}
         onClose={() => setAddDialog(false)}
         callback={() => {
-          fetchLinks(session.user.id).then((response) =>
-            setLinks(response.data),
-          );
+          if (session?.user?.id)
+            fetchLinks(session.user.id).then((response) =>
+              setLinks(response.data),
+            );
         }}
       />
       <Grid container justifyContent="end">
@@ -132,7 +133,7 @@ export default function LinksTable() {
                       <TableCell key={column.id} align={column.align}>
                         {column.format
                           ? column.format(value)
-                          : value.toString()}
+                          : value?.toString()}
                       </TableCell>
                     );
                   })}

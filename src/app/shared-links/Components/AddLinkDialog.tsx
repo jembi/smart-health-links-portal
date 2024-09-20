@@ -110,7 +110,7 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
           variant="contained"
           onClick={() =>
             createSHLink(
-              '/api/v1/share-links',
+              '/share-links',
               removeUndefinedValues({ ...payload, userId: data?.token?.sub }),
               () => {
                 callback?.();
