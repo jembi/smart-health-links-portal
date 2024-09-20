@@ -94,6 +94,8 @@ services:
 volumes:
   postgres_data:
     driver: local
+  hapi_fhir_data:
+    driver: local
 
 networks:
   smart-health-links-portal-network:
