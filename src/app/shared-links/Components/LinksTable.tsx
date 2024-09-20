@@ -1,6 +1,8 @@
 'use client';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import {
+  Button,
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -16,6 +18,9 @@ import { useEffect, useState } from 'react';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import BooleanIcon from './BooleanIcon';
+import { AddLinkDialog } from './AddLinkDialog';
+import React from 'react';
+import { useSession } from '@/app/hooks/useSession';
 
 interface Column {
   id: keyof SHLinkMiniDto;
@@ -52,30 +57,25 @@ const columns: readonly Column[] = [
   },
 ];
 
-export default function LinksTable({
-  session,
-}: {
-  session: { user: { id: string } };
-}) {
+async function fetchPosts(id: string) {
+  return axios.get(`http://localhost:3000/api/v1/share-links?user_id=${id}`);
+}
+
+export default function LinksTable() {
+  const session = useSession();
   const [links, setLinks] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [addDialog, setAddDialog] = React.useState<boolean>();
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   useEffect(() => {
-    async function fetchPosts() {
-      const id = session.user.id;
-      return axios
-        .get(`http://localhost:3000/api/v1/share-links?user_id=${id}`)
-        .then((response) => {
-          setLinks(response.data);
-        });
-    }
-    fetchPosts();
-  }, []);
+    if (session?.user.id)
+      fetchPosts(session.user.id).then((response) => setLinks(response.data));
+  }, [session?.user.id]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -84,8 +84,28 @@ export default function LinksTable({
     setPage(0);
   };
 
+  const handleCreateLink = (_event: unknown) => {
+    setAddDialog(true);
+  };
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <AddLinkDialog
+        open={addDialog}
+        onClose={() => setAddDialog(false)}
+        callback={() => {
+          fetchPosts(session.user.id).then((response) =>
+            setLinks(response.data),
+          );
+        }}
+      />
+      <Grid container justifyContent="end">
+        <Grid item>
+          <Button variant="contained" onClick={handleCreateLink}>
+            Add new link
+          </Button>
+        </Grid>
+      </Grid>
       <TableContainer sx={{ maxHeight: '50vh' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

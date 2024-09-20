@@ -5,7 +5,6 @@ import LinksTable from './Components/LinksTable';
 import { authOptions } from '../api/auth/authOptions';
 
 export default async function SharedLinksPage() {
-  const session: { user: { id: string } } = await getServerSession(authOptions);
   return (
     <Container maxWidth={false}>
       <Box
@@ -16,7 +15,7 @@ export default async function SharedLinksPage() {
         paddingTop={8}
         paddingBottom={8}
       ></Box>
-      <LinksTable session={session} />
+      <LinksTable />
     </Container>
   );
 }
