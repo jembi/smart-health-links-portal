@@ -40,3 +40,5 @@ To generate the swagger.json file for this application, run the following comman
 ```bash
 yarn next-swagger-doc-cli next-swagger-doc.json
 ```
+
+Once generated, you can view the API Swagger documentation by navigating to `/api/docs` in your browser.
