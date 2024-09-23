@@ -80,7 +80,7 @@ export async function GET(request: Request) {
 
   const validStatuses = ['expired', 'active', 'inactive'];
   if (status && !validStatuses.includes(status)) {
-    return NextResponse.json({ error: 'Invalid status parameter' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid status parameter' }, { status: 422 });
   }
 
   try {
