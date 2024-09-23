@@ -1,14 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
 import { Container } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useAuth } from '../context/AuthProvider';
-import { apiSharedLink } from '../utils/api.class';
+import { useEffect, useState } from 'react';
+
 import { TBundle } from '@/types/fhir.types';
 
 import PatientSummary from './components/PatientSummary';
-import PatientSummarySkeleton from './PatientSummarySkeleton';
 import ErrorState from './ErrorState';
+import PatientSummarySkeleton from './PatientSummarySkeleton';
+import { useAuth } from '../context/AuthProvider';
+import { apiSharedLink } from '../utils/api.class';
 
 export default function PatientSummaryPage() {
   const { user, isAuthenticated } = useAuth();

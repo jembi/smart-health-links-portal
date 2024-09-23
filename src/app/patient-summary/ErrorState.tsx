@@ -1,6 +1,6 @@
-import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Box, Typography, Button } from '@mui/material';
+import React from 'react';
 
 interface ErrorStateProps {
   message: string;
