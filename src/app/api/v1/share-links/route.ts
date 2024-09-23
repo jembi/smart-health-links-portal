@@ -76,7 +76,12 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const status: string|null = searchParams.get('status')?.toLowerCase() || null
+  let status: string | null = searchParams.get('status')?.toLowerCase() || null
+
+  const validStatuses = ['expired', 'active', 'inactive'];
+  if (status && !validStatuses.includes(status)) {
+    return NextResponse.json({ error: 'Invalid status parameter' }, { status: 400 });
+  }
 
   try {
     unstable_noStore();
