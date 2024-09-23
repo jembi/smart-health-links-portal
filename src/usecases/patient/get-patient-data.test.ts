@@ -6,6 +6,7 @@ import {
 } from '@/services/hapi-fhir.service';
 
 import { getPatientDataUseCase } from './get-patient-data';
+import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
 
 // Mock the HapiFhirService and ExternalDataFetchError
 jest.mock('@/services/hapi-fhir.service', () => ({
@@ -16,6 +17,7 @@ jest.mock('@/services/hapi-fhir.service', () => ({
 
 describe('getPatientDataUseCase', () => {
   let mockRepo: jest.Mocked<IServerConfigRepository>;
+  let mockUserRepo: jest.Mocked<IUserRepository>;
   let mockUser: jest.Mocked<UserModel>;
   let mockHapiFhirService: jest.Mocked<HapiFhirService>;
 
@@ -26,6 +28,7 @@ describe('getPatientDataUseCase', () => {
 
     mockUser = {
       getPatientId: jest.fn().mockReturnValue('test-patient-id'),
+      getServerConfigId: jest.fn().mockReturnValue('server-config-id'),
     } as any;
 
     mockHapiFhirService = {
@@ -41,7 +44,10 @@ describe('getPatientDataUseCase', () => {
     mockRepo.findMany.mockResolvedValue([]); // No server config
 
     await expect(
-      getPatientDataUseCase({ repo: mockRepo }, { user: mockUser }),
+      getPatientDataUseCase(
+        { repo: mockRepo, userRepo: mockUserRepo },
+        { user: mockUser },
+      ),
     ).rejects.toThrow(new ExternalDataFetchError('Missing Config error.'));
   });
 
@@ -54,7 +60,10 @@ describe('getPatientDataUseCase', () => {
     );
 
     await expect(
-      getPatientDataUseCase({ repo: mockRepo }, { user: mockUser }),
+      getPatientDataUseCase(
+        { repo: mockRepo, userRepo: mockUserRepo },
+        { user: mockUser },
+      ),
     ).rejects.toThrow(new ExternalDataFetchError('Unfullfilled request'));
   });
 
@@ -65,7 +74,10 @@ describe('getPatientDataUseCase', () => {
     mockHapiFhirService.getPatientData.mockResolvedValue(null);
 
     await expect(
-      getPatientDataUseCase({ repo: mockRepo }, { user: mockUser }),
+      getPatientDataUseCase(
+        { repo: mockRepo, userRepo: mockUserRepo },
+        { user: mockUser },
+      ),
     ).rejects.toThrow(new ExternalDataFetchError('Unfullfilled request'));
   });
 
@@ -73,12 +85,12 @@ describe('getPatientDataUseCase', () => {
     const mockPatientData = { id: 'test-patient-id', name: 'John Doe' };
 
     mockRepo.findMany.mockResolvedValue([
-      { endpoint_url: 'http://test-url.com' },
+      { endpoint_url: 'http://test-url.com', id: 'server-config-id' },
     ]);
     mockHapiFhirService.getPatientData.mockResolvedValue(mockPatientData);
 
     const result = await getPatientDataUseCase(
-      { repo: mockRepo },
+      { repo: mockRepo, userRepo: mockUserRepo },
       { user: mockUser },
     );
 
@@ -92,12 +104,15 @@ describe('getPatientDataUseCase', () => {
   it('should handle errors gracefully', async () => {
     const error = new Error('Test error');
     mockRepo.findMany.mockResolvedValue([
-      { endpoint_url: 'http://test-url.com' },
+      { endpoint_url: 'http://test-url.com', id: 'server-config-id' },
     ]);
     mockHapiFhirService.getPatientData.mockRejectedValue(error);
 
     await expect(
-      getPatientDataUseCase({ repo: mockRepo }, { user: mockUser }),
+      getPatientDataUseCase(
+        { repo: mockRepo, userRepo: mockUserRepo },
+        { user: mockUser },
+      ),
     ).rejects.toThrow(new ExternalDataFetchError('Unfullfilled request'));
 
     expect(mockHapiFhirService.getPatientData).toHaveBeenCalledWith(
