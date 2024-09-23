@@ -9,9 +9,13 @@ export class ParameterValidationError extends Error {
       this.name = 'ParameterValidationError';
     }
  }
+
+ interface SHLinkParameters {
+    status?: string;
+  }
   
 
-export const validateSHLinkStatusParameter = (parameters) => {
+export const validateSHLinkStatusParameter = (parameters: SHLinkParameters) => {
     const statusSchema = z.enum(['expired', 'active', 'inactive']);
 
     const result = statusSchema.safeParse(parameters.status);

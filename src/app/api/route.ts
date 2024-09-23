@@ -9,7 +9,7 @@ export async function GET(request) {
   unstable_noStore();
   logger.info('API connected successfully');
   return NextResponse.json(
-    { message: 'API Health Check', env: process.env.POSTGRES_PRISMA_URL },
+    { message: 'API Health Check' },
     { status: 200 },
   );
 }
