@@ -40,6 +40,9 @@ export default async function Header() {
         >
           Patient Summary View
         </MenuItem>
+        <MenuItem key="dashboard" component={NextLink} href="/shared-links">
+          Dashboard
+        </MenuItem>
         <Box sx={{ width: '100%', textAlign: 'right' }}>{AuthButton}</Box>
       </Toolbar>
     </AppBar>
