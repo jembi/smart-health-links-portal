@@ -1,10 +1,27 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-export async function middleware(req: Request) {
+const FRONTEND_PATHNAMES = ['/', '/patient-summary', '/shared-links'];
+const REDIRECTION_PATHNAME = '/';
+
+const isApiPathname = (pathname: string) => pathname.startsWith('/api/v1/');
+const isFrontendPathname = (pathname: string) =>
+  FRONTEND_PATHNAMES.includes(pathname);
+
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req });
+  const { nextUrl, url } = req;
+  const { pathname } = nextUrl;
+
   try {
-    const token = await getToken({ req: req as any });
-    if (!token) throw new Error();
+    if (!token) {
+      if (isApiPathname(pathname)) throw new Error();
+
+      if (pathname !== REDIRECTION_PATHNAME && isFrontendPathname(pathname)) {
+        const redirectionUrl = new URL(REDIRECTION_PATHNAME, url);
+        return NextResponse.redirect(redirectionUrl);
+      }
+    }
 
     return NextResponse.next();
   } catch (error) {
@@ -16,5 +33,5 @@ export async function middleware(req: Request) {
 }
 
 export const config = {
-  matcher: '/api/v1/:path*',
+  matcher: '/:path*',
 };
