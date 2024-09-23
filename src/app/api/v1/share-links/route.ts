@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { getUserProfile, validateUser } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
+import { validateSHLinkStatusParameter } from '@/app/utils/validate';
 import { container, SHLinkRepositoryToken } from '@/container';
 import { CreateSHLinkDto, SHLinkDto } from '@/domain/dtos/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
@@ -85,18 +86,15 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   let status: string | null = searchParams.get('status')?.toLowerCase() || null
 
-  const validStatuses = ['expired', 'active', 'inactive'];
-  if (status && !validStatuses.includes(status)) {
-        return NextResponse.json({ error: 'Invalid status parameter' }, { status: 422 });
-  }
-
   try {
     unstable_noStore();
+
+    validateSHLinkStatusParameter({status});
     const { id } = await getUserProfile(request);
 
     logger.info(`Getting all share links by user with user id: ${id}`);
 
-    const newShlink = await getSHLinkUseCase({ repo }, { user_id: id, status:status });
+    const newShlink = await getSHLinkUseCase({ repo }, { user_id: id, status });
     return NextResponse.json(
       newShlink.map((shlink) => mapModelToMiniDto(shlink)),
       { status: 200 },

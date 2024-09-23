@@ -1,5 +1,4 @@
 import { SHLinkModel } from '@/domain/models/shlink';
-import { Filter, QueryFilter, LogicOperator } from '@/infrastructure/repositories/interfaces/repository.interface';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { mapEntityToModel } from '@/mappers/shlink-mapper';
 
