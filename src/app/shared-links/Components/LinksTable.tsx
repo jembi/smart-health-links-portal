@@ -88,7 +88,10 @@ export default function LinksTable() {
         open={addDialog}
         onClose={() => setAddDialog(false)}
         callback={() => {
-          apiSharedLink.findLinks().then((response) => setLinks(response.data));
+          apiSharedLink.findLinks().then(({ data }) => {
+            setLinks(data);
+            setAddDialog(false);
+          });
         }}
       />
       <Grid container justifyContent="end">
