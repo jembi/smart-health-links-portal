@@ -15,8 +15,9 @@ import { useSession } from '@/app/hooks/useSession';
 import { apiSharedLink } from '@/app/utils/api.class';
 import { CreateSHLinkDto } from '@/domain/dtos/shlink';
 
-const removeUndefinedValues = (object: Object) =>
-  JSON.parse(JSON.stringify(object));
+const removeUndefinedValues = <T extends Record<string, unknown>>(
+  object: T,
+): T => JSON.parse(JSON.stringify(object));
 
 const StyledDialogTitle = styled(DialogTitle)(() => ({
   backgroundImage: 'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #e6e6e6)',
@@ -36,7 +37,7 @@ const StyledDialogActions = styled(DialogActions)(() => ({
   backgroundImage: 'linear-gradient(to top, hsla(0, 0%, 90%, .05), #e6e6e6)',
 }));
 
-type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
+export type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
   configExp?: string;
 };
 
@@ -60,10 +61,15 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
     handleSubmit,
   } = useForm<TCreateSHLinkDto>();
 
-  const onSubmitForm = async (data: TCreateSHLinkDto) =>
-    apiSharedLink
-      .createLink(removeUndefinedValues(data))
-      .then(() => callback?.());
+  const onSubmitForm = async (data: TCreateSHLinkDto) => {
+    try {
+      const transformedData = removeUndefinedValues(data);
+      await apiSharedLink.createLink(transformedData);
+      callback?.();
+    } catch (error) {
+      console.error('Failed to create link:', error);
+    }
+  };
 
   useEffect(() => {
     if (open) reset();

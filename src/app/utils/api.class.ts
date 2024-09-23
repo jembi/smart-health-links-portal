@@ -44,4 +44,13 @@ export class ApiSHLink extends BaseApi {
   }
 }
 
-export const apiSharedLink = new ApiSHLink(instance);
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Handle common errors (e.g., 401 Unauthorized)
+    return Promise.reject(error);
+  },
+);
+
+export const createApiSharedLink = () => new ApiSHLink(instance);
+export const apiSharedLink = createApiSharedLink();
