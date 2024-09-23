@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { getUserProfile, validateUser } from '@/app/utils/authentication';
@@ -13,6 +14,8 @@ import {
 } from '@/mappers/shlink-mapper';
 import { addShlinkUseCase } from '@/usecases/shlinks/add-shlink';
 import { getSHLinkUseCase } from '@/usecases/shlinks/get-shlink';
+
+export const dynamic = 'force-dynamic';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
@@ -41,8 +44,11 @@ const logger = new LogHandler(__dirname);
  */
 export async function POST(request: Request) {
   try {
+    unstable_noStore();
     const dto: CreateSHLinkDto = await request.json();
-    logger.info(`Creating a share link API with parameters, ${JSON.stringify({name:dto.name, userId:dto.userId})}`);
+    logger.info(
+      `Creating a share link API with parameters, ${JSON.stringify({ name: dto.name, userId: dto.userId })}`,
+    );
     await validateUser(request, dto.userId);
     const model = mapDtoToModel(dto as SHLinkDto);
     const newShlink = await addShlinkUseCase({ repo }, { shlink: model });
@@ -70,6 +76,7 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
   try {
+    unstable_noStore();
     const { id } = await getUserProfile(request);
 
     logger.info(`Getting all share links by user with user id: ${id}`);

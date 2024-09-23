@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import {
@@ -83,9 +84,12 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  unstable_noStore();
   let { managementToken, passcode, recipient }: SHLinkRequestDto =
     await request.json();
-  logger.info(`Creating share link access with share link id: ${params.id} and parameters: ${JSON.stringify({ managementToken, recipient })}`);
+  logger.info(
+    `Creating share link access with share link id: ${params.id} and parameters: ${JSON.stringify({ managementToken, recipient })}`,
+  );
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },
@@ -107,13 +111,17 @@ export async function POST(
       new SHLinkAccessModel(shlink.getId(), new Date(), recipient),
     );
 
-    logger.info(`Creating a share link access ticket with share link id: ${params.id}`);
+    logger.info(
+      `Creating a share link access ticket with share link id: ${params.id}`,
+    );
     const ticket = await addAccessTicketUseCase(
       { repo: ticketRepo },
       new AccessTicketModel(shlink.getId()),
     );
     setTimeout(() => {
-      logger.info(`Deleting share link access ticket with ticket: ${JSON.stringify(ticket)}`);
+      logger.info(
+        `Deleting share link access ticket with ticket: ${JSON.stringify(ticket)}`,
+      );
       deleteAccessTicketUseCase({ repo: ticketRepo }, { id: ticket.getId() });
     }, DELETE_DELAY);
     const endpoint = await getEndpointUseCase(
@@ -159,9 +167,12 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  unstable_noStore();
   let { managementToken, oldPasscode, passcode, expiryDate }: SHLinkUpdateDto =
     await request.json();
-  logger.info(`Updating a share link passcode and expiry date API with share link id: ${params.id} and parameters: ${JSON.stringify({managementToken, expiryDate})}`);
+  logger.info(
+    `Updating a share link passcode and expiry date API with share link id: ${params.id} and parameters: ${JSON.stringify({ managementToken, expiryDate })}`,
+  );
   try {
     let shlink = await getSingleSHLinkUseCase(
       { repo },

@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
@@ -14,6 +15,8 @@ import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/shlink-access-mapper';
 import { getSHLinkAccessesUseCase } from '@/usecases/shlink-access/get-shlink-accesses';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
+
+export const dynamic = 'force-dynamic';
 
 const repo = container.get<ISHLinkAccessRepository>(
   SHLinkAccessRepositoryToken,
@@ -52,8 +55,11 @@ const logger = new LogHandler(__dirname);
 export async function POST(request: Request, params: { id: string }) {
   try {
     const { managementToken }: SHLinkAccessRequestDto = await request.json();
-    logger.info(`Getting share link access for a user with share link id: ${params.id} and management token: ${managementToken}`);
+    logger.info(
+      `Getting share link access for a user with share link id: ${params.id} and management token: ${managementToken}`,
+    );
 
+    unstable_noStore();
     const shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
       { id: params.id, managementToken: managementToken },
@@ -62,6 +68,7 @@ export async function POST(request: Request, params: { id: string }) {
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
     }
 
+    unstable_noStore();
     const accesses = await getSHLinkAccessesUseCase(
       { repo },
       { shlinkId: shlink.getId() },
