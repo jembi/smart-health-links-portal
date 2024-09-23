@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '@/app/api/v1/users/route';
 import { getUserProfile } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
+import { mapEntityToModel } from '@/mappers/server-config-mapper';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import { IHapiFhirService } from '@/services/hapi-fhir.interface';
@@ -76,7 +77,10 @@ describe('POST /api/users', () => {
     (mapModelToDto as jest.Mock).mockReturnValue(mockUserDto);
     (searchPatientUseCase as jest.Mock).mockResolvedValue({
       patient: { id: 'patient id' },
-      serverConfig: { id: 'server-config-id' },
+      serverConfig: mapEntityToModel({
+        id: 'server-config-id',
+        endpoint_url: 'http://test.com',
+      }),
     });
 
     const request = mockRequest(mockCreateUserDto);
@@ -93,7 +97,10 @@ describe('POST /api/users', () => {
     const error = new Error('Validation error');
     (searchPatientUseCase as jest.Mock).mockResolvedValue({
       patient: { id: 'patient id' },
-      serverConfig: { id: 'server-config-id' },
+      serverConfig: mapEntityToModel({
+        id: 'server-config-id',
+        endpoint_url: 'http://test.com',
+      }),
     });
     (addUserUseCase as jest.Mock).mockRejectedValue(error);
     (handleApiValidationError as jest.Mock).mockReturnValue(
@@ -118,7 +125,10 @@ describe('POST /api/users', () => {
     const error = new Error('Unexpected error');
     (searchPatientUseCase as jest.Mock).mockResolvedValue({
       patient: { id: 'patient id' },
-      serverConfig: { id: 'server-config-id' },
+      serverConfig: mapEntityToModel({
+        id: 'server-config-id',
+        endpoint_url: 'http://test.com',
+      }),
     });
     (addUserUseCase as jest.Mock).mockRejectedValue(error);
     (handleApiValidationError as jest.Mock).mockReturnValue(
