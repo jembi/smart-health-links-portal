@@ -8,12 +8,11 @@ export class ParameterValidationError extends Error {
       super(message);
       this.name = 'ParameterValidationError';
     }
- }
+}
 
- interface SHLinkParameters {
+interface SHLinkParameters {
     status?: string;
-  }
-  
+}
 
 export const validateSHLinkStatusParameter = (parameters: SHLinkParameters) => {
     const statusSchema = z.enum(['expired', 'active', 'inactive']).nullable();
