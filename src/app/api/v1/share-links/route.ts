@@ -63,7 +63,14 @@ export async function POST(request: Request) {
  * /api/v1/share-links:
  *   get:
  *     tags: [Share Links]
- *     description: Get share links.
+ *     description: Get share links
+ *      parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [active, inactive, expired]
+ *         description: Filter share links by status.
  *     responses:
  *       200:
  *         description: Gets all the signed in user's share links.
@@ -80,7 +87,7 @@ export async function GET(request: Request) {
 
   const validStatuses = ['expired', 'active', 'inactive'];
   if (status && !validStatuses.includes(status)) {
-    return NextResponse.json({ error: 'Invalid status parameter' }, { status: 422 });
+        return NextResponse.json({ error: 'Invalid status parameter' }, { status: 422 });
   }
 
   try {
