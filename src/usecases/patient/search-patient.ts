@@ -1,6 +1,5 @@
 import { Patient } from 'fhir/r4';
 
-import { ServerConfigEntity } from '@/entities/server_config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
@@ -9,18 +8,22 @@ import {
   IHapiFhirService,
 } from '@/services/hapi-fhir.interface';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
+import { mapEntityToModel } from '@/mappers/server-config-mapper';
+import { ServerConfigModel } from '@/domain/models/server-config';
 
 export const searchPatientUseCase = async (
   context: { repo: IServerConfigRepository },
   data: { patientId: string; email: string },
 ) => {
-  const serviceConfigs = await context.repo.findMany({});
+  const serviceConfigs = (await context.repo.findMany({})).map((x) =>
+    mapEntityToModel(x),
+  );
   if (!serviceConfigs.length) {
     throw new ExternalDataFetchError('Missing Config error.');
   }
 
   let result: FhirSearchResult<FhirPatient>;
-  let serverConfig: ServerConfigEntity;
+  let serverConfig: ServerConfigModel;
   for (const serviceConfig of serviceConfigs) {
     try {
       serverConfig = serviceConfig;

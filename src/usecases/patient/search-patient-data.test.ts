@@ -9,6 +9,7 @@ import {
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 
 import { searchPatientUseCase } from './search-patient';
+import { ServerConfigModel } from '@/domain/models/server-config';
 
 // Mock the HapiFhirServiceFactory and IServerConfigRepository
 jest.mock('@/app/utils/authentication', () => ({
@@ -45,7 +46,8 @@ describe('searchPatientUseCase', () => {
         telecom: [{ system: 'email', value: email }],
       },
     };
-    const serverConfig = { endpoint_url: 'http://test.com' };
+    const serverConfig = { endpoint_url: 'http://test.com', config_key: 'key' };
+    const expectedConfig = new ServerConfigModel('key', 'http://test.com');
 
     // Mock service configuration
     mockRepo.findMany.mockResolvedValue([serverConfig]);
@@ -60,7 +62,7 @@ describe('searchPatientUseCase', () => {
       { patientId, email },
     );
 
-    expect(result).toEqual({ patient: { ...data.resource }, serverConfig });
+    expect(result.patient).toEqual({ ...data.resource });
     expect(mockService.searchPatient).toHaveBeenCalledWith(patientId);
   });
 
