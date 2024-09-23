@@ -121,6 +121,10 @@ export class SHLinkDto extends CreateSHLinkDto {
  *           type: string
  *           description: A string representing the share link's encoded url.
  *           example: 5AMl62z2XDmgrh2XsI2O
+ *         active:
+ *           type: boolean
+ *           description: A boolean indicating whether the share link is active.
+ *           example: true
  *         passwordRequired:
  *           type: boolean
  *           description: A boolean indicating whether the share link has a passcode or not.
@@ -143,6 +147,7 @@ export class SHLinkMiniDto {
   passwordRequired?: boolean;
   name: string;
   url: string;
+  active: boolean
 }
 
 /**

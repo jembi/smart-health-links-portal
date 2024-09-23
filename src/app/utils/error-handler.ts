@@ -6,12 +6,12 @@ import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 import { SHLinkValidationError } from '@/usecases/shlinks/validate-shlink';
 
 import { AuthenticationError } from './authentication';
+import { ParameterValidationError } from './validate';
 import {
   BAD_REQUEST,
   PRECONDITION_FAILED,
   SERVER_ERROR,
 } from '../constants/http-constants';
-
 
 export function handleApiValidationError(error: Error, logger:LogHandler) {
   logger.error(error);
@@ -21,6 +21,11 @@ export function handleApiValidationError(error: Error, logger:LogHandler) {
       { error: BAD_REQUEST, detail: error },
       { status: 422 },
     );
+  }else if (error instanceof ParameterValidationError) {
+    return NextResponse.json(
+      { error: BAD_REQUEST, detail: error },
+      { status: 422 }
+    )
   } else if (error instanceof ExternalDataFetchError) {
     return NextResponse.json(
       { error: PRECONDITION_FAILED, detail: error.message },

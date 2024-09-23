@@ -68,6 +68,7 @@ export const mapModelToMiniDto = (
         expiryDate: shlinkModel.getConfigExp(),
         passwordRequired: !!shlinkModel.getConfigPasscode(),
         url: encodeSHLink(shlinkModel),
+        active: shlinkModel.getActive(),
         files: files?.map((x) => {
           return {
             location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,

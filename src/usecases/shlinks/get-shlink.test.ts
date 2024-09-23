@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { SHLinkModel } from '@/domain/models/shlink';
 import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
@@ -44,6 +47,7 @@ describe('getSHLinkUseCase', () => {
         config_exp: new Date('2024-06-01T00:00:00Z'),
       },
     ];
+
     mockModels = [
       new SHLinkModel(
         mockUserId,
@@ -66,7 +70,7 @@ describe('getSHLinkUseCase', () => {
         '2',
       ),
     ];
-    // Set up mock implementations
+
     (mockRepo.findMany as jest.Mock).mockResolvedValue(mockSHLinkEntities);
   });
 
@@ -88,5 +92,39 @@ describe('getSHLinkUseCase', () => {
     const result = await getSHLinkUseCase(mockContext, { user_id: mockUserId });
 
     expect(result).toEqual([]);
+  });
+
+  it('should filter by active status when status is "active"', async () => {
+    await getSHLinkUseCase(mockContext, { user_id: mockUserId, status: 'active' });
+
+    expect(mockRepo.findMany).toHaveBeenCalledWith({
+      user_id: mockUserId,
+      active: true,
+    });
+  });
+
+  it('should filter by inactive status when status is "inactive"', async () => {
+    await getSHLinkUseCase(mockContext, { user_id: mockUserId, status: 'inactive' });
+
+    expect(mockRepo.findMany).toHaveBeenCalledWith({
+      user_id: mockUserId,
+      active: false,
+    });
+  });
+
+  it('should filter by expired status when status is "expired"', async () => {
+    const dateBeforeNow = new Date();
+    jest.useFakeTimers().setSystemTime(dateBeforeNow); // Mock the current date
+
+    await getSHLinkUseCase(mockContext, { user_id: mockUserId, status: 'expired' });
+
+    expect(mockRepo.findMany).toHaveBeenCalledWith({
+      user_id: mockUserId,
+      config_exp: {
+        lt: dateBeforeNow,
+      },
+    });
+
+    jest.useRealTimers();
   });
 });
