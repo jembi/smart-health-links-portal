@@ -1,12 +1,12 @@
 import { UserModel } from '@/domain/models/user';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
+import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
 import {
   ExternalDataFetchError,
   HapiFhirService,
 } from '@/services/hapi-fhir.service';
 
 import { getPatientDataUseCase } from './get-patient-data';
-import { IUserRepository } from '@/infrastructure/repositories/interfaces/user-repository';
 
 // Mock the HapiFhirService and ExternalDataFetchError
 jest.mock('@/services/hapi-fhir.service', () => ({

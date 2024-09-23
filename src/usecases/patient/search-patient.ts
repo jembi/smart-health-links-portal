@@ -1,5 +1,6 @@
 import { Patient } from 'fhir/r4';
 
+import { ServerConfigEntity } from '@/entities/server_config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
@@ -8,7 +9,6 @@ import {
   IHapiFhirService,
 } from '@/services/hapi-fhir.interface';
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
-import { ServerConfigEntity } from '@/entities/server_config';
 
 export const searchPatientUseCase = async (
   context: { repo: IServerConfigRepository },
