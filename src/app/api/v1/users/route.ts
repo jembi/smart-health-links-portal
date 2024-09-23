@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     dto = {
       ...dto,
       patientId: data.patient.id,
-      serverConfigId: data.serverConfig.id,
+      serverConfigId: data.serverConfig.getId(),
     };
     logger.info(JSON.stringify(dto));
     const model = mapDtoToModel(dto as UserDto);

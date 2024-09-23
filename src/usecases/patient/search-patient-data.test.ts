@@ -1,4 +1,5 @@
 import { getUserProfile } from '@/app/utils/authentication';
+import { ServerConfigModel } from '@/domain/models/server-config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
@@ -9,7 +10,6 @@ import {
 import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 
 import { searchPatientUseCase } from './search-patient';
-import { ServerConfigModel } from '@/domain/models/server-config';
 
 // Mock the HapiFhirServiceFactory and IServerConfigRepository
 jest.mock('@/app/utils/authentication', () => ({
