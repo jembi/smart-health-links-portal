@@ -1,4 +1,3 @@
-'use server';
 import { Box, Container } from '@mui/material';
 
 import LinksTable from './Components/LinksTable';

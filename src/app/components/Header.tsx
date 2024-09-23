@@ -33,18 +33,18 @@ export default function Header() {
           Home
         </MenuItem>
         {isAuthenticated && (
-          <MenuItem
-            key="patient-summary"
-            component={NextLink}
-            href="/patient-summary"
-          >
-            Patient Summary View
-          </MenuItem>
-        )}
-        {isAuthenticated && (
-          <MenuItem key="dashboard" component={NextLink} href="/shared-links">
-            Dashboard
-          </MenuItem>
+          <>
+            <MenuItem
+              key="patient-summary"
+              component={NextLink}
+              href="/patient-summary"
+            >
+              Patient Summary View
+            </MenuItem>
+            <MenuItem key="dashboard" component={NextLink} href="/shared-links">
+              Dashboard
+            </MenuItem>
+          </>
         )}
         <Box sx={{ width: '100%', textAlign: 'right' }}>{AuthButton}</Box>
       </Toolbar>
