@@ -56,8 +56,12 @@ export async function POST(request: Request) {
       { repo: serverConfigRepo },
       { patientId: dto.patientId, email },
     );
-    dto.patientId = data.patient.id;
-    dto.serverConfigId = data.serverConfig.id;
+    dto = {
+      ...dto,
+      patientId: data.patient.id,
+      serverConfigId: data.serverConfig.id,
+    };
+    logger.info(JSON.stringify(dto));
     const model = mapDtoToModel(dto as UserDto);
     const newUser = await addUserUseCase({ repo }, { user: model });
     return NextResponse.json(mapModelToDto(newUser), { status: 201 });

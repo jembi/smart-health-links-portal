@@ -62,7 +62,7 @@ describe('POST /api/users', () => {
 
   const mockRoute = '/api/v1/users';
   let mockService: jest.Mocked<IHapiFhirService>;
-  (getUserProfile as jest.Mock).mockResolvedValue(true);
+  (getUserProfile as jest.Mock).mockResolvedValue({ email: 'test@test.com' });
 
   HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);
 
@@ -74,7 +74,10 @@ describe('POST /api/users', () => {
     (mapDtoToModel as jest.Mock).mockReturnValue(mockUserModel);
     (addUserUseCase as jest.Mock).mockResolvedValue(mockUserModel);
     (mapModelToDto as jest.Mock).mockReturnValue(mockUserDto);
-    (searchPatientUseCase as jest.Mock).mockResolvedValue('patient id');
+    (searchPatientUseCase as jest.Mock).mockResolvedValue({
+      patient: { id: 'patient id' },
+      serverConfig: { id: 'server-config-id' },
+    });
 
     const request = mockRequest(mockCreateUserDto);
     const response = await POST(request);
@@ -88,6 +91,10 @@ describe('POST /api/users', () => {
 
   it('should handle validation errors and return status 400', async () => {
     const error = new Error('Validation error');
+    (searchPatientUseCase as jest.Mock).mockResolvedValue({
+      patient: { id: 'patient id' },
+      serverConfig: { id: 'server-config-id' },
+    });
     (addUserUseCase as jest.Mock).mockRejectedValue(error);
     (handleApiValidationError as jest.Mock).mockReturnValue(
       NextResponse.json({ message: 'Validation error' }, { status: 400 }),
@@ -109,6 +116,10 @@ describe('POST /api/users', () => {
 
   it('should handle unexpected errors and return status 500', async () => {
     const error = new Error('Unexpected error');
+    (searchPatientUseCase as jest.Mock).mockResolvedValue({
+      patient: { id: 'patient id' },
+      serverConfig: { id: 'server-config-id' },
+    });
     (addUserUseCase as jest.Mock).mockRejectedValue(error);
     (handleApiValidationError as jest.Mock).mockReturnValue(
       NextResponse.json({ message: 'Unexpected error' }, { status: 500 }),
