@@ -75,13 +75,16 @@ export async function POST(request: Request) {
  *                 $ref: '#/components/schemas/SHLinkMini'
  */
 export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const status: string|null = searchParams.get('status')?.toLowerCase() || null
+
   try {
     unstable_noStore();
     const { id } = await getUserProfile(request);
 
     logger.info(`Getting all share links by user with user id: ${id}`);
 
-    const newShlink = await getSHLinkUseCase({ repo }, { user_id: id });
+    const newShlink = await getSHLinkUseCase({ repo }, { user_id: id, status:status });
     return NextResponse.json(
       newShlink.map((shlink) => mapModelToMiniDto(shlink)),
       { status: 200 },
