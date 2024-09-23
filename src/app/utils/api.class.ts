@@ -1,33 +1,47 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
+
+import { IApiProps, EEndpoint } from './api.types';
+
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL,
 });
 
-interface IApiProps {
-  url: string;
-  data: object;
-  params?: AxiosRequestConfig<any>;
-}
-
-class Api {
-  constructor(protected readonly request: AxiosInstance) {}
+class BaseApi {
+  constructor(protected readonly instance: AxiosInstance) {}
 
   create({ url, data, params = {} }: IApiProps) {
-    return this.request.post(url, data, params);
+    return this.instance.post(url, data, params);
   }
 
   find({ url, params = {} }: Omit<IApiProps, 'data'>) {
-    return this.request.get(url, { params });
+    return this.instance.get(url, { params });
   }
 
   update({ url, data, params = {} }: IApiProps) {
-    return this.request.put(url, data, params);
+    return this.instance.put(url, data, params);
   }
 
   delete({ url, params = {} }: Omit<IApiProps, 'data'>) {
-    return this.request.delete(url, params);
+    return this.instance.delete(url, params);
   }
 }
 
-export const apiClient = new Api(instance);
+export class ApiSHLink extends BaseApi {
+  constructor(protected readonly instance: AxiosInstance) {
+    super(instance);
+  }
+
+  async findLinks() {
+    return await this.find({
+      url: `/${EEndpoint.shareLinks}`,
+    });
+  }
+
+  async createLink(data: object) {
+    return await this.create({ url: `/${EEndpoint.shareLinks}`, data });
+  }
+}
+
+export const apiSharedLink = new ApiSHLink(instance);

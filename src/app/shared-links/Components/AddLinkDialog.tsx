@@ -12,7 +12,7 @@ import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useSession } from '@/app/hooks/useSession';
-import { apiClient } from '@/app/utils/api.class';
+import { apiSharedLink } from '@/app/utils/api.class';
 import { CreateSHLinkDto } from '@/domain/dtos/shlink';
 
 const removeUndefinedValues = (object: Object) =>
@@ -60,14 +60,10 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
     handleSubmit,
   } = useForm<TCreateSHLinkDto>();
 
-  const onSubmitForm = async (data: TCreateSHLinkDto) => {
-    await apiClient
-      .create({
-        url: '/share-links',
-        data: removeUndefinedValues(data),
-      })
+  const onSubmitForm = async (data: TCreateSHLinkDto) =>
+    apiSharedLink
+      .createLink(removeUndefinedValues(data))
       .then(() => callback?.());
-  };
 
   useEffect(() => {
     if (open) reset();

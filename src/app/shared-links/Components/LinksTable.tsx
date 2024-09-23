@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 
 import { useSession } from '@/app/hooks/useSession';
-import { apiClient } from '@/app/utils/api.class';
+import { apiSharedLink } from '@/app/utils/api.class';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
@@ -56,11 +56,6 @@ const columns: readonly Column[] = [
   },
 ];
 
-const fetchLinks = async (id: string) =>
-  apiClient.find({
-    url: `/share-links?user_id=${id}`,
-  });
-
 export default function LinksTable() {
   const session = useSession();
   const [links, setLinks] = useState<SHLinkMiniDto[]>([]);
@@ -73,9 +68,8 @@ export default function LinksTable() {
   };
 
   useEffect(() => {
-    if (session?.user?.id)
-      fetchLinks(session.user.id).then(({ data }) => setLinks(data));
-  }, [session?.user?.id]);
+    apiSharedLink.findLinks().then(({ data }) => setLinks(data));
+  }, []);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -94,10 +88,7 @@ export default function LinksTable() {
         open={addDialog}
         onClose={() => setAddDialog(false)}
         callback={() => {
-          if (session?.user?.id)
-            fetchLinks(session.user.id).then((response) =>
-              setLinks(response.data),
-            );
+          apiSharedLink.findLinks().then((response) => setLinks(response.data));
         }}
       />
       <Grid container justifyContent="end">
