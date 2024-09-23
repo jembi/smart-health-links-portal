@@ -16,9 +16,9 @@ export class ParameterValidationError extends Error {
   
 
 export const validateSHLinkStatusParameter = (parameters: SHLinkParameters) => {
-    const statusSchema = z.enum(['expired', 'active', 'inactive']);
+    const statusSchema = z.enum(['expired', 'active', 'inactive']).nullable();
 
-    const result = statusSchema.safeParse(parameters.status);
+    const result = statusSchema.safeParse(parameters.status || null);
     
     if (!result.success) {
         throw new ParameterValidationError('Invalid status parameter', {

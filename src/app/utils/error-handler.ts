@@ -23,8 +23,8 @@ export function handleApiValidationError(error: Error, logger:LogHandler) {
     );
   }else if (error instanceof ParameterValidationError) {
     return NextResponse.json(
-      {error: BAD_REQUEST, detail:error},
-      {status: 422}
+      { error: BAD_REQUEST, detail: error },
+      { status: 422 }
     )
   } else if (error instanceof ExternalDataFetchError) {
     return NextResponse.json(

@@ -88,10 +88,9 @@ export async function GET(request: Request) {
 
   try {
     unstable_noStore();
+    
+    validateSHLinkStatusParameter({status});
 
-    if(status){
-      validateSHLinkStatusParameter({status});
-    }
     const { id } = await getUserProfile(request);
 
     logger.info(`Getting all share links by user with user id: ${id}`);
