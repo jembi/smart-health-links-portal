@@ -42,6 +42,10 @@ export class ApiSHLink extends BaseApi {
   async createLink(data: object) {
     return await this.create({ url: `/${EEndpoint.shareLinks}`, data });
   }
+
+  async deactivateLink(id: string) {
+    return await this.delete({ url: `/share-links/${id}/deactivate` });
+  }
 }
 
 instance.interceptors.response.use(

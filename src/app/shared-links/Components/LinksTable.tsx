@@ -1,5 +1,7 @@
 'use client';
+
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 import {
   Button,
   Grid,
@@ -11,6 +13,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
@@ -31,6 +34,22 @@ interface Column {
     value: SHLinkMiniDto[keyof SHLinkMiniDto],
   ) => string | React.JSX.Element;
 }
+
+interface IActionColumn extends Omit<Column, 'id' | 'label'> {
+  id: 'action';
+  label: React.JSX.Element;
+  action: (id: string) => void;
+}
+
+const createActionColumn = (
+  label: React.JSX.Element,
+  action: (id: string) => void,
+): IActionColumn => ({
+  id: 'action',
+  label,
+  minWidth: 50,
+  action,
+});
 
 const columns: readonly Column[] = [
   { id: 'name', label: 'Name', minWidth: 100 },
@@ -62,14 +81,24 @@ export default function LinksTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [addDialog, setAddDialog] = React.useState<boolean>();
-
+  const [refetch, setRefetch] = useState(false);
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
+  const handleDeactivate = async (id: string) => {
+    await apiSharedLink.deactivateLink(id);
+    setRefetch(true);
+  };
+
+  const actionColumn: IActionColumn[] = [
+    createActionColumn(<LinkOffIcon />, handleDeactivate),
+    // TODO: Other actions will be added
+  ];
+
   useEffect(() => {
     apiSharedLink.findLinks().then(({ data }) => setLinks(data));
-  }, []);
+  }, [refetch]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -81,6 +110,8 @@ export default function LinksTable() {
   const handleCreateLink = (_event: unknown) => {
     setAddDialog(true);
   };
+
+  const combinedCols = [...columns, ...actionColumn];
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -114,6 +145,7 @@ export default function LinksTable() {
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -121,13 +153,27 @@ export default function LinksTable() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow hover tabIndex={-1} key={row.id}>
-                  {columns.map((column) => {
+                  {combinedCols.map((column) => {
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format
-                          ? column.format(value)
-                          : value?.toString()}
+                      <TableCell
+                        key={column.id + row.active}
+                        align={column.align}
+                      >
+                        {column.id === 'action' ? (
+                          <Tooltip title="Deactivate">
+                            <Button
+                              disabled={!row.active}
+                              onClick={() => column.action(row.id)}
+                            >
+                              {column.label}
+                            </Button>
+                          </Tooltip>
+                        ) : column.format ? (
+                          column.format(value)
+                        ) : (
+                          value?.toString()
+                        )}
                       </TableCell>
                     );
                   })}
