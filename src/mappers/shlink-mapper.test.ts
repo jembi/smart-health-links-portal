@@ -260,7 +260,7 @@ describe('mapModelToMiniDto', () => {
       name: 'name',
       url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
       expiryDate: date,
-      active:true,
+      active: true,
       files: [
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint-id?ticket=undefined`,
