@@ -1,24 +1,23 @@
-import { Box, Grid, MenuItem } from '@mui/material';
+'use client';
+import { Box, MenuItem } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import NextLink from 'next/link';
-import { getServerSession } from 'next-auth';
 import * as React from 'react';
 
 import Login from './Login';
 import Logout from './Logout';
-import { authOptions } from '../api/auth/authOptions';
+import { useAuth } from '../context/AuthProvider';
 
-export default async function Header() {
-  const session = await getServerSession(authOptions);
-
-  const AuthButton = session ? (
+export default function Header() {
+  const { isAuthenticated, user } = useAuth();
+  const AuthButton = isAuthenticated ? (
     <div>
       <div>
         <Logout />
       </div>
       <div>
-        Your full name is <b>{session.user?.name}</b>
+        Your full name is <b>{user?.name}</b>
       </div>
     </div>
   ) : (
@@ -33,16 +32,20 @@ export default async function Header() {
         <MenuItem key="home" component={NextLink} href="/">
           Home
         </MenuItem>
-        <MenuItem
-          key="patient-summary"
-          component={NextLink}
-          href="/patient-summary"
-        >
-          Patient Summary View
-        </MenuItem>
-        <MenuItem key="dashboard" component={NextLink} href="/shared-links">
-          Dashboard
-        </MenuItem>
+        {isAuthenticated && (
+          <MenuItem
+            key="patient-summary"
+            component={NextLink}
+            href="/patient-summary"
+          >
+            Patient Summary View
+          </MenuItem>
+        )}
+        {isAuthenticated && (
+          <MenuItem key="dashboard" component={NextLink} href="/shared-links">
+            Dashboard
+          </MenuItem>
+        )}
         <Box sx={{ width: '100%', textAlign: 'right' }}>{AuthButton}</Box>
       </Toolbar>
     </AppBar>
