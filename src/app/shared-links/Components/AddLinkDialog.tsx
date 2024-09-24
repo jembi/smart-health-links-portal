@@ -12,7 +12,7 @@ import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useAuth } from '@/app/context/AuthProvider';
-import { apiSharedLink } from '@/app/utils/api.class';
+import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
 import { CreateSHLinkDto } from '@/domain/dtos/shlink';
 
 const removeUndefinedValues = <T extends Record<string, unknown>>(

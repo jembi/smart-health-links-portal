@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { apiSharedLink } from '@/app/utils/api.class';
+import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
