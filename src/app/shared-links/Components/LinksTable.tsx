@@ -14,6 +14,11 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
@@ -24,6 +29,7 @@ import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
 import BooleanIcon from './BooleanIcon';
+import ConfirmationDialog from './ConfirmationDialog';
 
 interface Column {
   id: keyof SHLinkMiniDto;
@@ -82,13 +88,25 @@ export default function LinksTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [addDialog, setAddDialog] = React.useState<boolean>();
   const [refetch, setRefetch] = useState(false);
+
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedLinkId, setSelectedLinkId] = useState<string | null>(null);
+
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   const handleDeactivate = async (id: string) => {
-    await apiSharedLink.deactivateLink(id);
-    setRefetch(true);
+    setSelectedLinkId(id);
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmDeactivate = async () => {
+    if (selectedLinkId) {
+      await apiSharedLink.deactivateLink(selectedLinkId);
+      setRefetch(true);
+      setConfirmDialogOpen(false);
+    }
   };
 
   const actionColumn: IActionColumn[] = [
@@ -190,6 +208,12 @@ export default function LinksTable() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
+      <ConfirmationDialog
+        confirmDeactivate={confirmDeactivate}
+        confirmDialogOpen={confirmDialogOpen}
+        setConfirmDialogOpen={setConfirmDialogOpen}
       />
     </Paper>
   );
