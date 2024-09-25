@@ -189,6 +189,7 @@ describe('POST handler', () => {
       shlink,
       [endpoint],
       'ticket-id',
+      false,
     );
     expect(mockResponseJson).toHaveBeenCalledWith(
       {
