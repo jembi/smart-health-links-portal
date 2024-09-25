@@ -123,7 +123,7 @@ export default function LinksTable() {
 
   useEffect(() => {
     fetchLinks();
-  }, []);
+  }, [refetch]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
