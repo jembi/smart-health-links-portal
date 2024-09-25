@@ -296,15 +296,10 @@
       "SHLinkRequest": {
         "type": "object",
         "properties": {
-          "id": {
+          "passcode": {
             "type": "string",
-            "description": "A string representing the share links unique identifier.",
-            "example": "hWWNwskdGOnEdq0KIQ3S"
-          },
-          "managementToken": {
-            "type": "string",
-            "description": "A string representing the share link's unique management token used for managing the share link.",
-            "example": "hWWNwskdGOnEdq0KIQ3S"
+            "description": "A string representing the share link's unique passcode.",
+            "example": null
           },
           "recipient": {
             "type": "string",
@@ -698,7 +693,7 @@
         "tags": [
           "Share Links"
         ],
-        "description": "Create a server config.",
+        "description": "Create a share link.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -711,7 +706,7 @@
         },
         "responses": {
           "200": {
-            "description": "Create Server Config",
+            "description": "Create Share Link",
             "content": {
               "application/json": {
                 "schema": {
@@ -727,7 +722,22 @@
         "tags": [
           "Share Links"
         ],
-        "description": "Get share links.",
+        "description": "Get share links",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "inactive",
+                "expired"
+              ]
+            },
+            "description": "Filter share links by status."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Gets all the signed in user's share links.",

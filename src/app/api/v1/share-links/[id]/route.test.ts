@@ -74,7 +74,7 @@ jest.mock('next/server', () => ({
   },
 }));
 
-const mockRoute = '/api/v1/share-links/{id}'
+const mockRoute = '/api/v1/share-links/{id}';
 
 describe('POST handler', () => {
   const mockResponseJson = NextResponse.json as jest.Mock;
@@ -109,7 +109,7 @@ describe('POST handler', () => {
 
     expect(mockGetSingleSHLinkUseCase).toHaveBeenCalledWith(
       { repo: container.get(SHLinkRepositoryToken) },
-      { id: '123', managementToken: 'token' },
+      { id: '123' },
     );
     expect(mockLogSHLinkAccess).not.toHaveBeenCalled();
     expect(mockAddAccessTicketUseCase).not.toHaveBeenCalled();
@@ -167,7 +167,7 @@ describe('POST handler', () => {
 
     expect(mockGetSingleSHLinkUseCase).toHaveBeenCalledWith(
       { repo: container.get(SHLinkRepositoryToken) },
-      { id: '123', managementToken: 'token' },
+      { id: '123' },
     );
     expect(mockValidateSHLinkUseCase).toHaveBeenCalledWith({
       shlink,
@@ -189,6 +189,7 @@ describe('POST handler', () => {
       shlink,
       [endpoint],
       'ticket-id',
+      false,
     );
     expect(mockResponseJson).toHaveBeenCalledWith(
       {
@@ -224,7 +225,10 @@ describe('POST handler', () => {
 
     const response = await POST(request, { params });
 
-    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(
+      error,
+      expect.anything(),
+    );
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });
@@ -337,7 +341,10 @@ describe('PUT handler', () => {
 
     const response = await PUT(request, { params });
 
-    expect(mockHandleApiValidationError).toHaveBeenCalledWith(error, expect.anything());
+    expect(mockHandleApiValidationError).toHaveBeenCalledWith(
+      error,
+      expect.anything(),
+    );
     expect(mockResponseJson).not.toHaveBeenCalled();
   });
 });
