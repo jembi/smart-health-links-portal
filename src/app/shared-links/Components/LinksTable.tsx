@@ -180,12 +180,14 @@ export default function LinksTable() {
                       >
                         {column.id === 'action' ? (
                           <Tooltip title="Deactivate">
-                            <Button
-                              disabled={!row.active}
-                              onClick={() => column.action(row.id)}
-                            >
-                              {column.label}
-                            </Button>
+                            <span>
+                              <Button
+                                disabled={!row.active}
+                                onClick={() => column.action(row.id)}
+                              >
+                                {column.label}
+                              </Button>
+                            </span>
                           </Tooltip>
                         ) : column.format ? (
                           column.format(value)
