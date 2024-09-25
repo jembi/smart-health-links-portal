@@ -1,5 +1,5 @@
 'use client';
-
+import { QrCode } from '@mui/icons-material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
 import {
@@ -14,21 +14,18 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
 import { apiSharedLink } from '@/app/utils/api.class';
+import { uuid } from '@/app/utils/helpers';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
 import BooleanIcon from './BooleanIcon';
 import ConfirmationDialog from './ConfirmationDialog';
+import { QRCodeDialog } from './QRCodeDialog';
 
 interface Column {
   id: keyof SHLinkMiniDto;
@@ -40,20 +37,26 @@ interface Column {
   ) => string | React.JSX.Element;
 }
 
-interface IActionColumn extends Omit<Column, 'id' | 'label'> {
+interface IActionColumns extends Omit<Column, 'id' | 'label'> {
   id: 'action';
   label: React.JSX.Element;
-  action: (id: string) => void;
+  action: (row: SHLinkMiniDto) => void;
+  tooltipTitle?: string;
+  isDisabled?: (row: SHLinkMiniDto) => boolean;
 }
 
 const createActionColumn = (
   label: React.JSX.Element,
-  action: (id: string) => void,
-): IActionColumn => ({
+  action: (row: SHLinkMiniDto) => void,
+  tooltipTitle?: string,
+  isDisabled?: (row: SHLinkMiniDto) => boolean,
+): IActionColumns => ({
   id: 'action',
   label,
   minWidth: 50,
   action,
+  tooltipTitle,
+  isDisabled,
 });
 
 const columns: readonly Column[] = [
@@ -90,12 +93,19 @@ export default function LinksTable() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedLinkId, setSelectedLinkId] = useState<string | null>(null);
 
+  const [qrCodeDialogOpen, setQrCodeDialogOpen] = useState(false);
+  const [qrCodeData, setQrCodeData] = useState<{
+    id: string;
+    managementToken: string;
+    url: string;
+  }>();
+
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleDeactivate = async (id: string) => {
-    setSelectedLinkId(id);
+  const handleDeactivate = async (row: SHLinkMiniDto) => {
+    setSelectedLinkId(row.id);
     setConfirmDialogOpen(true);
   };
 
@@ -110,10 +120,19 @@ export default function LinksTable() {
       }
     }
   };
+  const handleQrCode = async (row: SHLinkMiniDto) => {
+    setQrCodeDialogOpen(true);
+    setQrCodeData({ id: row.id, managementToken: '', url: row.url });
+  };
 
-  const actionColumn: IActionColumn[] = [
-    createActionColumn(<LinkOffIcon />, handleDeactivate),
-    // TODO: Other actions will be added
+  const actionColumns: IActionColumns[] = [
+    createActionColumn(
+      <LinkOffIcon />,
+      handleDeactivate,
+      'Deactivate',
+      (row) => row.active,
+    ),
+    createActionColumn(<QrCode />, handleQrCode, 'Show QR Code'),
   ];
 
   const fetchLinks = async () => {
@@ -136,8 +155,6 @@ export default function LinksTable() {
     setAddDialog(true);
   };
 
-  const combinedCols = [...columns, ...actionColumn];
-
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <AddLinkDialog
@@ -150,6 +167,15 @@ export default function LinksTable() {
           });
         }}
       />
+      {qrCodeDialogOpen && (
+        <QRCodeDialog
+          open={qrCodeDialogOpen}
+          data={qrCodeData}
+          onClose={() => {
+            setQrCodeDialogOpen(false);
+          }}
+        />
+      )}
       <Grid container justifyContent="end">
         <Grid item>
           <Button variant="contained" onClick={handleCreateLink}>
@@ -178,32 +204,33 @@ export default function LinksTable() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow hover tabIndex={-1} key={row.id}>
-                  {combinedCols.map((column) => {
+                  {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell
                         key={column.id + row.active}
                         align={column.align}
                       >
-                        {column.id === 'action' ? (
-                          <Tooltip title="Deactivate">
-                            <span>
-                              <Button
-                                disabled={!row.active}
-                                onClick={() => column.action(row.id)}
-                              >
-                                {column.label}
-                              </Button>
-                            </span>
-                          </Tooltip>
-                        ) : column.format ? (
-                          column.format(value)
-                        ) : (
-                          value?.toString()
-                        )}
+                        {column.format
+                          ? column.format(value)
+                          : value?.toString()}
                       </TableCell>
                     );
                   })}
+                  <TableCell width={200}>
+                    {actionColumns.map((actionColumn) => (
+                      <Tooltip key={uuid()} title={actionColumn.tooltipTitle}>
+                        <span>
+                          <Button
+                            disabled={actionColumn.isDisabled?.(row)}
+                            onClick={() => actionColumn.action(row)}
+                          >
+                            {actionColumn.label}
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    ))}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

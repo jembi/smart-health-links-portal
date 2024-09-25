@@ -11,6 +11,9 @@ import {
 import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { StyledDialogActions } from '@/app/components/StyledDialogActions';
+import { StyledDialogContent } from '@/app/components/StyledDialogContent';
+import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
 import { useAuth } from '@/app/context/AuthProvider';
 import { apiSharedLink } from '@/app/utils/api.class';
 import { CreateSHLinkDto } from '@/domain/dtos/shlink';
@@ -18,24 +21,6 @@ import { CreateSHLinkDto } from '@/domain/dtos/shlink';
 const removeUndefinedValues = <T extends Record<string, unknown>>(
   object: T,
 ): T => JSON.parse(JSON.stringify(object));
-
-const StyledDialogTitle = styled(DialogTitle)(() => ({
-  backgroundImage: 'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #e6e6e6)',
-}));
-
-const StyledDialogContent = styled('div')(() => ({
-  gap: '15px',
-  margin: '15px',
-  display: 'flex',
-  flexDirection: 'column',
-}));
-
-const StyledDialogActions = styled(DialogActions)(() => ({
-  paddingTop: '15px',
-  paddingRight: '25px',
-  paddingBottom: '15px',
-  backgroundImage: 'linear-gradient(to top, hsla(0, 0%, 90%, .05), #e6e6e6)',
-}));
 
 export type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
   configExp?: string;

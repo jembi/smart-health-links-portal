@@ -52,6 +52,16 @@ export class ApiSHLink extends BaseApi {
       url: `/users/${userId}/ips`,
     });
   }
+
+  async getQrCode(linkId: string, data: object) {
+    return await this.create({
+      url: `/${EEndpoint.shareLinks}/${linkId}/qrcode`,
+      data,
+      params: {
+        responseType: 'arraybuffer',
+      },
+    });
+  }
 }
 
 instance.interceptors.response.use(
