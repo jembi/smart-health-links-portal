@@ -103,7 +103,7 @@ export default function LinksTable() {
     if (selectedLinkId) {
       try {
         await apiSharedLink.deactivateLink(selectedLinkId);
-        setRefetch(true);
+        setRefetch(!refetch);
         setConfirmDialogOpen(false);
       } catch (error) {
         console.error('Failed to deactivate link:', error);
