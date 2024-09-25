@@ -85,16 +85,12 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   unstable_noStore();
-  let { managementToken, passcode, recipient }: SHLinkRequestDto =
-    await request.json();
+  let { passcode, recipient }: SHLinkRequestDto = await request.json();
   logger.info(
-    `Creating share link access with share link id: ${params.id} and parameters: ${JSON.stringify({ managementToken, recipient })}`,
+    `Creating share link access with share link id: ${params.id} and parameters: ${JSON.stringify({ recipient })}`,
   );
   try {
-    let shlink = await getSingleSHLinkUseCase(
-      { repo },
-      { id: params.id, managementToken },
-    );
+    let shlink = await getSingleSHLinkUseCase({ repo }, { id: params.id });
     if (!shlink)
       return NextResponse.json({ message: NOT_FOUND }, { status: 404 });
 

@@ -27,7 +27,7 @@ const logger = new LogHandler(__dirname);
  * /api/v1/share-links:
  *   post:
  *     tags: [Share Links]
- *     description: Create a server config.
+ *     description: Create a share link.
  *     requestBody:
  *       content:
  *         application/json:
@@ -36,7 +36,7 @@ const logger = new LogHandler(__dirname);
  *             $ref: '#/components/schemas/CreateSHLink'
  *     responses:
  *       200:
- *         description: Create Server Config
+ *         description: Create Share Link
  *         content:
  *           application/json:
  *             schema:
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
  *   get:
  *     tags: [Share Links]
  *     description: Get share links
- *      parameters:
+ *     parameters:
  *       - in: query
  *         name: status
  *         schema:
@@ -83,13 +83,13 @@ export async function POST(request: Request) {
  *                 $ref: '#/components/schemas/SHLinkMini'
  */
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  let status: string | null = searchParams.get('status')?.toLowerCase() || null
+  const { searchParams } = new URL(request.url);
+  let status: string | null = searchParams.get('status')?.toLowerCase() || null;
 
   try {
     unstable_noStore();
-    
-    validateSHLinkStatusParameter({status});
+
+    validateSHLinkStatusParameter({ status });
 
     const { id } = await getUserProfile(request);
 
