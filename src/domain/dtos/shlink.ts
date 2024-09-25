@@ -159,7 +159,7 @@ export class SHLinkMiniDto {
  *       properties:
  *         passcode:
  *           type: string
- *           description: A string representing the share links unique passcode.
+ *           description: A string representing the share link's unique passcode.
  *           example: null
  *         recipient:
  *           type: string
