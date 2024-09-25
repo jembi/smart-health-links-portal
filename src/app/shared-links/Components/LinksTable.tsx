@@ -101,9 +101,13 @@ export default function LinksTable() {
 
   const confirmDeactivate = async () => {
     if (selectedLinkId) {
-      await apiSharedLink.deactivateLink(selectedLinkId);
-      setRefetch(true);
-      setConfirmDialogOpen(false);
+      try {
+        await apiSharedLink.deactivateLink(selectedLinkId);
+        setRefetch(true);
+        setConfirmDialogOpen(false);
+      } catch (error) {
+        console.error('Failed to deactivate link:', error);
+      }
     }
   };
 
@@ -112,9 +116,14 @@ export default function LinksTable() {
     // TODO: Other actions will be added
   ];
 
+  const fetchLinks = async () => {
+    const { data } = await apiSharedLink.findLinks();
+    setLinks(data);
+  };
+
   useEffect(() => {
-    apiSharedLink.findLinks().then(({ data }) => setLinks(data));
-  }, [refetch]);
+    fetchLinks();
+  }, []);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
