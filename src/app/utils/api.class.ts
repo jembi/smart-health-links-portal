@@ -42,6 +42,12 @@ export class ApiSHLink extends BaseApi {
   async createLink(data: object) {
     return await this.create({ url: `/${EEndpoint.shareLinks}`, data });
   }
+
+  async getPatientData(userId: string) {
+    return await this.find({
+      url: `/users/${userId}/ips`,
+    });
+  }
 }
 
 instance.interceptors.response.use(
