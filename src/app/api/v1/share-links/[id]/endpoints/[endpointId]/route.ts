@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import {
@@ -22,6 +23,8 @@ import { getAccessTicketUseCase } from '@/usecases/access-tickets/get-access-tic
 import { getPatientDataUseCase } from '@/usecases/patient/get-patient-data';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 import { getUserUseCase } from '@/usecases/users/get-user';
+
+export const dynamic = 'force-dynamic';
 
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 const ticketRepo = container.get<IAccessTicketRepository>(
@@ -64,9 +67,12 @@ export async function GET(
   const url = new URL(request.url);
 
   const ticketId = url.searchParams.get('ticket');
-  logger.info(`Getting an endpoint data with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
+  logger.info(
+    `Getting an endpoint data with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`,
+  );
 
   try {
+    unstable_noStore();
     const ticket: AccessTicketModel = await getAccessTicketUseCase(
       { repo: ticketRepo },
       ticketId,
@@ -91,9 +97,11 @@ export async function GET(
       { repo: userRepo },
       { userId: shlink.getUserId() },
     );
-    logger.info(`Getting an endpoint data of user id: ${shlink.getUserId()} with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`);
+    logger.info(
+      `Getting an endpoint data of user id: ${shlink.getUserId()} with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`,
+    );
     const patient = await getPatientDataUseCase(
-      { repo: serverConfigRepo },
+      { repo: serverConfigRepo, userRepo },
       { user: user },
     );
 

@@ -11,7 +11,7 @@ import {
 import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useSession } from '@/app/hooks/useSession';
+import { useAuth } from '@/app/context/AuthProvider';
 import { apiSharedLink } from '@/app/utils/api.class';
 import { CreateSHLinkDto } from '@/domain/dtos/shlink';
 
@@ -52,7 +52,8 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
   onClose,
   callback,
 }) => {
-  const data = useSession();
+  const { session } = useAuth();
+
   const {
     reset,
     register,
@@ -76,9 +77,9 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
   }, [open]);
 
   useEffect(() => {
-    if (data?.token?.sub)
-      resetField('userId', { defaultValue: data.token.sub });
-  }, [data?.token?.sub]);
+    if (session?.token?.sub)
+      resetField('userId', { defaultValue: session.token.sub });
+  }, [session?.token?.sub]);
 
   return (
     <Dialog open={!!open} fullWidth maxWidth="xs" onClose={() => onClose?.()}>

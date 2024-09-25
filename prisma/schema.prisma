@@ -61,10 +61,12 @@ model shlink {
 }
 
 model user {
-    id           String   @id @default(cuid()) @db.VarChar(43)
-    user_id       String    @unique
-    patient_id    String
-    shlink       shlink[]
+    id               String   @id @default(cuid()) @db.VarChar(43)
+    user_id          String    @unique
+    patient_id       String
+    server_config_id String?
+    server_config    server_config? @relation(fields: [server_config_id], references: [id])
+    shlink           shlink[]
     
 
     @@index([id], name: "idx_user_id")
@@ -84,6 +86,7 @@ model server_config {
     refresh_time                DateTime @default(now())
     access_token_response       String
     shlink_endpoints            shlink_endpoint[]
+    users                       user[]
 
     @@index([id], name: "idx_server_config_id")
 }

@@ -7,15 +7,25 @@ export class UserModel extends BaseModel {
     private userId: string,
     private patientId: string,
     private id?: string,
+    private serverConfigId?: string,
   ) {
     super(
       z.object({
         userId: z.string().min(1),
         patientId: z.string().min(1),
         id: z.string().optional(),
+        serverConfigId: z.string().optional(),
       }),
     );
     this.validate();
+  }
+
+  getServerConfigId(): string | undefined {
+    return this.serverConfigId;
+  }
+
+  setServerConfigId(serverConfigId: string): void {
+    this.serverConfigId = serverConfigId;
   }
 
   getId(): string | undefined {

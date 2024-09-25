@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
@@ -24,6 +25,8 @@ import { mapModelToDto as mapShlinkModelToDto } from '@/mappers/shlink-mapper';
 import { getServerConfigsUseCase } from '@/usecases/server-configs/get-server-configs';
 import { addEndpointUseCase } from '@/usecases/shlink-endpoint/add-endpoint';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
+
+export const dynamic = 'force-dynamic';
 
 const shlRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 const shlEndpointRepo = container.get<ISHLinkEndpointRepository>(
@@ -66,9 +69,12 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   let dto: CreateSHLinkEndpointDto = await request.json();
-  logger.info(`Creating a share link endpoint with parameters: ${JSON.stringify(dto)}`);
+  logger.info(
+    `Creating a share link endpoint with parameters: ${JSON.stringify(dto)}`,
+  );
 
   try {
+    unstable_noStore();
     const serverConfig = (
       await getServerConfigsUseCase({ repo: serverConfigRepo })
     )[0];

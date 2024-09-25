@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
@@ -8,6 +9,8 @@ import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shli
 import { LogHandler } from '@/lib/logger';
 import { mapModelToDto } from '@/mappers/shlink-mapper';
 import { deactivateSHLinksUseCase } from '@/usecases/shlinks/deactivate-shlink';
+
+export const dynamic = 'force-dynamic';
 
 const repo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
@@ -39,6 +42,7 @@ export async function DELETE(
 ) {
   logger.info(`Deactivating a share link API with share link id: ${params.id}`);
   try {
+    unstable_noStore();
     const user = await getUserProfile(request);
     const result = await deactivateSHLinksUseCase(
       { repo },

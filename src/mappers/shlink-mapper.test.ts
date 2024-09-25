@@ -172,6 +172,7 @@ describe('mapModelToMiniDto', () => {
       passwordRequired: true,
       url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
       name: 'name',
+      active: true,
       files: [
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint1-id?ticket=${ticket}`,
@@ -211,6 +212,7 @@ describe('mapModelToMiniDto', () => {
       passwordRequired: true,
       name: 'name',
       expiryDate: date,
+      active: true,
       files: undefined,
       url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
     });
@@ -258,6 +260,7 @@ describe('mapModelToMiniDto', () => {
       name: 'name',
       url: 'http://localhost:3000/viewer#shlink:/eyJsYWJlbCI6Im5hbWUiLCJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL3NoYXJlLWxpbmtzL2xpbmstaWQiLCJmbGFnIjoiUCJ9',
       expiryDate: date,
+      active: true,
       files: [
         {
           location: `${EXTERNAL_URL}/api/v1/share-links/link-id/endpoints/endpoint-id?ticket=undefined`,

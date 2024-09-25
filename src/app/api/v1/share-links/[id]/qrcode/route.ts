@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { NOT_FOUND } from '@/app/constants/http-constants';
@@ -9,10 +10,11 @@ import { LogHandler } from '@/lib/logger';
 import { getSHLinkQRCodeUseCase } from '@/usecases/shlink-qrcode/get-shlink-qrcode';
 import { getSingleSHLinkUseCase } from '@/usecases/shlinks/get-single-shlink';
 
+export const dynamic = 'force-dynamic';
+
 const shlinkRepo = container.get<ISHLinkRepository>(SHLinkRepositoryToken);
 
 const logger = new LogHandler(__dirname);
-
 
 /**
  * @swagger
@@ -43,14 +45,16 @@ const logger = new LogHandler(__dirname);
  */
 
 export async function POST(
-  request: Request, 
-  { params }: {params: { id: string } }, 
+  request: Request,
+  { params }: { params: { id: string } },
 ) {
   try {
     const { managementToken }: SHLinkQRCodeRequestDto = await request.json();
     const { id } = params;
-    logger.info(`Creating a QR Code with share link id: ${id} and management token: ${managementToken}`);
-
+    logger.info(
+      `Creating a QR Code with share link id: ${id} and management token: ${managementToken}`,
+    );
+    unstable_noStore();
     let shlink = await getSingleSHLinkUseCase(
       { repo: shlinkRepo },
       { id, managementToken },

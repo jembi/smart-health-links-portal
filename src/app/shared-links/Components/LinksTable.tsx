@@ -23,7 +23,6 @@ import {
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { useSession } from '@/app/hooks/useSession';
 import { apiSharedLink } from '@/app/utils/api.class';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
@@ -82,7 +81,6 @@ const columns: readonly Column[] = [
 ];
 
 export default function LinksTable() {
-  const session = useSession();
   const [links, setLinks] = useState<SHLinkMiniDto[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);

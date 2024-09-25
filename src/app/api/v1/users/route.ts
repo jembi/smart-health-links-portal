@@ -1,3 +1,4 @@
+import { unstable_noStore } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 import { getUserProfile } from '@/app/utils/authentication';
@@ -14,6 +15,8 @@ import { LogHandler } from '@/lib/logger';
 import { mapDtoToModel, mapModelToDto } from '@/mappers/user-mapper';
 import { searchPatientUseCase } from '@/usecases/patient/search-patient';
 import { addUserUseCase } from '@/usecases/users/add-user';
+
+export const dynamic = 'force-dynamic';
 
 const repo = container.get<IUserRepository>(UserRepositoryToken);
 const serverConfigRepo = container.get<IServerConfigRepository>(
@@ -47,12 +50,18 @@ export async function POST(request: Request) {
   let dto: CreateUserDto = await request.json();
   logger.log(`Creating a user with,  ${JSON.stringify(dto)}`);
   try {
+    unstable_noStore();
     const { email } = await getUserProfile(request);
-    const patientId = await searchPatientUseCase(
+    const data = await searchPatientUseCase(
       { repo: serverConfigRepo },
       { patientId: dto.patientId, email },
     );
-    dto.patientId = patientId;
+    dto = {
+      ...dto,
+      patientId: data.patient.id,
+      serverConfigId: data.serverConfig.getId(),
+    };
+    logger.info(JSON.stringify(dto));
     const model = mapDtoToModel(dto as UserDto);
     const newUser = await addUserUseCase({ repo }, { user: model });
     return NextResponse.json(mapModelToDto(newUser), { status: 201 });
