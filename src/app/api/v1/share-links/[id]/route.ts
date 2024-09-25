@@ -125,7 +125,12 @@ export async function POST(
       { shlinkId: shlink.getId() },
     );
     return NextResponse.json(
-      mapModelToMiniDto(shlink, endpoint ? [endpoint] : [], ticket.getId()),
+      mapModelToMiniDto(
+        shlink,
+        endpoint ? [endpoint] : [],
+        ticket.getId(),
+        false,
+      ),
       { status: 200 },
     );
   } catch (error) {
