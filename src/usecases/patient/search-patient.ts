@@ -1,6 +1,8 @@
 import { Patient } from 'fhir/r4';
 
+import { ServerConfigModel } from '@/domain/models/server-config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
+import { mapEntityToModel } from '@/mappers/server-config-mapper';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
   FhirPatient,
@@ -12,15 +14,19 @@ import { ExternalDataFetchError } from '@/services/hapi-fhir.service';
 export const searchPatientUseCase = async (
   context: { repo: IServerConfigRepository },
   data: { patientId: string; email: string },
-): Promise<string> => {
-  const serviceConfigs = await context.repo.findMany({});
+) => {
+  const serviceConfigs = (await context.repo.findMany({})).map((x) =>
+    mapEntityToModel(x),
+  );
   if (!serviceConfigs.length) {
     throw new ExternalDataFetchError('Missing Config error.');
   }
 
   let result: FhirSearchResult<FhirPatient>;
+  let serverConfig: ServerConfigModel;
   for (const serviceConfig of serviceConfigs) {
     try {
+      serverConfig = serviceConfig;
       const service: IHapiFhirService =
         HapiFhirServiceFactory.getService(serviceConfig);
       result = await service.searchPatient<FhirSearchResult<FhirPatient>>(
@@ -40,7 +46,7 @@ export const searchPatientUseCase = async (
   ) {
     throw new ExternalDataFetchError('Patient Data not found.', 404);
   }
-  return result.entry[0].resource.id;
+  return { patient: result.entry[0].resource, serverConfig };
 };
 
 export const findEmailAddress = (patient: Patient, email: string) => {
