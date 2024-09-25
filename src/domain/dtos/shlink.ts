@@ -147,7 +147,7 @@ export class SHLinkMiniDto {
   passwordRequired?: boolean;
   name: string;
   url: string;
-  active: boolean
+  active: boolean;
 }
 
 /**
