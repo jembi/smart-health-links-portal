@@ -68,12 +68,13 @@ export const mapModelToMiniDto = (
   shlinkModel: SHLinkModel,
   files?: SHLinkEndpointModel[],
   ticket?: string,
+  includeToken: boolean = true,
 ): SHLinkMiniDto | undefined => {
   return shlinkModel
     ? {
         id: shlinkModel.getId(),
         name: shlinkModel.getName(),
-        managementToken: shlinkModel.getManagementToken(),
+        managementToken: includeToken ? shlinkModel.getManagementToken() : null,
         expiryDate: shlinkModel.getConfigExp(),
         passwordRequired: !!shlinkModel.getConfigPasscode(),
         url: encodeSHLink(shlinkModel),

@@ -6,7 +6,12 @@ export const mapEntityToModel = (
   userEntity: UserEntity,
 ): UserModel | undefined => {
   return userEntity
-    ? new UserModel(userEntity.user_id, userEntity.patient_id, userEntity.id)
+    ? new UserModel(
+        userEntity.user_id,
+        userEntity.patient_id,
+        userEntity.id,
+        userEntity.server_config_id,
+      )
     : undefined;
 };
 
@@ -18,6 +23,7 @@ export const mapModelToEntity = (
         id: userModel.getId(),
         user_id: userModel.getUserId(),
         patient_id: userModel.getPatientId(),
+        server_config_id: userModel.getServerConfigId(),
         created_at: userModel.getCreatedAt(),
         updated_at: userModel.getUpdatedAt()
       }
@@ -39,9 +45,10 @@ export const mapModelToDto = (userModel: UserModel): UserDto | undefined => {
 export const mapDtoToModel = (userDto: UserDto): UserModel | undefined => {
   return userDto
     ? new UserModel(
-      userDto.userId, 
-      userDto.patientId, 
+      userDto.userId,
+      userDto.patientId,
       userDto.id,
+      userDto.serverConfigId,
       userDto.createdAt,
       userDto.updatedAt
     )

@@ -7,6 +7,7 @@ export class UserModel extends BaseModel {
     private userId: string,
     private patientId: string,
     private id?: string,
+    private serverConfigId?: string,
     private createdAt?: Date,
     private updatedAt?: Date
   ) {
@@ -15,11 +16,20 @@ export class UserModel extends BaseModel {
         userId: z.string().min(1),
         patientId: z.string().min(1),
         id: z.string().optional(),
+        serverConfigId: z.string().optional(),
         createdAt: z.date().optional(),
         updatedAt: z.date().optional()
       }),
     );
     this.validate();
+  }
+
+  getServerConfigId(): string | undefined {
+    return this.serverConfigId;
+  }
+
+  setServerConfigId(serverConfigId: string): void {
+    this.serverConfigId = serverConfigId;
   }
 
   getId(): string | undefined {

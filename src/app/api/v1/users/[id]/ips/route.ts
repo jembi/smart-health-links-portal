@@ -63,7 +63,7 @@ export async function GET(
       `Retrieving patient summary data from FHIR with user: ${JSON.stringify(user)}`,
     );
     const result = await getPatientDataUseCase(
-      { repo: serverConfigRepo },
+      { repo: serverConfigRepo, userRepo },
       { user },
     );
 

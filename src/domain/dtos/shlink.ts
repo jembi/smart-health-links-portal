@@ -158,7 +158,7 @@ export class SHLinkMiniDto {
   passwordRequired?: boolean;
   name: string;
   url: string;
-  active: boolean
+  active: boolean;
 }
 
 /**
@@ -168,21 +168,16 @@ export class SHLinkMiniDto {
  *     SHLinkRequest:
  *       type: object
  *       properties:
- *         id:
+ *         passcode:
  *           type: string
- *           description: A string representing the share links unique identifier.
- *           example: hWWNwskdGOnEdq0KIQ3S
- *         managementToken:
- *           type: string
- *           description: A string representing the share link's unique management token used for managing the share link.
- *           example: hWWNwskdGOnEdq0KIQ3S
+ *           description: A string representing the share link's unique passcode.
+ *           example: null
  *         recipient:
  *           type: string
  *           description: A string representing the share link's recipient.
  *           example: Jane Doe
  */
 export class SHLinkRequestDto {
-  managementToken: string;
   recipient: string;
   passcode?: string;
 }

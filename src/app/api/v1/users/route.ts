@@ -52,11 +52,16 @@ export async function POST(request: Request) {
   try {
     unstable_noStore();
     const { email } = await getUserProfile(request);
-    const patientId = await searchPatientUseCase(
+    const data = await searchPatientUseCase(
       { repo: serverConfigRepo },
       { patientId: dto.patientId, email },
     );
-    dto.patientId = patientId;
+    dto = {
+      ...dto,
+      patientId: data.patient.id,
+      serverConfigId: data.serverConfig.getId(),
+    };
+    logger.info(JSON.stringify(dto));
     const model = mapDtoToModel(dto as UserDto);
     const newUser = await addUserUseCase({ repo }, { user: model });
     return NextResponse.json(mapModelToDto(newUser), { status: 201 });

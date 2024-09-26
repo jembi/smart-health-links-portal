@@ -1,5 +1,7 @@
 'use client';
+import { QrCode } from '@mui/icons-material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 import {
   Button,
   Grid,
@@ -11,15 +13,19 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
 import { apiSharedLink } from '@/app/utils/api.class';
+import { uuid } from '@/app/utils/helpers';
 import { SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
 import BooleanIcon from './BooleanIcon';
+import ConfirmationDialog from './ConfirmationDialog';
+import { QRCodeDialog } from './QRCodeDialog';
 
 interface Column {
   id: keyof SHLinkMiniDto;
@@ -30,6 +36,28 @@ interface Column {
     value: SHLinkMiniDto[keyof SHLinkMiniDto],
   ) => string | React.JSX.Element;
 }
+
+interface IActionColumns extends Omit<Column, 'id' | 'label'> {
+  id: 'action';
+  label: React.JSX.Element;
+  action: (row: SHLinkMiniDto) => void;
+  tooltipTitle?: string;
+  isDisabled?: (row: SHLinkMiniDto) => boolean;
+}
+
+const createActionColumn = (
+  label: React.JSX.Element,
+  action: (row: SHLinkMiniDto) => void,
+  tooltipTitle?: string,
+  isDisabled?: (row: SHLinkMiniDto) => boolean,
+): IActionColumns => ({
+  id: 'action',
+  label,
+  minWidth: 50,
+  action,
+  tooltipTitle,
+  isDisabled,
+});
 
 const columns: readonly Column[] = [
   { id: 'name', label: 'Name', minWidth: 100 },
@@ -60,14 +88,61 @@ export default function LinksTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [addDialog, setAddDialog] = React.useState<boolean>();
+  const [refetch, setRefetch] = useState(false);
+
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedLinkId, setSelectedLinkId] = useState<string | null>(null);
+
+  const [qrCodeDialogOpen, setQrCodeDialogOpen] = useState(false);
+  const [qrCodeData, setQrCodeData] = useState<{
+    id: string;
+    managementToken: string;
+    url: string;
+  }>();
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
+  const handleDeactivate = async (row: SHLinkMiniDto) => {
+    setSelectedLinkId(row.id);
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmDeactivate = async () => {
+    if (selectedLinkId) {
+      try {
+        await apiSharedLink.deactivateLink(selectedLinkId);
+        setRefetch(!refetch);
+        setConfirmDialogOpen(false);
+      } catch (error) {
+        console.error('Failed to deactivate link:', error);
+      }
+    }
+  };
+  const handleQrCode = async (row: SHLinkMiniDto) => {
+    setQrCodeDialogOpen(true);
+    setQrCodeData({ id: row.id, managementToken: '', url: row.url });
+  };
+
+  const actionColumns: IActionColumns[] = [
+    createActionColumn(
+      <LinkOffIcon />,
+      handleDeactivate,
+      'Deactivate',
+      (row) => row.active,
+    ),
+    createActionColumn(<QrCode />, handleQrCode, 'Show QR Code'),
+  ];
+
+  const fetchLinks = async () => {
+    const { data } = await apiSharedLink.findLinks();
+    setLinks(data);
+  };
+
   useEffect(() => {
-    apiSharedLink.findLinks().then(({ data }) => setLinks(data));
-  }, []);
+    fetchLinks();
+  }, [refetch]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -92,6 +167,15 @@ export default function LinksTable() {
           });
         }}
       />
+      {qrCodeDialogOpen && (
+        <QRCodeDialog
+          open={qrCodeDialogOpen}
+          data={qrCodeData}
+          onClose={() => {
+            setQrCodeDialogOpen(false);
+          }}
+        />
+      )}
       <Grid container justifyContent="end">
         <Grid item>
           <Button variant="contained" onClick={handleCreateLink}>
@@ -112,6 +196,7 @@ export default function LinksTable() {
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -122,13 +207,30 @@ export default function LinksTable() {
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell
+                        key={column.id + row.active}
+                        align={column.align}
+                      >
                         {column.format
                           ? column.format(value)
                           : value?.toString()}
                       </TableCell>
                     );
                   })}
+                  <TableCell width={200}>
+                    {actionColumns.map((actionColumn) => (
+                      <Tooltip key={uuid()} title={actionColumn.tooltipTitle}>
+                        <span>
+                          <Button
+                            disabled={actionColumn.isDisabled?.(row)}
+                            onClick={() => actionColumn.action(row)}
+                          >
+                            {actionColumn.label}
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    ))}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -142,6 +244,12 @@ export default function LinksTable() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
+      <ConfirmationDialog
+        confirmDeactivate={confirmDeactivate}
+        confirmDialogOpen={confirmDialogOpen}
+        setConfirmDialogOpen={setConfirmDialogOpen}
       />
     </Paper>
   );

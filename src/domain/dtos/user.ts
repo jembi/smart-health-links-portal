@@ -17,6 +17,7 @@
 export class CreateUserDto {
   userId: string;
   patientId: string;
+  serverConfigId?: string;
 }
 
 /**

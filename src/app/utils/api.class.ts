@@ -43,9 +43,23 @@ export class ApiSHLink extends BaseApi {
     return await this.create({ url: `/${EEndpoint.shareLinks}`, data });
   }
 
+  async deactivateLink(id: string) {
+    return await this.delete({ url: `/share-links/${id}/deactivate` });
+  }
+
   async getPatientData(userId: string) {
     return await this.find({
       url: `/users/${userId}/ips`,
+    });
+  }
+
+  async getQrCode(linkId: string, data: object) {
+    return await this.create({
+      url: `/${EEndpoint.shareLinks}/${linkId}/qrcode`,
+      data,
+      params: {
+        responseType: 'arraybuffer',
+      },
     });
   }
 }
