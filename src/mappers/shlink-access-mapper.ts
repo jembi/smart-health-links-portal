@@ -11,6 +11,8 @@ export const mapModelToEntity = (
         recipient: shlinkAccessModel.getRecipient(),
         shlink_id: shlinkAccessModel.getSHLinkId(),
         id: shlinkAccessModel.getId(),
+        created_at: shlinkAccessModel.getCreatedAt(),
+        updated_at: shlinkAccessModel.getUpdatedAt()
       }
     : undefined;
 };
@@ -24,6 +26,8 @@ export const mapEntityToModel = (
         shlinkAccessEntity.access_time,
         shlinkAccessEntity.recipient,
         shlinkAccessEntity.id,
+        shlinkAccessEntity.created_at,
+        shlinkAccessEntity.updated_at,
       )
     : undefined;
 };
@@ -37,6 +41,8 @@ export const mapModelToDto = (
         shlinkId: shlinkAccessModel.getSHLinkId(),
         accessTime: shlinkAccessModel.getAccessTime(),
         recipient: shlinkAccessModel.getRecipient(),
+        createdAt: shlinkAccessModel.getCreatedAt(),
+        updatedAt: shlinkAccessModel.getUpdatedAt()
       }
     : undefined;
 };

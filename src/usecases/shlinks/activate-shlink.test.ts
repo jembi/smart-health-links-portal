@@ -38,6 +38,9 @@ describe('activeSHLinksUseCase', () => {
       management_token: 'token-xyz1234',
       config_passcode: 'passcode-abcde',
       config_exp: new Date('2024-01-01T00:00:00Z'),
+      created_at: new Date('2024-01-01T00:00:00Z'),
+      updated_at: new Date('2024-01-01T00:00:00Z'),
+      deleted_at: null
     };
 
     mockUpdatedSHLinkEntity = {
@@ -54,6 +57,9 @@ describe('activeSHLinksUseCase', () => {
       mockSHLinkEntity.config_passcode,
       mockSHLinkEntity.config_exp,
       mockSHLinkEntity.id,
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
 
     // Set up mock implementations

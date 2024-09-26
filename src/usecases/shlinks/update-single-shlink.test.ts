@@ -25,6 +25,9 @@ describe('updateSingleSHLinkUseCase', () => {
       managementToken: 'token-xyz1234',
       configPasscode: 'passcode-abcde',
       configExp: new Date('2024-01-01T00:00:00Z'),
+      created_at: new Date('2024-01-01T00:00:00Z'),
+      updated_at: new Date('2024-01-01T00:00:00Z'),
+      deleted_at: null
     };
 
     mockSHLinkModel = new SHLinkModel(
@@ -36,6 +39,9 @@ describe('updateSingleSHLinkUseCase', () => {
       mockDto.configPasscode,
       mockDto.configExp,
       '1',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
 
     mockSHLinkEntity = {
@@ -47,6 +53,9 @@ describe('updateSingleSHLinkUseCase', () => {
       management_token: mockDto.managementToken,
       config_passcode: mockDto.configPasscode,
       config_exp: mockDto.configExp,
+      created_at: new Date('2024-01-01T00:00:00Z'),
+      updated_at: new Date('2024-01-01T00:00:00Z'),
+      deleted_at: null
     };
 
     mockRepo = {

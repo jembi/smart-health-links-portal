@@ -18,6 +18,7 @@ export const deactivateSHLinksUseCase = async (
       );
 
     entity.active = false;
+    entity.deleted_at = new Date()
     newShlink = await context.repo.update(entity);
   }
 

@@ -48,7 +48,17 @@ export class CreateSHLinkEndpointDto {
  *           type: string
  *           description: An optional string representing the share link endpoint's query parameters.
  *           example:
+ *         createdAt:
+ *            type: datetime
+ *            description: A date representing the date the share link endpoint was created.
+ *            example: 2024-09-26T10:03:39.379Z
+ *         updatedAt:
+ *            type:datetime
+ *            description: A date representing the date the share link endpoint was updated.
+ *            example: 2024-09-26T10:03:39.379Z
  */
 export class SHLinkEndpointDto extends CreateSHLinkEndpointDto {
   id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

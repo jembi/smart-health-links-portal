@@ -16,6 +16,8 @@ export class ServerConfigModel extends BaseModel {
     private id?: string,
     private accessTokenResponse?: string,
     private refreshToken?: string,
+    private createdAt?: Date,
+    private updatedAt?: Date
   ) {
     super(
       z.object({
@@ -32,6 +34,8 @@ export class ServerConfigModel extends BaseModel {
         refreshTime: z.date().optional().nullable(),
         accessTokenResponse: z.string().optional().nullable(),
         refreshToken: z.string().optional().nullable(),
+        createdAt: z.date().optional(),
+        updatedAt: z.date().optional()
       }),
     );
     this.validate();
@@ -103,5 +107,21 @@ export class ServerConfigModel extends BaseModel {
 
   setTokenEndpoint(tokenEndpoint: string): void {
     this.tokenEndpoint = tokenEndpoint;
+  }
+  
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  setCreatedAt(createdAt: Date): void {
+    this.createdAt = createdAt;
+  }
+
+  getUpdatedAt(): Date {
+    return this.updatedAt;
+  }
+
+  setUpdatedAt(updatedAt: Date): void {
+    this.updatedAt = updatedAt;
   }
 }

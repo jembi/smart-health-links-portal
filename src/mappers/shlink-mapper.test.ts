@@ -21,6 +21,9 @@ describe('SHLink Mappers', () => {
     management_token: 'tokenxyz123',
     config_passcode: 'passcodeabc',
     config_exp: new Date('2024-01-01T00:00:00Z'),
+    created_at: new Date('2024-01-01T00:00:00Z'),
+    updated_at: new Date('2024-01-01T00:00:00Z'),
+    deleted_at: null
   };
 
   const shLinkModel = new SHLinkModel(
@@ -32,6 +35,9 @@ describe('SHLink Mappers', () => {
     'passcodeabc',
     new Date('2024-01-01T00:00:00Z'),
     '1',
+    new Date('2024-01-01T00:00:00Z'),
+    new Date('2024-01-01T00:00:00Z'),
+    null
   );
 
   const shLinkDto: SHLinkDto = {
@@ -43,6 +49,9 @@ describe('SHLink Mappers', () => {
     managementToken: 'tokenxyz123',
     configPasscode: 'passcodeabc',
     configExp: new Date('2024-01-01T00:00:00Z'),
+    createdAt: new Date('2024-01-01T00:00:00Z'),
+    updatedAt: new Date('2024-01-01T00:00:00Z'),
+    deletedAt: null
   };
 
   describe('mapEntityToModel', () => {
@@ -78,6 +87,9 @@ describe('SHLink Mappers', () => {
         management_token: shLinkModel.getManagementToken(),
         config_passcode: shLinkModel.getConfigPasscode(),
         config_exp: shLinkModel.getConfigExp(),
+        created_at: shLinkModel.getCreatedAt(),
+        updated_at: shLinkModel.getUpdatedAt(),
+        deleted_at: shLinkModel.getDeletedAt()
       });
     });
 
@@ -99,6 +111,10 @@ describe('SHLink Mappers', () => {
         managementToken: shLinkModel.getManagementToken(),
         configPasscode: shLinkModel.getConfigPasscode(),
         configExp: shLinkModel.getConfigExp(),
+        createdAt: shLinkModel.getCreatedAt(),
+        updatedAt: shLinkModel.getUpdatedAt(),
+        deletedAt: shLinkModel.getDeletedAt()
+
       });
     });
 
@@ -143,6 +159,9 @@ describe('mapModelToMiniDto', () => {
       'config-passcode',
       date,
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
 
     // Create valid SHLinkEndpointModel instances
@@ -151,12 +170,16 @@ describe('mapModelToMiniDto', () => {
       'server-config-id-1',
       'url-path-1',
       'endpoint1-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
     );
     const endpoint2 = new SHLinkEndpointModel(
       'shlink-id-2',
       'server-config-id-2',
       'url-path-2',
       'endpoint2-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
     );
     const files = [endpoint1, endpoint2];
     const ticket = 'sample-ticket';
@@ -200,6 +223,9 @@ describe('mapModelToMiniDto', () => {
       'config-passcode',
       date,
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
 
     // Execute the function
@@ -238,6 +264,9 @@ describe('mapModelToMiniDto', () => {
       'config-passcode',
       date,
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
 
     // Create a valid SHLinkEndpointModel instance
@@ -246,6 +275,8 @@ describe('mapModelToMiniDto', () => {
       'server-config-id',
       'url-path',
       'endpoint-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
     );
     const files = [endpoint];
 

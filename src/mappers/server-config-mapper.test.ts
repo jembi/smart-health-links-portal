@@ -21,6 +21,8 @@ describe('ServerConfig Mappers', () => {
     refresh_time: refreshTime,
     access_token_response: 'entity-access-token',
     config_refresh_token: 'entity-refresh-token',
+    created_at: new Date('2024-01-01T00:00:00Z'),
+    updated_at: new Date('2024-01-01T00:00:00Z')
   };
 
   const serverConfigModel = new ServerConfigModel(
@@ -33,6 +35,8 @@ describe('ServerConfig Mappers', () => {
     'entity-id',
     'entity-access-token',
     'entity-refresh-token',
+    new Date('2024-01-01T00:00:00Z'),
+    new Date('2024-01-01T00:00:00Z')
   );
 
   const serverConfigDto: ServerConfigDto = {
@@ -45,6 +49,8 @@ describe('ServerConfig Mappers', () => {
     refreshTime: refreshTime,
     refreshToken: 'dto-refresh-token',
     tokenEndpoint: 'http://dto-token-endpoint',
+    createdAt: new Date('2024-01-01T00:00:00Z'),
+    updatedAt: new Date('2024-01-01T00:00:00Z')
   };
 
   describe('mapEntityToModel', () => {
@@ -89,6 +95,8 @@ describe('ServerConfig Mappers', () => {
         refresh_time: serverConfigModel.getRefreshTime(),
         access_token_response: serverConfigModel.getAccessTokenResponse(),
         config_refresh_token: serverConfigModel.getRefreshToken(),
+        created_at: serverConfigModel.getCreatedAt(),
+        updated_at: serverConfigModel.getUpdatedAt()
       });
     });
 
@@ -111,6 +119,8 @@ describe('ServerConfig Mappers', () => {
         refreshTime: serverConfigModel.getRefreshTime(),
         refreshToken: serverConfigModel.getRefreshToken(),
         tokenEndpoint: serverConfigModel.getTokenEndpoint(),
+        created_at: serverConfigModel.getCreatedAt(),
+        updated_at: serverConfigModel.getUpdatedAt()
       });
     });
 

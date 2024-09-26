@@ -9,6 +9,8 @@ describe('Mapping functions', () => {
       const entity: AccessTicketEntity = {
         id: '123',
         shlink_id: 'abc',
+        created_at: new Date('2024-01-01T00:00:00Z'),
+        updated_at: new Date('2024-01-01T00:00:00Z')
       };
 
       const model = mapEntityToModel(entity);
@@ -40,6 +42,8 @@ describe('Mapping functions', () => {
       expect(entity).toEqual({
         id: '123',
         shlink_id: 'abc',
+        created_at: new Date('2024-01-01T00:00:00Z'),
+        updated_at: new Date('2024-01-01T00:00:00Z')
       });
     });
 

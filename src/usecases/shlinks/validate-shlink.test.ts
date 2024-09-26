@@ -16,6 +16,9 @@ describe('validateSHLinkUseCase', () => {
       'valid-passcode',
       new Date(Date.now() + 10000), // future date
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
     const result = validateSHLinkUseCase({
       shlink: validSHLink,
@@ -34,6 +37,9 @@ describe('validateSHLinkUseCase', () => {
       'valid-passcode',
       new Date(Date.now() + 10000), // future date
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
     expect(() =>
       validateSHLinkUseCase({
@@ -53,6 +59,9 @@ describe('validateSHLinkUseCase', () => {
       'valid-passcode',
       new Date(Date.now() - 10000), // past date
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
     expect(() =>
       validateSHLinkUseCase({
@@ -72,6 +81,9 @@ describe('validateSHLinkUseCase', () => {
       'correct-passcode',
       new Date(Date.now() + 10000), // future date
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
     const result = validateSHLinkUseCase({
       shlink: validSHLink,
@@ -90,6 +102,9 @@ describe('validateSHLinkUseCase', () => {
       undefined,
       new Date(Date.now() + 10000), // future date
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
     const result = validateSHLinkUseCase({ shlink: validSHLink });
     expect(result).toBe(true);
@@ -105,6 +120,9 @@ describe('validateSHLinkUseCase', () => {
       undefined,
       undefined,
       'link-id',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
     const result = validateSHLinkUseCase({ shlink: validSHLink });
     expect(result).toBe(true);
@@ -121,6 +139,9 @@ describe('validateSHLinkUseCase', () => {
         'passcode',
         new Date(Date.now() - 10000), // past date
         'link-id',
+        new Date('2024-01-01T00:00:00Z'),
+        new Date('2024-01-01T00:00:00Z'),
+        null
       );
       validateSHLinkUseCase({
         shlink: invalidSHLink,

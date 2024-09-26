@@ -15,6 +15,8 @@ describe('SHLinkEndpoint Mappers', () => {
     shlink_id: 'shlink-456',
     server_config_id: 'config-789',
     url_path: '/api/path',
+    created_at: new Date('2024-01-01T00:00:00Z'),
+    updated_at: new Date('2024-01-01T00:00:00Z')
   };
 
   const mockModel = new SHLinkEndpointModel(
@@ -22,6 +24,8 @@ describe('SHLinkEndpoint Mappers', () => {
     'config-789',
     '/api/path',
     'endpoint-123',
+    new Date('2024-01-01T00:00:00Z'),
+    new Date('2024-01-01T00:00:00Z')
   );
 
   const mockDto: SHLinkEndpointDto = {
@@ -29,6 +33,8 @@ describe('SHLinkEndpoint Mappers', () => {
     shlinkId: 'shlink-456',
     serverConfigId: 'config-789',
     urlPath: '/api/path',
+    createdAt: new Date('2024-01-01T00:00:00Z'),
+    updatedAt: new Date('2024-01-01T00:00:00Z')
   };
 
   describe('mapEntityToModel', () => {

@@ -53,7 +53,7 @@ export class BasePrismaRepository<T extends BaseEntity>
 
   async update(entity: T): Promise<T> {
     // @ts-ignore
-    return this.getModel().update({ where: { id: entity.id }, data: entity });
+    return this.getModel().update({ where: { id: entity.id }, data: {...entity, updated_at: undefined} });
   }
 
   async delete(entity: T): Promise<T> {

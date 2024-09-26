@@ -14,18 +14,24 @@ describe('User Mappers', () => {
     id: 'entity-id',
     user_id: 'entity-user-id',
     patient_id: 'entity-patient-id',
+    created_at: new Date('2024-01-01T00:00:00Z'),
+    updated_at: new Date('2024-01-01T00:00:00Z')
   };
 
   const userModel = new UserModel(
     'model-user-id',
     'model-patient-id',
     'model-id',
+    new Date('2024-01-01T00:00:00Z'),
+    new Date('2024-01-01T00:00:00Z')
   );
 
   const userDto: UserDto = {
     id: 'dto-id',
     userId: 'dto-user-id',
     patientId: 'dto-patient-id',
+    createdAt: new Date('2024-01-01T00:00:00Z'),
+    updatedAt: new Date('2024-01-01T00:00:00Z')
   };
 
   describe('mapEntityToModel', () => {

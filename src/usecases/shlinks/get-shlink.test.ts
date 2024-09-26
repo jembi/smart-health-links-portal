@@ -35,6 +35,9 @@ describe('getSHLinkUseCase', () => {
         management_token: 'token-xyz1234',
         config_passcode: 'passcode-abcde',
         config_exp: new Date('2024-01-01T00:00:00Z'),
+        created_at: new Date('2024-01-01T00:00:00Z'),
+        updated_at: new Date('2024-01-01T00:00:00Z'),
+        deleted_at: null
       },
       {
         id: '2',
@@ -45,6 +48,9 @@ describe('getSHLinkUseCase', () => {
         management_token: 'token-uvw5678',
         config_passcode: 'passcode-fghij',
         config_exp: new Date('2024-06-01T00:00:00Z'),
+        created_at: new Date('2024-01-01T00:00:00Z'),
+        updated_at: new Date('2024-01-01T00:00:00Z'),
+        deleted_at: null
       },
     ];
 
@@ -58,6 +64,9 @@ describe('getSHLinkUseCase', () => {
         'passcode-abcde',
         new Date('2024-01-01T00:00:00Z'),
         '1',
+        new Date('2024-01-01T00:00:00Z'),
+        new Date('2024-01-01T00:00:00Z'),
+        null
       ),
       new SHLinkModel(
         mockUserId,
@@ -68,6 +77,9 @@ describe('getSHLinkUseCase', () => {
         'passcode-fghij',
         new Date('2024-06-01T00:00:00Z'),
         '2',
+        new Date('2024-01-01T00:00:00Z'),
+        new Date('2024-01-01T00:00:00Z'),
+        null
       ),
     ];
 

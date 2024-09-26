@@ -47,6 +47,9 @@ describe('addShlinkUseCase', () => {
       mockDto.configPasscode,
       mockDto.configExp,
       '1',
+      new Date('2024-01-01T00:00:00Z'),
+      new Date('2024-01-01T00:00:00Z'),
+      null
     );
 
     const mockEntity: SHLinkEntity = {
@@ -58,6 +61,9 @@ describe('addShlinkUseCase', () => {
       management_token: mockDto.managementToken,
       config_passcode: mockDto.configPasscode,
       config_exp: mockDto.configExp,
+      created_at: new Date('2024-01-01T00:00:00Z'),
+      updated_at: new Date('2024-01-01T00:00:00Z'),
+      deleted_at: null
     };
 
     // Mock the data
