@@ -11,6 +11,7 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogContent } from '@/app/components/StyledDialogContent';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
@@ -134,19 +135,15 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
             />
             Back
           </Button>
-          <Button
+          <StyledButton
             type="submit"
             color="success"
             variant="contained"
             disabled={disableButton}
-            sx={{
-              backgroundImage:
-                'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
-            }}
           >
             <Send sx={{ paddingRight: '4px', marginRight: '4px' }} />
             Create
-          </Button>
+          </StyledButton>
         </StyledDialogActions>
       </form>
     </Dialog>

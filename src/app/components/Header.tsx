@@ -26,7 +26,7 @@ export default function Header() {
   const AuthButton = isAuthenticated ? (
     <Grid container alignItems="center" gap="6px" justifyContent="end">
       <Grid item>{user?.name && <Avatar {...stringAvatar(user.name)} />}</Grid>
-      <Grid item pr="6px">
+      <Grid item pr="13px">
         {user?.name}
       </Grid>
       <Grid item>
@@ -34,9 +34,7 @@ export default function Header() {
       </Grid>
     </Grid>
   ) : (
-    <div>
-      <Login />
-    </div>
+    <Login />
   );
 
   const ACTIVE_BUTTON_STYLE = {

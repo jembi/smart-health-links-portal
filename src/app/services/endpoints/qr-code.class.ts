@@ -16,7 +16,7 @@ export class QrCode<
     super(instance);
   }
 
-  async getQrCode(linkId: string, data: object) {
+  async getQrCode(linkId: string, data: TOperations['create']['req']) {
     return await this.create({
       url: `/${EPath.shareLinks}/${linkId}/qrcode`,
       data,

@@ -15,10 +15,12 @@ import {
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogContent } from '@/app/components/StyledDialogContent';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
 import { apiQrCode } from '@/app/services/endpoints/qr-code.class';
+import { clipboard } from '@/app/utils/helpers';
 import { type CreateSHLinkDto } from '@/domain/dtos/shlink';
 
 export type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
@@ -29,8 +31,8 @@ interface QRCodeDialogProps {
   open?: boolean;
   data?: {
     id: string;
-    managementToken: string;
     url: string;
+    managementToken: string;
   };
   onClose?: () => void;
 }
@@ -92,11 +94,9 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
               )}
             </Grid>
             <Grid item textAlign="center">
-              <Button
+              <StyledButton
                 sx={{
                   maxWidth: '240px',
-                  backgroundImage:
-                    'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
                 }}
                 fullWidth
                 disabled={!qrCodeUrl || QrCopyStatus === 'loading'}
@@ -107,11 +107,7 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                   if (qrCodeBlob) {
                     setQrCopyStatus('loading');
 
-                    await navigator.clipboard.write([
-                      new ClipboardItem({
-                        [qrCodeBlob.type]: qrCodeBlob,
-                      }),
-                    ]);
+                    await clipboard(qrCodeBlob);
 
                     setTimeout(() => {
                       setQrCopyStatus('copied');
@@ -136,14 +132,12 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                     Coping QR Code
                   </>
                 )}
-              </Button>
+              </StyledButton>
             </Grid>
             <Grid item textAlign="center">
-              <Button
+              <StyledButton
                 sx={{
                   maxWidth: '240px',
-                  backgroundImage:
-                    'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
                 }}
                 fullWidth
                 disabled={!qrCodeUrl || linkCopyStatus === 'loading'}
@@ -154,7 +148,7 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                   if (qrCodeBlob && data?.url) {
                     setLinkCopyStatus('loading');
 
-                    await navigator.clipboard.writeText(data.url);
+                    await clipboard(data.url);
 
                     setTimeout(() => {
                       setLinkCopyStatus('copied');
@@ -179,7 +173,7 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                     Coping link
                   </>
                 )}
-              </Button>
+              </StyledButton>
             </Grid>
           </Grid>
         </StyledDialogContent>

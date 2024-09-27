@@ -6,6 +6,7 @@ import {
   DialogContentText,
 } from '@mui/material';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
 
@@ -35,18 +36,14 @@ export const ConfirmationDialog = ({
           <KeyboardBackspace sx={{ paddingRight: '4px', marginRight: '4px' }} />
           Cancel
         </Button>
-        <Button
+        <StyledButton
           onClick={confirmDeactivate}
           color="error"
           variant="contained"
-          sx={{
-            backgroundImage:
-              'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
-          }}
         >
           <Block sx={{ paddingRight: '4px', marginRight: '4px' }} />
           Deactivate
-        </Button>
+        </StyledButton>
       </StyledDialogActions>
     </Dialog>
   );

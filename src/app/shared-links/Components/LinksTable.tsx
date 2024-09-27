@@ -1,5 +1,5 @@
 'use client';
-import { QrCode } from '@mui/icons-material';
+import { Cancel, CheckCircle, ContentCopy, QrCode } from '@mui/icons-material';
 import { Add } from '@mui/icons-material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
@@ -16,14 +16,15 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material';
+import { green, red } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
-import { uuid } from '@/app/utils/helpers';
+import { clipboard, uuid } from '@/app/utils/helpers';
 import { type SHLinkMiniDto } from '@/domain/dtos/shlink';
 
-import BooleanIcon from './BooleanIcon';
 import { AddLinkDialog } from './dialogs/AddLinkDialog';
 import ConfirmationDialog from './dialogs/ConfirmationDialog';
 import { QRCodeDialog } from './dialogs/QRCodeDialog';
@@ -80,9 +81,18 @@ const columns: readonly Column[] = [
     id: 'passwordRequired',
     label: 'Passcode enabled',
     minWidth: 50,
-    format: (value?: boolean) => <BooleanIcon status={!!value} />,
+    format: (value?: boolean) =>
+      !!value ? (
+        <CheckCircle style={{ color: green[500] }} />
+      ) : (
+        <Cancel style={{ color: red[500] }} />
+      ),
   },
 ];
+
+const handleCopyLink = async ({ url }: SHLinkMiniDto) => {
+  await clipboard(url);
+};
 
 export default function LinksTable() {
   const [links, setLinks] = useState<SHLinkMiniDto[]>([]);
@@ -105,7 +115,7 @@ export default function LinksTable() {
     setPage(newPage);
   };
 
-  const handleDeactivate = async (row: SHLinkMiniDto) => {
+  const handleDeactivate = (row: SHLinkMiniDto) => {
     setSelectedLinkId(row.id);
     setConfirmDialogOpen(true);
   };
@@ -121,9 +131,9 @@ export default function LinksTable() {
       }
     }
   };
-  const handleQrCode = async (row: SHLinkMiniDto) => {
+  const handleQrCode = ({ id, url, managementToken }: SHLinkMiniDto) => {
     setQrCodeDialogOpen(true);
-    setQrCodeData({ id: row.id, managementToken: '', url: row.url });
+    setQrCodeData({ id, url, managementToken });
   };
 
   const actionColumns: IActionColumns[] = [
@@ -134,6 +144,7 @@ export default function LinksTable() {
       ({ active }) => !active,
     ),
     createActionColumn(<QrCode />, handleQrCode, 'Show QR Code'),
+    createActionColumn(<ContentCopy />, handleCopyLink, 'Copy Shared Link'),
   ];
 
   const fetchLinks = async () => {
@@ -179,20 +190,16 @@ export default function LinksTable() {
       )}
       <Grid container justifyContent="end">
         <Grid item>
-          <Button
+          <StyledButton
             size="small"
             variant="contained"
             onClick={handleCreateLink}
-            sx={{
-              backgroundImage:
-                'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
-            }}
           >
             <Add
               sx={{ color: '#eee', paddingRight: '4px', marginRight: '4px' }}
             />
             new link
-          </Button>
+          </StyledButton>
         </Grid>
       </Grid>
       <TableContainer sx={{ maxHeight: '50vh' }}>
@@ -229,7 +236,7 @@ export default function LinksTable() {
                       </TableCell>
                     );
                   })}
-                  <TableCell width={200}>
+                  <TableCell width={250}>
                     {actionColumns.map((actionColumn) => (
                       <Tooltip key={uuid()} title={actionColumn.tooltipTitle}>
                         <span>

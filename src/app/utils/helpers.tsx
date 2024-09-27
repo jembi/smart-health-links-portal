@@ -173,3 +173,14 @@ export const getResource = <TResource extends keyof IResource>(
 };
 
 export const uuid = () => uuidv4();
+
+export const clipboard = async (items: string | Blob) => {
+  if (typeof items === 'string') await navigator.clipboard.writeText(items);
+  else {
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        [items.type]: items,
+      }),
+    ]);
+  }
+};
