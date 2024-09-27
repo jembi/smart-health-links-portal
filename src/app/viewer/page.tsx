@@ -37,12 +37,38 @@ export default function SHlinkViewer() {
   const [nameError, setNameError] = useState(false);
   const [passcodeError, setPasscodeError] = useState(false);
 
+  // Helper function to check if a string is valid JSON
+  function isJsonString(str: string): boolean {
+    try {
+      JSON.parse(str);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  // Helper function to validate the URL
+  function isValidUrl(inputUrl: string): boolean {
+    // Define allowed domains or patterns
+
+    const allowedDomains = [process.env.DOMAIN || 'localhost'];
+    try {
+      const parsedUrl = new URL(inputUrl);
+      return allowedDomains.includes(parsedUrl.hostname);
+    } catch {
+      return false;
+    }
+  }
+
   useEffect(() => {
     const hash = window.location.hash;
     const ticket = hash.split('/')[1];
     if (ticket) {
       try {
         const decodedString = atob(ticket);
+        // Validate that decodedString is a valid JSON string
+        if (!isJsonString(decodedString)) {
+          throw new Error('Decoded ticket is not valid JSON.');
+        }
         const decoded: DecodedToken = JSON.parse(decodedString);
         setTokenData(decoded);
       } catch (error) {
@@ -65,13 +91,24 @@ export default function SHlinkViewer() {
       setNameError(true);
       return;
     }
+
+    // Validate and sanitize the URL
+    const url = tokenData?.url;
+    if (!url) {
+      setError(
+        'Invalid token data. Please ask the patient to generate a new valid link.',
+      );
+      return;
+    } else if (!isValidUrl(url)) {
+      setError('Invalid URL detected. Please contact support.');
+      return;
+    }
     if (tokenData && tokenData.flag !== 'L' && !passcode) {
       setPasscodeError(true);
       return;
     }
 
     // Extract URL from tokenData
-    const url = tokenData?.url;
     if (!url) {
       setError(
         'Invalid token data. Please ask the patient to generate a new valid link.',
