@@ -5,7 +5,7 @@ import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { mapEntityToModel, mapModelToEntity } from '@/mappers/shlink-mapper';
 
-export const activeSHLinksUseCase = async (
+export const activateSHLinksUseCase = async (
   context: { repo: ISHLinkRepository },
   data: { id: string; user: UserProfile },
 ): Promise<SHLinkModel> => {
@@ -16,7 +16,7 @@ export const activeSHLinksUseCase = async (
   if (model) {
     if (data.user.id !== model.getUserId())
       throw new AuthenticationError(
-        'User not authorized to deactivate shlink.',
+        'User not authorized to activate shlink.',
       );
 
     model.setActive(true);

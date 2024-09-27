@@ -8,7 +8,7 @@ import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
 import { mapEntityToModel, mapModelToEntity } from '@/mappers/shlink-mapper';
 
-import { activeSHLinksUseCase } from './activate-shlink';
+import { activateSHLinksUseCase } from './activate-shlink';
 
 // Mock the dependencies
 jest.mock('@/mappers/shlink-mapper', () => ({
@@ -18,7 +18,7 @@ jest.mock('@/mappers/shlink-mapper', () => ({
 
 const dateValue = new Date('2024-01-01T00:00:00Z');
 
-describe('activeSHLinksUseCase', () => {
+describe('activateSHLinksUseCase', () => {
   let mockRepo: jest.Mocked<ISHLinkRepository>;
   let mockContext: { repo: ISHLinkRepository };
   let mockSHLinkEntity: SHLinkEntity;
@@ -80,7 +80,7 @@ describe('activeSHLinksUseCase', () => {
   });
 
   it('should call the repository findById method with the correct id', async () => {
-    await activeSHLinksUseCase(mockContext, {
+    await activateSHLinksUseCase(mockContext, {
       id: mockId,
       user: { id: 'user-123567', name: '', email: '' },
     });
@@ -89,7 +89,7 @@ describe('activeSHLinksUseCase', () => {
   });
 
   it('should deactivate the SHLinkEntity and update it in the repository', async () => {
-    await activeSHLinksUseCase(mockContext, {
+    await activateSHLinksUseCase(mockContext, {
       id: mockId,
       user: { id: 'user-123567', name: '', email: '' },
     });
@@ -98,7 +98,7 @@ describe('activeSHLinksUseCase', () => {
   });
 
   it('should map the updated SHLinkEntity back to SHLinkModel', async () => {
-    const result = await activeSHLinksUseCase(mockContext, {
+    const result = await activateSHLinksUseCase(mockContext, {
       id: mockId,
       user: { id: 'user-123567', name: '', email: '' },
     });
@@ -110,7 +110,7 @@ describe('activeSHLinksUseCase', () => {
   it('should throw an AuthenticationError if the user is not authorized', async () => {
     const wrongUserId = 'user-111111'; // Different from the one in mockSHLinkEntity
     await expect(
-      activeSHLinksUseCase(mockContext, {
+      activateSHLinksUseCase(mockContext, {
         id: mockId,
         user: { id: wrongUserId, name: '', email: '' },
       }),
@@ -125,7 +125,7 @@ describe('activeSHLinksUseCase', () => {
     mockRepo.update.mockRejectedValue(error);
 
     await expect(
-      activeSHLinksUseCase(mockContext, {
+      activateSHLinksUseCase(mockContext, {
         id: mockId,
         user: { id: 'user-123567', name: '', email: '' },
       }),
