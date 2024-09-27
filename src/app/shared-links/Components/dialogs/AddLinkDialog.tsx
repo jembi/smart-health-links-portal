@@ -1,4 +1,5 @@
 'use client';
+import { KeyboardBackspace, Send } from '@mui/icons-material';
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,7 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogContent } from '@/app/components/StyledDialogContent';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
@@ -127,17 +129,21 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
           </StyledDialogContent>
         </DialogContent>
         <StyledDialogActions>
-          <Button color="inherit" variant="contained" onClick={onClose}>
-            Cancel
+          <Button onClick={onClose}>
+            <KeyboardBackspace
+              sx={{ paddingRight: '4px', marginRight: '4px' }}
+            />
+            Back
           </Button>
-          <Button
+          <StyledButton
             type="submit"
             color="success"
             variant="contained"
             disabled={disableButton}
           >
+            <Send sx={{ paddingRight: '4px', marginRight: '4px' }} />
             Create
-          </Button>
+          </StyledButton>
         </StyledDialogActions>
       </form>
     </Dialog>

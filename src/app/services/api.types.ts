@@ -9,6 +9,7 @@ import type {
   SHLinkEndpointDto,
   CreateSHLinkEndpointDto,
 } from '@/domain/dtos/shlink-endpoint';
+import { SHLinkQRCodeRequestDto } from '@/domain/dtos/shlink-qrcode';
 import { type TBundle } from '@/types/fhir.types';
 
 export interface IApi {
@@ -68,7 +69,7 @@ export interface IPathMapTypes {
   };
   [EPath.qrCode]: {
     create: {
-      req: never;
+      req: SHLinkQRCodeRequestDto;
       res: never;
     };
     read: never;

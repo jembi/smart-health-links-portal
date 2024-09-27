@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import type { Metadata } from 'next';
@@ -8,6 +9,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import AuthProvider from './context/AuthProvider';
 import theme from './theme';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -30,7 +32,12 @@ export default async function RootLayout({
           <ThemeProvider theme={theme}>
             <AuthProvider session={session}>
               <Header />
-              {children}
+              <Grid
+                sx={{ alignContent: 'center' }}
+                minHeight={'calc(100vh - 137px)'}
+              >
+                {children}
+              </Grid>
               <Footer />
             </AuthProvider>
           </ThemeProvider>
