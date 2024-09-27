@@ -1,4 +1,5 @@
 import { getUserProfile } from '@/app/utils/authentication';
+import { ServerConfigModel } from '@/domain/models/server-config';
 import { IServerConfigRepository } from '@/infrastructure/repositories/interfaces/server-config-repository';
 import { HapiFhirServiceFactory } from '@/services/hapi-fhir-factory';
 import {
@@ -36,23 +37,24 @@ describe('searchPatientUseCase', () => {
     HapiFhirServiceFactory.getService = jest.fn().mockReturnValue(mockService);
   });
 
-  it('should return patient ID if patient data is found', async () => {
+  it('should return patient and server config data if patient data is found', async () => {
     const patientId = '12345';
     const expectedId = 'patient-12345';
+    const data = {
+      resource: {
+        id: expectedId,
+        telecom: [{ system: 'email', value: email }],
+      },
+    };
+    const serverConfig = { endpoint_url: 'http://test.com', config_key: 'key' };
+    const expectedConfig = new ServerConfigModel('key', 'http://test.com');
 
     // Mock service configuration
-    mockRepo.findMany.mockResolvedValue([{ endpoint_url: 'http://test.com' }]);
+    mockRepo.findMany.mockResolvedValue([serverConfig]);
 
     // Mock patient search result
     mockService.searchPatient.mockResolvedValue({
-      entry: [
-        {
-          resource: {
-            id: expectedId,
-            telecom: [{ system: 'email', value: email }],
-          },
-        },
-      ],
+      entry: [data],
     });
 
     const result = await searchPatientUseCase(
@@ -60,7 +62,7 @@ describe('searchPatientUseCase', () => {
       { patientId, email },
     );
 
-    expect(result).toBe(expectedId);
+    expect(result.patient).toEqual({ ...data.resource });
     expect(mockService.searchPatient).toHaveBeenCalledWith(patientId);
   });
 

@@ -101,7 +101,7 @@ export async function GET(
       `Getting an endpoint data of user id: ${shlink.getUserId()} with share link id: ${params.id}, endpoint id: ${params.endpointId} and ticket id: ${ticketId}`,
     );
     const patient = await getPatientDataUseCase(
-      { repo: serverConfigRepo },
+      { repo: serverConfigRepo, userRepo },
       { user: user },
     );
 

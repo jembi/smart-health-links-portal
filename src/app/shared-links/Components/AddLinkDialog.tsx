@@ -1,16 +1,18 @@
 'use client';
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   TextField,
-  DialogActions,
   Button,
-  styled,
+  Alert,
+  Grid,
 } from '@mui/material';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { StyledDialogActions } from '@/app/components/StyledDialogActions';
+import { StyledDialogContent } from '@/app/components/StyledDialogContent';
+import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
 import { useAuth } from '@/app/context/AuthProvider';
 import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
 import { CreateSHLinkDto } from '@/domain/dtos/shlink';
@@ -18,24 +20,6 @@ import { CreateSHLinkDto } from '@/domain/dtos/shlink';
 const removeUndefinedValues = <T extends Record<string, unknown>>(
   object: T,
 ): T => JSON.parse(JSON.stringify(object));
-
-const StyledDialogTitle = styled(DialogTitle)(() => ({
-  backgroundImage: 'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #e6e6e6)',
-}));
-
-const StyledDialogContent = styled('div')(() => ({
-  gap: '15px',
-  margin: '15px',
-  display: 'flex',
-  flexDirection: 'column',
-}));
-
-const StyledDialogActions = styled(DialogActions)(() => ({
-  paddingTop: '15px',
-  paddingRight: '25px',
-  paddingBottom: '15px',
-  backgroundImage: 'linear-gradient(to top, hsla(0, 0%, 90%, .05), #e6e6e6)',
-}));
 
 export type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
   configExp?: string;
@@ -53,6 +37,8 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
   callback,
 }) => {
   const { session } = useAuth();
+  const [hasError, setHasError] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const {
     reset,
@@ -63,17 +49,30 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
   } = useForm<TCreateSHLinkDto>();
 
   const onSubmitForm = async (data: TCreateSHLinkDto) => {
+    setDisableButton(true);
     try {
       const transformedData = removeUndefinedValues(data);
-      await apiSharedLink.createLink(transformedData);
-      callback?.();
+      const { data: createdLink } =
+        await apiSharedLink.createLink(transformedData);
+      await apiSharedLink
+        .createEndpoint(createdLink['id'])
+        .then(() => {
+          callback?.();
+        })
+        .catch(() => {
+          setHasError(true);
+        });
     } catch (error) {
       console.error('Failed to create link:', error);
     }
   };
 
   useEffect(() => {
-    if (open) reset();
+    if (open) {
+      reset();
+      setHasError(false);
+      setDisableButton(false);
+    }
   }, [open]);
 
   useEffect(() => {
@@ -83,10 +82,17 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
 
   return (
     <Dialog open={!!open} fullWidth maxWidth="xs" onClose={() => onClose?.()}>
-      <StyledDialogTitle>Create a new Link</StyledDialogTitle>
-      <DialogContent style={{ padding: '5px 8px' }}>
-        <form onSubmit={handleSubmit(onSubmitForm)}>
+      <form onSubmit={handleSubmit(onSubmitForm)}>
+        <StyledDialogTitle>Create a new Link</StyledDialogTitle>
+        <DialogContent style={{ padding: '5px 8px' }}>
           <StyledDialogContent>
+            {hasError && (
+              <Grid pb={2}>
+                <Alert severity="error">
+                  The creation of the endpoint is failed
+                </Alert>
+              </Grid>
+            )}
             <TextField
               label="User id"
               error={!!errors.userId}
@@ -96,9 +102,8 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
               {...register('userId', {})}
             />
             <TextField
-              label="Name"
+              label="Name *"
               error={!!errors.name}
-              required
               helperText={errors.name ? errors.name.message : null}
               placeholder="Name"
               {...register('name', { required: 'Required field' })}
@@ -119,21 +124,21 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
               })}
             />
           </StyledDialogContent>
-        </form>
-      </DialogContent>
-      <StyledDialogActions>
-        <Button color="inherit" variant="contained" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          color="success"
-          variant="contained"
-          onClick={handleSubmit(onSubmitForm)}
-        >
-          Create
-        </Button>
-      </StyledDialogActions>
+        </DialogContent>
+        <StyledDialogActions>
+          <Button color="inherit" variant="contained" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            color="success"
+            variant="contained"
+            disabled={disableButton}
+          >
+            Create
+          </Button>
+        </StyledDialogActions>
+      </form>
     </Dialog>
   );
 };
