@@ -6,6 +6,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const instance = axios.create({
   baseURL,
+  withCredentials: true,
 });
 
 class BaseApi {
@@ -53,6 +54,18 @@ export class ApiSHLink extends BaseApi {
     });
   }
 
+  async fetchShareLinkData(url: string, data: object) {
+    return await this.create({
+      url,
+      data,
+    });
+  }
+
+  async getShareLinkData(url: string) {
+    return await this.find({
+      url,
+    });
+  }
   async getQrCode(linkId: string, data: object) {
     return await this.create({
       url: `/${EEndpoint.shareLinks}/${linkId}/qrcode`,
@@ -74,3 +87,5 @@ instance.interceptors.response.use(
 
 export const createApiSharedLink = () => new ApiSHLink(instance);
 export const apiSharedLink = createApiSharedLink();
+export const getShareLinkData = (url: string) =>
+  apiSharedLink.getShareLinkData(url);
