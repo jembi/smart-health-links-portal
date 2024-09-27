@@ -11,6 +11,8 @@ export const mapEntityToModel = (
         userEntity.patient_id,
         userEntity.id,
         userEntity.server_config_id,
+        userEntity.created_at,
+        userEntity.updated_at
       )
     : undefined;
 };
@@ -23,9 +25,7 @@ export const mapModelToEntity = (
         id: userModel.getId(),
         user_id: userModel.getUserId(),
         patient_id: userModel.getPatientId(),
-        server_config_id: userModel.getServerConfigId(),
-        created_at: userModel.getCreatedAt(),
-        updated_at: userModel.getUpdatedAt()
+        server_config_id: userModel.getServerConfigId()
       }
     : undefined;
 };
@@ -35,9 +35,7 @@ export const mapModelToDto = (userModel: UserModel): UserDto | undefined => {
     ? {
         id: userModel.getId(),
         patientId: userModel.getPatientId(),
-        userId: userModel.getUserId(),
-        createdAt: userModel.getCreatedAt(),
-        updatedAt: userModel.getUpdatedAt()
+        userId: userModel.getUserId()
       }
     : undefined;
 };
@@ -48,9 +46,7 @@ export const mapDtoToModel = (userDto: UserDto): UserModel | undefined => {
       userDto.userId,
       userDto.patientId,
       userDto.id,
-      userDto.serverConfigId,
-      userDto.createdAt,
-      userDto.updatedAt
+      userDto.serverConfigId
     )
     : undefined;
 };

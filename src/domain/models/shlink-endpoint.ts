@@ -8,18 +8,18 @@ export class SHLinkEndpointModel extends BaseModel {
     private serverConfigId: string,
     private urlPath: string,
     private id?: string,
-    private createdAt?: Date,
-    private updatedAt?: Date
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
         shlinkId: z.string(),
         serverConfigId: z.string(),
         urlPath: z.string(),
-        id: z.string().optional(),
-        createdAt: z.date().optional(),
-        updatedAt: z.date().optional()
+        id: z.string().optional()
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }
@@ -54,21 +54,5 @@ export class SHLinkEndpointModel extends BaseModel {
 
   setUrlPath(urlPath: string): void {
     this.urlPath = urlPath;
-  }
-
-  getCreatedAt(): Date {
-    return this.createdAt;
-  }
-
-  setCreatedAt(createdAt: Date): void {
-    this.createdAt = createdAt;
-  }
-
-  getUpdatedAt(): Date {
-    return this.updatedAt;
-  }
-
-  setUpdatedAt(updatedAt: Date): void {
-    this.updatedAt = updatedAt;
   }
 }

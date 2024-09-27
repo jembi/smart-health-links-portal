@@ -59,19 +59,9 @@ export class CreateServerConfigDto {
  *           type: string
  *           description: An optional string representing the external endpoint to get a session token.
  *           example: https://example.com
- *         createdAt:
- *            type: datetime
- *            description: A date representing the date the share link endpoint was created.
- *            example: 2024-09-26T10:03:39.379Z
- *         updatedAt:
- *            type:datetime
- *            description: A date representing the date the share link endpoint was updated.
- *            example: 2024-09-26T10:03:39.379Z
  */
 export class ServerConfigDto extends CreateServerConfigDto {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
   accessTokenResponse?: string;
   refreshToken?: string;
   refreshTime?: Date;

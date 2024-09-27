@@ -43,8 +43,7 @@ describe('deactivateSHLinksUseCase', () => {
       config_passcode: 'passcode-abcde',
       config_exp: new Date('2024-01-01T00:00:00Z'),
       created_at: new Date('2024-01-01T00:00:00Z'),
-      updated_at: new Date('2024-01-01T00:00:00Z'),
-      deleted_at: null
+      updated_at: new Date('2024-01-01T00:00:00Z')
     };
 
     mockUpdatedSHLinkEntity = {
@@ -62,8 +61,7 @@ describe('deactivateSHLinksUseCase', () => {
       mockSHLinkEntity.config_exp,
       mockSHLinkEntity.id,
       new Date('2024-01-01T00:00:00Z'),
-      new Date('2024-01-01T00:00:00Z'),
-      null
+      new Date('2024-01-01T00:00:00Z')
     );
 
     // Set up mock implementations

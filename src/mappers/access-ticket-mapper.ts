@@ -20,9 +20,7 @@ export const mapModelToEntity = (
   return accessTicketModel
     ? {
         id: accessTicketModel.getId(),
-        shlink_id: accessTicketModel.getSHLinkId(),
-        created_at: accessTicketModel.getCreatedAt(),
-        updated_at: accessTicketModel.getUpdatedAt()
+        shlink_id: accessTicketModel.getSHLinkId()
       }
     : undefined;
 };

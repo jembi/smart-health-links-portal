@@ -8,18 +8,18 @@ export class UserModel extends BaseModel {
     private patientId: string,
     private id?: string,
     private serverConfigId?: string,
-    private createdAt?: Date,
-    private updatedAt?: Date
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
         userId: z.string().min(1),
         patientId: z.string().min(1),
         id: z.string().optional(),
-        serverConfigId: z.string().optional(),
-        createdAt: z.date().optional(),
-        updatedAt: z.date().optional()
+        serverConfigId: z.string().optional()
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }
@@ -50,21 +50,5 @@ export class UserModel extends BaseModel {
 
   setUserId(userId: string): void {
     this.userId = userId;
-  }
-
-  getCreatedAt(): Date {
-    return this.createdAt;
-  }
-
-  setCreatedAt(createdAt: Date): void {
-    this.createdAt = createdAt;
-  }
-
-  getUpdatedAt(): Date {
-    return this.updatedAt;
-  }
-
-  setUpdatedAt(updatedAt: Date): void {
-    this.updatedAt = updatedAt;
   }
 }

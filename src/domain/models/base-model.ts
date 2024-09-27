@@ -1,4 +1,5 @@
-import z from 'zod';
+import z, { ZodObject, ZodRawShape } from 'zod';
+
 
 export class ModelValidationError extends Error {
   constructor(
@@ -11,10 +12,23 @@ export class ModelValidationError extends Error {
 }
 
 export abstract class BaseModel {
-  constructor(private _schema: z.ZodSchema) {}
+  public createdAt?: Date;
+  public updatedAt?: Date;
+
+  private static _baseSchema = z.object({
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
+  });
+
+  constructor(private _schema: ZodObject<ZodRawShape>, createdAt?:Date, updatedAt?: Date) {
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 
   validate() {
-    const result = this._schema.safeParse(this);
+    const combinedSchema = BaseModel._baseSchema.merge(this._schema);
+
+    const result = combinedSchema.safeParse(this);
 
     if (!result.success) {
       const errors: Record<string, string[]> = {};
@@ -28,4 +42,21 @@ export abstract class BaseModel {
       throw new ModelValidationError('Validation failed', errors);
     }
   }
+
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+
+  setCreatedAt(createdAt: Date): void {
+    this.createdAt = createdAt;
+  }
+
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
+
+  setUpdatedAt(updatedAt: Date): void {
+    this.updatedAt = updatedAt;
+  }
+
 }

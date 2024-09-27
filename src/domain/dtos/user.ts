@@ -42,6 +42,4 @@ export class CreateUserDto {
  */
 export class UserDto extends CreateUserDto {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
 }

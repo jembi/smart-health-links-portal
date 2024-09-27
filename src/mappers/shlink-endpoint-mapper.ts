@@ -25,9 +25,7 @@ export const mapModelToEntity = (
         id: shlinkEndpointModel.getId(),
         shlink_id: shlinkEndpointModel.getShlinkId(),
         server_config_id: shlinkEndpointModel.getServerConfigId(),
-        url_path: shlinkEndpointModel.getUrlPath(),
-        created_at: shlinkEndpointModel.getCreatedAt(),
-        updated_at: shlinkEndpointModel.getUpdatedAt()
+        url_path: shlinkEndpointModel.getUrlPath()
       }
     : undefined;
 };
@@ -40,9 +38,7 @@ export const mapModelToDto = (
         id: shlinkEndpointModel.getId(),
         shlinkId: shlinkEndpointModel.getShlinkId(),
         serverConfigId: shlinkEndpointModel.getServerConfigId(),
-        urlPath: shlinkEndpointModel.getUrlPath(),
-        createdAt: shlinkEndpointModel.getCreatedAt(),
-        updatedAt: shlinkEndpointModel.getUpdatedAt()
+        urlPath: shlinkEndpointModel.getUrlPath()
       }
     : undefined;
 };
@@ -55,9 +51,7 @@ export const mapDtoToModel = (
         shlinkEndpointDto.shlinkId,
         shlinkEndpointDto.serverConfigId,
         shlinkEndpointDto.urlPath,
-        shlinkEndpointDto.id,
-        shlinkEndpointDto.createdAt,
-        shlinkEndpointDto.updatedAt
+        shlinkEndpointDto.id
       )
     : undefined;
 };

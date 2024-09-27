@@ -9,14 +9,16 @@ import {
   mapDtoToModel,
 } from './shlink-endpoint-mapper';
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('SHLinkEndpoint Mappers', () => {
   const mockEntity: SHLinkEndpointEntity = {
     id: 'endpoint-123',
     shlink_id: 'shlink-456',
     server_config_id: 'config-789',
     url_path: '/api/path',
-    created_at: new Date('2024-01-01T00:00:00Z'),
-    updated_at: new Date('2024-01-01T00:00:00Z')
+    created_at:dateValue,
+    updated_at:dateValue
   };
 
   const mockModel = new SHLinkEndpointModel(
@@ -24,17 +26,15 @@ describe('SHLinkEndpoint Mappers', () => {
     'config-789',
     '/api/path',
     'endpoint-123',
-    new Date('2024-01-01T00:00:00Z'),
-    new Date('2024-01-01T00:00:00Z')
+   dateValue,
+   dateValue
   );
 
   const mockDto: SHLinkEndpointDto = {
     id: 'endpoint-123',
     shlinkId: 'shlink-456',
     serverConfigId: 'config-789',
-    urlPath: '/api/path',
-    createdAt: new Date('2024-01-01T00:00:00Z'),
-    updatedAt: new Date('2024-01-01T00:00:00Z')
+    urlPath: '/api/path'
   };
 
   describe('mapEntityToModel', () => {
@@ -52,7 +52,12 @@ describe('SHLinkEndpoint Mappers', () => {
   describe('mapModelToEntity', () => {
     it('should map SHLinkEndpointModel to SHLinkEndpointEntity', () => {
       const result = mapModelToEntity(mockModel);
-      expect(result).toEqual(mockEntity);
+      expect(result).toEqual({
+        id: 'endpoint-123',
+        shlink_id: 'shlink-456',
+        server_config_id: 'config-789',
+        url_path: '/api/path'
+      });
     });
 
     it('should return undefined if SHLinkEndpointModel is undefined', () => {

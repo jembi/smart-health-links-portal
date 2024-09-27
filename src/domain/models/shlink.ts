@@ -12,9 +12,8 @@ export class SHLinkModel extends BaseModel {
     private configPasscode?: string,
     private configExp?: Date,
     private id?: string,
-    private createdAt?: Date,
-    private updatedAt?: Date,
-    private deletedAt?: Date
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
@@ -25,11 +24,10 @@ export class SHLinkModel extends BaseModel {
         configPasscode: z.string().min(4).optional().nullable(),
         configExp: z.date().optional().nullable(),
         id: z.string().optional(),
-        createdAt: z.date().optional(),
-        updatedAt: z.date().optional(),
-        deletedAt: z.date().optional().nullable(),
         name: z.string().default('unnamed shlink'),
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }
@@ -96,29 +94,5 @@ export class SHLinkModel extends BaseModel {
 
   setUserId(userId: string): void {
     this.userId = userId;
-  }
-
-  getCreatedAt(): Date {
-    return this.createdAt;
-  }
-
-  setCreatedAt(createdAt: Date): void {
-    this.createdAt = createdAt;
-  }
-
-  getUpdatedAt(): Date {
-    return this.updatedAt;
-  }
-
-  setUpdatedAt(updatedAt: Date): void {
-    this.updatedAt = updatedAt;
-  }
-
-  getDeletedAt(): Date | null {
-    return this.deletedAt;
-  }
-
-  setDeletedAt(deletedAt: Date | null): void {
-    this.deletedAt = deletedAt;
   }
 }

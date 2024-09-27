@@ -106,7 +106,6 @@ export class SHLinkDto extends CreateSHLinkDto {
   managementToken: string;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
 }
 
 /**
@@ -159,6 +158,8 @@ export class SHLinkMiniDto {
   name: string;
   url: string;
   active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 /**

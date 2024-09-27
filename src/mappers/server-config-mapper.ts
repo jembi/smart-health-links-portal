@@ -55,9 +55,7 @@ export const mapModelToDto = (
         endpointUrl: serverModel.getEndpointUrl(),
         refreshTime: serverModel.getRefreshTime(),
         refreshToken: serverModel.getRefreshToken(),
-        tokenEndpoint: serverModel.getTokenEndpoint(),
-        createdAt: serverModel.getCreatedAt(),
-        updatedAt: serverModel.getUpdatedAt()
+        tokenEndpoint: serverModel.getTokenEndpoint()
       }
     : undefined;
 };
@@ -75,9 +73,7 @@ export const mapDtoToModel = (
         serverDto.refreshTime,
         serverDto.id,
         serverDto.accessTokenResponse || '',
-        serverDto.refreshToken,
-        serverDto.createdAt,
-        serverDto.updatedAt
+        serverDto.refreshToken
       )
     : undefined;
 };

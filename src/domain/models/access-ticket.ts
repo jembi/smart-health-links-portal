@@ -6,16 +6,16 @@ export class AccessTicketModel extends BaseModel {
   constructor(
     private shlinkId: string,
     private id?: string,
-    private createdAt?: Date,
-    private updatedAt?: Date
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
         shlinkId: z.string().min(1),
-        id: z.string().optional(),
-        createdAt: z.date().optional(),
-        updatedAt: z.date().optional()
+        id: z.string().optional() 
       }),
+      createdAt, 
+      updatedAt
     );
     this.validate();
   }
@@ -35,20 +35,5 @@ export class AccessTicketModel extends BaseModel {
   setSHLinkId(shlinkId: string): void {
     this.shlinkId = shlinkId;
   }
-  
-  getCreatedAt(): Date {
-    return this.createdAt;
-  }
 
-  setCreatedAt(createdAt: Date): void {
-    this.createdAt = createdAt;
-  }
-
-  getUpdatedAt(): Date {
-    return this.updatedAt;
-  }
-
-  setUpdatedAt(updatedAt: Date): void {
-    this.updatedAt = updatedAt;
-  }
 }

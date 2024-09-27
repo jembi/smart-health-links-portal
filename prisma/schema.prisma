@@ -50,7 +50,6 @@ model shlink {
     id                         String           @id @unique @default(cuid()) @db.VarChar(43)
     created_at                 DateTime         @default(now())
     updated_at                 DateTime         @updatedAt @default(now())
-    deleted_at                 DateTime?        
     passcode_failures_remaining Int             @default(5)
     config_passcode            String?          /// @encrypted
     config_passcode_hash        String?         /// @encryption:hash(config_passcode)
