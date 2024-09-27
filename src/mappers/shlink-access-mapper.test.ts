@@ -14,14 +14,12 @@ jest.mock('@/domain/models/shlink-access', () => {
     SHLinkAccessModel: jest
       .fn()
       .mockImplementation(
-        (shlinkId: string, accessTime: Date, recipient: string, id: string, createdAt: Date, updatedAt: Date) => {
+        (shlinkId: string, accessTime: Date, recipient: string, id: string) => {
           return {
             getAccessTime: jest.fn(() => accessTime),
             getRecipient: jest.fn(() => recipient),
             getSHLinkId: jest.fn(() => shlinkId),
             getId: jest.fn(() => id),
-            createdAt: jest.fn(() => createdAt),
-            updatedAt: jest.fn(() => updatedAt),
           };
         },
       ),
@@ -36,28 +34,19 @@ describe('mapModelToEntity', () => {
     const recipient = 'test@example.com';
     const shlinkId = 'abc123';
     const id = 'def456';
-    const createdAt =dateValue;
-    const updatedAt =dateValue;
 
-    const model = new SHLinkAccessModel(shlinkId, accessTime, recipient, id, createdAt, updatedAt);
+    const model = new SHLinkAccessModel(shlinkId, accessTime, recipient, id);
 
     const expectedEntity: SHLinkAccessEntity = {
       access_time: accessTime,
       recipient: recipient,
       shlink_id: shlinkId,
-      id: id,
-      created_at: createdAt,
-      updated_at: updatedAt
+      id: id
     };
 
     const result = mapModelToEntity(model);
 
-    expect(result).toEqual({
-      access_time: accessTime,
-      recipient: recipient,
-      shlink_id: shlinkId,
-      id: id,
-    });
+    expect(result).toEqual(expectedEntity);
   });
 
   it('should return undefined if SHLinkAccessModel is undefined', () => {
@@ -79,25 +68,19 @@ describe('mapEntityToModel', () => {
     const recipient = 'test@example.com';
     const shlinkId = 'abc123';
     const id = 'def456';
-    const createdAt =dateValue;
-    const updatedAt =dateValue;
 
     const entity: SHLinkAccessEntity = {
       access_time: accessTime,
       recipient: recipient,
       shlink_id: shlinkId,
-      id: id,
-      created_at: createdAt,
-      updated_at: updatedAt
+      id: id
     };
 
     const expectedModel = new SHLinkAccessModel(
       shlinkId,
       accessTime,
       recipient,
-      id,
-      createdAt,
-      updatedAt
+      id
     );
 
     const result = mapEntityToModel(entity);
@@ -127,10 +110,8 @@ describe('mapModelToDto', () => {
     const recipient = 'test@example.com';
     const shlinkId = 'abc123';
     const id = 'def456';
-    const createdAt =dateValue;
-    const updatedAt =dateValue;
 
-    const model = new SHLinkAccessModel(shlinkId, accessTime, recipient, id, createdAt, updatedAt);
+    const model = new SHLinkAccessModel(shlinkId, accessTime, recipient, id);
 
     const expectedDto: SHLinkAccessDto = {
       accessTime: accessTime,
