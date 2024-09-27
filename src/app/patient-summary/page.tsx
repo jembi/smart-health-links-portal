@@ -20,8 +20,8 @@ export default function PatientSummaryPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiIps.getPatientData(user.id);
-        setFhirBundle(response.data);
+        const { data } = await apiIps.getPatientData(user.id);
+        setFhirBundle(data);
       } catch (error) {
         setError(error.message);
       } finally {

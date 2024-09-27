@@ -56,11 +56,11 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
         .getQrCode(data.id, {
           managementToken: data?.managementToken,
         })
-        .then(async (response) => {
+        .then(({ data }) => {
           setQrCodeUrl(
-            `data:image/png;base64,${Buffer.from(response.data, 'binary').toString('base64')}`,
+            `data:image/png;base64,${Buffer.from(data, 'binary').toString('base64')}`,
           );
-          setQrCodeBlob(new Blob([response.data], { type: 'image/png' }));
+          setQrCodeBlob(new Blob([data], { type: 'image/png' }));
         });
     }
   }, [data?.id, data?.managementToken, open]);
