@@ -1,4 +1,5 @@
 'use client';
+import { KeyboardBackspace, Send } from '@mui/icons-material';
 import {
   Dialog,
   DialogContent,
@@ -127,15 +128,23 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
           </StyledDialogContent>
         </DialogContent>
         <StyledDialogActions>
-          <Button color="inherit" variant="contained" onClick={onClose}>
-            Cancel
+          <Button onClick={onClose}>
+            <KeyboardBackspace
+              sx={{ paddingRight: '4px', marginRight: '4px' }}
+            />
+            Back
           </Button>
           <Button
             type="submit"
             color="success"
             variant="contained"
             disabled={disableButton}
+            sx={{
+              backgroundImage:
+                'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
+            }}
           >
+            <Send sx={{ paddingRight: '4px', marginRight: '4px' }} />
             Create
           </Button>
         </StyledDialogActions>

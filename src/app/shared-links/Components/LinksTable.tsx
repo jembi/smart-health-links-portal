@@ -1,5 +1,6 @@
 'use client';
 import { QrCode } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
 import {
@@ -22,10 +23,10 @@ import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
 import { uuid } from '@/app/utils/helpers';
 import { type SHLinkMiniDto } from '@/domain/dtos/shlink';
 
-import { AddLinkDialog } from './AddLinkDialog';
 import BooleanIcon from './BooleanIcon';
-import ConfirmationDialog from './ConfirmationDialog';
-import { QRCodeDialog } from './QRCodeDialog';
+import { AddLinkDialog } from './dialogs/AddLinkDialog';
+import ConfirmationDialog from './dialogs/ConfirmationDialog';
+import { QRCodeDialog } from './dialogs/QRCodeDialog';
 
 interface Column {
   id: keyof SHLinkMiniDto;
@@ -156,7 +157,7 @@ export default function LinksTable() {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', marginBottom: '25px' }}>
       <AddLinkDialog
         open={addDialog}
         onClose={() => setAddDialog(false)}
@@ -178,8 +179,19 @@ export default function LinksTable() {
       )}
       <Grid container justifyContent="end">
         <Grid item>
-          <Button variant="contained" onClick={handleCreateLink}>
-            Add new link
+          <Button
+            size="small"
+            variant="contained"
+            onClick={handleCreateLink}
+            sx={{
+              backgroundImage:
+                'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
+            }}
+          >
+            <Add
+              sx={{ color: '#eee', paddingRight: '4px', marginRight: '4px' }}
+            />
+            new link
           </Button>
         </Grid>
       </Grid>

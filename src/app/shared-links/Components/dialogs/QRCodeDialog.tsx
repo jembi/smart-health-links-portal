@@ -1,5 +1,10 @@
 'use client';
-import { ContentCopy, Check, FileCopy } from '@mui/icons-material';
+import {
+  ContentCopy,
+  Check,
+  FileCopy,
+  KeyboardBackspace,
+} from '@mui/icons-material';
 import {
   Dialog,
   DialogTitle,
@@ -91,7 +96,11 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
             </Grid>
             <Grid item textAlign="center">
               <Button
-                sx={{ maxWidth: '240px' }}
+                sx={{
+                  maxWidth: '240px',
+                  backgroundImage:
+                    'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
+                }}
                 fullWidth
                 disabled={!qrCodeUrl || QrCopyStatus === 'loading'}
                 type="submit"
@@ -134,7 +143,11 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
             </Grid>
             <Grid item textAlign="center">
               <Button
-                sx={{ maxWidth: '240px' }}
+                sx={{
+                  maxWidth: '240px',
+                  backgroundImage:
+                    'linear-gradient(to bottom, hsla(0, 0%, 90%, .05), #0004)',
+                }}
                 fullWidth
                 disabled={!qrCodeUrl || linkCopyStatus === 'loading'}
                 type="submit"
@@ -175,8 +188,9 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
         </StyledDialogContent>
       </DialogContent>
       <StyledDialogActions>
-        <Button color="inherit" variant="contained" onClick={onClose}>
-          Cancel
+        <Button onClick={onClose}>
+          <KeyboardBackspace sx={{ paddingRight: '4px', marginRight: '4px' }} />
+          Back
         </Button>
       </StyledDialogActions>
     </Dialog>
