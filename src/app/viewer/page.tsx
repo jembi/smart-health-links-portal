@@ -18,7 +18,7 @@ import ErrorState from '../components/ErrorState';
 import PatientSummary from '../components/PatientSummaryViewer/PatientSummary';
 import PatientSummarySkeleton from '../components/PatientSummaryViewer/PatientSummarySkeleton';
 import { useAuth } from '../context/AuthProvider';
-import { apiSharedLink, getShareLinkData } from '../utils/api.class';
+import { apiViewer } from '../services/endpoints/viewer.class';
 
 interface DecodedToken {
   label: string;
@@ -91,7 +91,7 @@ export default function SHlinkViewer() {
     try {
       setLoading(true);
       // Send POST request using fetchShareLinkData
-      const response = await apiSharedLink.fetchShareLinkData(url, requestBody);
+      const response = await apiViewer.fetchShareLinkData(url, requestBody);
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -102,8 +102,8 @@ export default function SHlinkViewer() {
       if (responseData.files && responseData.files.length > 0) {
         const location = responseData.files[0].location;
         // Run GET request using the value of location as URL
-        const fileResponse = await getShareLinkData(location);
-        setFhirBundle(fileResponse.data as TBundle);
+        const fileResponse = await apiViewer.getShareLinkData(location);
+        setFhirBundle(fileResponse.data);
       } else if (responseData.files && responseData.files.length === 0) {
         setError(
           'The SHlink has no files associated with it. Please ask the patient to generate a new valid link.',

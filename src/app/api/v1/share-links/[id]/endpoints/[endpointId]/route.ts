@@ -5,6 +5,7 @@ import {
   NOT_FOUND,
   UNAUTHORIZED_REQUEST,
 } from '@/app/constants/http-constants';
+import { AuthenticationError } from '@/app/utils/authentication';
 import { handleApiValidationError } from '@/app/utils/error-handler';
 import {
   AccessTicketRepositoryToken,
@@ -73,16 +74,17 @@ export async function GET(
 
   try {
     unstable_noStore();
+    if (!ticketId) {
+      throw new AuthenticationError();
+    }
+
     const ticket: AccessTicketModel = await getAccessTicketUseCase(
       { repo: ticketRepo },
       ticketId,
     );
 
     if (!ticket || ticket.getSHLinkId() !== params.id) {
-      return NextResponse.json(
-        { message: UNAUTHORIZED_REQUEST },
-        { status: 401 },
-      );
+      throw new AuthenticationError();
     }
 
     const shlink = await getSingleSHLinkUseCase(

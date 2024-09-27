@@ -1,23 +1,27 @@
 'use client';
-import { ContentCopy, Check, FileCopy } from '@mui/icons-material';
+import {
+  ContentCopy,
+  Check,
+  FileCopy,
+  KeyboardBackspace,
+} from '@mui/icons-material';
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
-  DialogActions,
   Button,
-  styled,
   CircularProgress,
   Grid,
 } from '@mui/material';
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogContent } from '@/app/components/StyledDialogContent';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
-import { apiSharedLink } from '@/app/utils/api.class';
-import { CreateSHLinkDto } from '@/domain/dtos/shlink';
+import { apiQrCode } from '@/app/services/endpoints/qr-code.class';
+import { clipboard } from '@/app/utils/helpers';
+import { type CreateSHLinkDto } from '@/domain/dtos/shlink';
 
 export type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
   configExp?: string;
@@ -27,8 +31,8 @@ interface QRCodeDialogProps {
   open?: boolean;
   data?: {
     id: string;
-    managementToken: string;
     url: string;
+    managementToken: string;
   };
   onClose?: () => void;
 }
@@ -47,15 +51,15 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
 
   useEffect(() => {
     if (open && data?.id) {
-      apiSharedLink
+      apiQrCode
         .getQrCode(data.id, {
           managementToken: data?.managementToken,
         })
-        .then(async (response) => {
+        .then(({ data }) => {
           setQrCodeUrl(
-            `data:image/png;base64,${Buffer.from(response.data, 'binary').toString('base64')}`,
+            `data:image/png;base64,${Buffer.from(data, 'binary').toString('base64')}`,
           );
-          setQrCodeBlob(new Blob([response.data], { type: 'image/png' }));
+          setQrCodeBlob(new Blob([data], { type: 'image/png' }));
         });
     }
   }, [data?.id, data?.managementToken, open]);
@@ -90,8 +94,10 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
               )}
             </Grid>
             <Grid item textAlign="center">
-              <Button
-                sx={{ maxWidth: '240px' }}
+              <StyledButton
+                sx={{
+                  maxWidth: '240px',
+                }}
                 fullWidth
                 disabled={!qrCodeUrl || QrCopyStatus === 'loading'}
                 type="submit"
@@ -101,11 +107,7 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                   if (qrCodeBlob) {
                     setQrCopyStatus('loading');
 
-                    await navigator.clipboard.write([
-                      new ClipboardItem({
-                        [qrCodeBlob.type]: qrCodeBlob,
-                      }),
-                    ]);
+                    await clipboard(qrCodeBlob);
 
                     setTimeout(() => {
                       setQrCopyStatus('copied');
@@ -130,11 +132,13 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                     Coping QR Code
                   </>
                 )}
-              </Button>
+              </StyledButton>
             </Grid>
             <Grid item textAlign="center">
-              <Button
-                sx={{ maxWidth: '240px' }}
+              <StyledButton
+                sx={{
+                  maxWidth: '240px',
+                }}
                 fullWidth
                 disabled={!qrCodeUrl || linkCopyStatus === 'loading'}
                 type="submit"
@@ -144,7 +148,7 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                   if (qrCodeBlob && data?.url) {
                     setLinkCopyStatus('loading');
 
-                    await navigator.clipboard.writeText(data.url);
+                    await clipboard(data.url);
 
                     setTimeout(() => {
                       setLinkCopyStatus('copied');
@@ -169,14 +173,15 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
                     Coping link
                   </>
                 )}
-              </Button>
+              </StyledButton>
             </Grid>
           </Grid>
         </StyledDialogContent>
       </DialogContent>
       <StyledDialogActions>
-        <Button color="inherit" variant="contained" onClick={onClose}>
-          Cancel
+        <Button onClick={onClose}>
+          <KeyboardBackspace sx={{ paddingRight: '4px', marginRight: '4px' }} />
+          Back
         </Button>
       </StyledDialogActions>
     </Dialog>

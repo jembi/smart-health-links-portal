@@ -62,7 +62,10 @@ describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(401);
     const responseBody = await response.json();
-    expect(responseBody).toEqual({ message: UNAUTHORIZED_REQUEST });
+    expect(responseBody).toEqual({
+      detail: UNAUTHORIZED_REQUEST,
+      error: 'AuthenticationError',
+    });
   });
 
   it('should return 404 if SHLink is not found', async () => {
@@ -91,7 +94,10 @@ describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(401);
     const responseBody = await response.json();
-    expect(responseBody).toEqual({ message: UNAUTHORIZED_REQUEST });
+    expect(responseBody).toEqual({
+      detail: UNAUTHORIZED_REQUEST,
+      error: 'AuthenticationError',
+    });
   });
 
   it('should return 200 with patient data if everything is valid', async () => {
@@ -127,6 +133,9 @@ describe('GET /api/v1/share-links/[id]/endpoints/[endpointId]', () => {
     expect(response).toBeInstanceOf(NextResponse);
     expect(response.status).toBe(401);
     const responseBody = await response.json();
-    expect(responseBody).toEqual({ message: UNAUTHORIZED_REQUEST });
+    expect(responseBody).toEqual({
+      detail: UNAUTHORIZED_REQUEST,
+      error: 'AuthenticationError',
+    });
   });
 });

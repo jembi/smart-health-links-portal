@@ -1,12 +1,21 @@
 'use client';
-
-import { Button, Typography } from '@mui/material';
+import { Logout as LogoutIcon } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
 import { signOut } from 'next-auth/react';
+
+import { StyledButton } from './StyledButton';
 
 export default function Logout() {
   return (
-    <Button onClick={() => signOut()} variant="contained" color="secondary">
-      <Typography>Sign out</Typography>
-    </Button>
+    <Tooltip title="Sign out">
+      <StyledButton
+        size="small"
+        onClick={() => signOut()}
+        variant="contained"
+        color="error"
+      >
+        <LogoutIcon sx={{ color: '#eee' }}></LogoutIcon>
+      </StyledButton>
+    </Tooltip>
   );
 }
