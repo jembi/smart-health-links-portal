@@ -32,12 +32,7 @@ export default async function RootLayout({
           <ThemeProvider theme={theme}>
             <AuthProvider session={session}>
               <Header />
-              <Grid
-                sx={{ alignContent: 'center' }}
-                minHeight={'calc(100vh - 137px)'}
-              >
-                {children}
-              </Grid>
+              <Grid minHeight={'calc(100vh - 137px)'}>{children}</Grid>
               <Footer />
             </AuthProvider>
           </ThemeProvider>
