@@ -15,7 +15,9 @@ const isFrontendPathname = (pathname: string) =>
   FRONTEND_PATHNAMES.includes(pathname);
 
 const isIgnorePath = (method: HTTP_VERB, pathname: string) => {
-  return !!IGNORE_PATHS[method]?.find((x) => pathname.match(x));
+  return (
+    IGNORE_PATHS[method]?.some((regex: RegExp) => regex.test(pathname)) ?? false
+  );
 };
 
 export async function middleware(req: NextRequest) {
