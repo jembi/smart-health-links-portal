@@ -16,6 +16,8 @@ export class ServerConfigModel extends BaseModel {
     private id?: string,
     private accessTokenResponse?: string,
     private refreshToken?: string,
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
@@ -31,8 +33,10 @@ export class ServerConfigModel extends BaseModel {
           .nullable(),
         refreshTime: z.date().optional().nullable(),
         accessTokenResponse: z.string().optional().nullable(),
-        refreshToken: z.string().optional().nullable(),
+        refreshToken: z.string().optional().nullable()
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }

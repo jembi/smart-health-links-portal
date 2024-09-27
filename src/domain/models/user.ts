@@ -8,14 +8,18 @@ export class UserModel extends BaseModel {
     private patientId: string,
     private id?: string,
     private serverConfigId?: string,
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
         userId: z.string().min(1),
         patientId: z.string().min(1),
         id: z.string().optional(),
-        serverConfigId: z.string().optional(),
+        serverConfigId: z.string().optional()
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }

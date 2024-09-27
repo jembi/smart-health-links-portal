@@ -5,7 +5,12 @@ export const mapEntityToModel = (
   accessTicketEntity: AccessTicketEntity,
 ): AccessTicketModel | undefined => {
   return accessTicketEntity
-    ? new AccessTicketModel(accessTicketEntity.shlink_id, accessTicketEntity.id)
+    ? new AccessTicketModel(
+      accessTicketEntity.shlink_id, 
+      accessTicketEntity.id,
+      accessTicketEntity.created_at,
+      accessTicketEntity.updated_at
+    )
     : undefined;
 };
 
@@ -15,7 +20,7 @@ export const mapModelToEntity = (
   return accessTicketModel
     ? {
         id: accessTicketModel.getId(),
-        shlink_id: accessTicketModel.getSHLinkId(),
+        shlink_id: accessTicketModel.getSHLinkId()
       }
     : undefined;
 };

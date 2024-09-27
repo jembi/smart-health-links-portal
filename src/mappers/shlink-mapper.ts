@@ -17,6 +17,8 @@ export const mapEntityToModel = (
         shlinkEntity.config_passcode,
         shlinkEntity.config_exp,
         shlinkEntity.id,
+        shlinkEntity.created_at,
+        shlinkEntity.updated_at
       )
     : undefined;
 };
@@ -33,7 +35,7 @@ export const mapModelToEntity = (
         active: shlinkModel.getActive(),
         management_token: shlinkModel.getManagementToken(),
         config_passcode: shlinkModel.getConfigPasscode(),
-        config_exp: shlinkModel.getConfigExp(),
+        config_exp: shlinkModel.getConfigExp()
       }
     : undefined;
 };
@@ -51,6 +53,8 @@ export const mapModelToDto = (
         configPasscode: shlinkModel.getConfigPasscode(),
         configExp: shlinkModel.getConfigExp(),
         userId: shlinkModel.getUserId(),
+        createdAt: shlinkModel.getCreatedAt(),
+        updatedAt: shlinkModel.getUpdatedAt()
       }
     : undefined;
 };
@@ -70,6 +74,8 @@ export const mapModelToMiniDto = (
         passwordRequired: !!shlinkModel.getConfigPasscode(),
         url: encodeSHLink(shlinkModel),
         active: shlinkModel.getActive(),
+        createdAt: shlinkModel.getCreatedAt(),
+        updatedAt: shlinkModel.getUpdatedAt(),
         files: files?.map((x) => {
           return {
             location: `${EXTERNAL_URL}/api/v1/share-links/${shlinkModel.getId()}/endpoints/${x.getId()}?ticket=${ticket}`,
@@ -94,6 +100,8 @@ export const mapDtoToModel = (
         shlinkDto.configPasscode,
         shlinkDto.configExp ? new Date(shlinkDto.configExp) : null,
         shlinkDto.id,
+        shlinkDto.createdAt,
+        shlinkDto.updatedAt
       )
     : undefined;
 };

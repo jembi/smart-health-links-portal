@@ -3,12 +3,16 @@ import { AccessTicketEntity } from '@/entities/access-ticket';
 
 import { mapEntityToModel, mapModelToEntity } from './access-ticket-mapper';
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('Mapping functions', () => {
   describe('mapEntityToModel', () => {
     it('should map a valid AccessTicketEntity to AccessTicketModel', () => {
       const entity: AccessTicketEntity = {
         id: '123',
         shlink_id: 'abc',
+        created_at:dateValue,
+        updated_at:dateValue
       };
 
       const model = mapEntityToModel(entity);
@@ -39,7 +43,7 @@ describe('Mapping functions', () => {
 
       expect(entity).toEqual({
         id: '123',
-        shlink_id: 'abc',
+        shlink_id: 'abc'
       });
     });
 

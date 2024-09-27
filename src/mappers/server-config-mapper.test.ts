@@ -9,6 +9,7 @@ import {
 } from '@/mappers/server-config-mapper';
 
 const refreshTime = new Date();
+const dateValue = new Date('2024-01-01T00:00:00Z')
 
 describe('ServerConfig Mappers', () => {
   const serverConfigEntity: ServerConfigEntity = {
@@ -21,6 +22,8 @@ describe('ServerConfig Mappers', () => {
     refresh_time: refreshTime,
     access_token_response: 'entity-access-token',
     config_refresh_token: 'entity-refresh-token',
+    created_at:dateValue,
+    updated_at:dateValue
   };
 
   const serverConfigModel = new ServerConfigModel(
@@ -32,7 +35,7 @@ describe('ServerConfig Mappers', () => {
     refreshTime,
     'entity-id',
     'entity-access-token',
-    'entity-refresh-token',
+    'entity-refresh-token'
   );
 
   const serverConfigDto: ServerConfigDto = {
@@ -44,7 +47,7 @@ describe('ServerConfig Mappers', () => {
     endpointUrl: 'http://dto-url.com',
     refreshTime: refreshTime,
     refreshToken: 'dto-refresh-token',
-    tokenEndpoint: 'http://dto-token-endpoint',
+    tokenEndpoint: 'http://dto-token-endpoint'
   };
 
   describe('mapEntityToModel', () => {
@@ -88,7 +91,7 @@ describe('ServerConfig Mappers', () => {
         config_token_endpoint: serverConfigModel.getTokenEndpoint(),
         refresh_time: serverConfigModel.getRefreshTime(),
         access_token_response: serverConfigModel.getAccessTokenResponse(),
-        config_refresh_token: serverConfigModel.getRefreshToken(),
+        config_refresh_token: serverConfigModel.getRefreshToken()
       });
     });
 
@@ -110,7 +113,7 @@ describe('ServerConfig Mappers', () => {
         endpointUrl: serverConfigModel.getEndpointUrl(),
         refreshTime: serverConfigModel.getRefreshTime(),
         refreshToken: serverConfigModel.getRefreshToken(),
-        tokenEndpoint: serverConfigModel.getTokenEndpoint(),
+        tokenEndpoint: serverConfigModel.getTokenEndpoint()
       });
     });
 

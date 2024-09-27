@@ -12,6 +12,8 @@ export class SHLinkModel extends BaseModel {
     private configPasscode?: string,
     private configExp?: Date,
     private id?: string,
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
@@ -24,6 +26,8 @@ export class SHLinkModel extends BaseModel {
         id: z.string().optional(),
         name: z.string().default('unnamed shlink'),
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }

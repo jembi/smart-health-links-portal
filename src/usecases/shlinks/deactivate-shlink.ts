@@ -2,23 +2,24 @@ import { AuthenticationError, UserProfile } from '@/app/utils/authentication';
 import { SHLinkModel } from '@/domain/models/shlink';
 import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
-import { mapEntityToModel } from '@/mappers/shlink-mapper';
+import { mapEntityToModel, mapModelToEntity } from '@/mappers/shlink-mapper';
 
 export const deactivateSHLinksUseCase = async (
   context: { repo: ISHLinkRepository },
   data: { id: string; user: UserProfile },
 ): Promise<SHLinkModel> => {
-  const entity = await context.repo.findById(data.id);
+  const model = mapEntityToModel(await context.repo.findById(data.id));
+
   let newShlink: SHLinkEntity;
 
-  if (entity) {
-    if (data.user.id !== entity.user_id)
+  if (model) {
+    if (data.user.id !== model.getUserId())
       throw new AuthenticationError(
         'User not authorized to deactivate shlink.',
       );
 
-    entity.active = false;
-    newShlink = await context.repo.update(entity);
+    model.setActive(false);
+    newShlink = await context.repo.update(mapModelToEntity(model));
   }
 
   return mapEntityToModel(newShlink);

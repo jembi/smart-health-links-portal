@@ -5,6 +5,8 @@ import {
   validateSHLinkUseCase,
 } from './validate-shlink';
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('validateSHLinkUseCase', () => {
   it('should return true for a valid active SHLink with matching passcode', () => {
     const validSHLink = new SHLinkModel(
@@ -16,6 +18,8 @@ describe('validateSHLinkUseCase', () => {
       'valid-passcode',
       new Date(Date.now() + 10000), // future date
       'link-id',
+      dateValue,
+      dateValue
     );
     const result = validateSHLinkUseCase({
       shlink: validSHLink,
@@ -34,6 +38,8 @@ describe('validateSHLinkUseCase', () => {
       'valid-passcode',
       new Date(Date.now() + 10000), // future date
       'link-id',
+      dateValue,
+      dateValue
     );
     expect(() =>
       validateSHLinkUseCase({
@@ -53,6 +59,8 @@ describe('validateSHLinkUseCase', () => {
       'valid-passcode',
       new Date(Date.now() - 10000), // past date
       'link-id',
+      dateValue,
+      dateValue
     );
     expect(() =>
       validateSHLinkUseCase({
@@ -72,6 +80,8 @@ describe('validateSHLinkUseCase', () => {
       'correct-passcode',
       new Date(Date.now() + 10000), // future date
       'link-id',
+      dateValue,
+      dateValue
     );
     const result = validateSHLinkUseCase({
       shlink: validSHLink,
@@ -90,6 +100,8 @@ describe('validateSHLinkUseCase', () => {
       undefined,
       new Date(Date.now() + 10000), // future date
       'link-id',
+      dateValue,
+      dateValue
     );
     const result = validateSHLinkUseCase({ shlink: validSHLink });
     expect(result).toBe(true);
@@ -105,6 +117,8 @@ describe('validateSHLinkUseCase', () => {
       undefined,
       undefined,
       'link-id',
+      dateValue,
+      dateValue
     );
     const result = validateSHLinkUseCase({ shlink: validSHLink });
     expect(result).toBe(true);
@@ -121,6 +135,8 @@ describe('validateSHLinkUseCase', () => {
         'passcode',
         new Date(Date.now() - 10000), // past date
         'link-id',
+        dateValue,
+        dateValue
       );
       validateSHLinkUseCase({
         shlink: invalidSHLink,

@@ -1,7 +1,7 @@
 import { SHLinkModel } from '@/domain/models/shlink';
 import { SHLinkEntity } from '@/entities/shlink';
 import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shlink-repository';
-import { mapEntityToModel } from '@/mappers/shlink-mapper';
+import { mapEntityToModel, mapModelToEntity } from '@/mappers/shlink-mapper';
 
 export const updateSingleSHLinkUseCase = async (
   context: {
@@ -18,21 +18,21 @@ export const updateSingleSHLinkUseCase = async (
 ): Promise<SHLinkModel> => {
   let updateShlink: SHLinkEntity;
 
-  let entity = await context.repo.findOne({ id: data.id });
+  let model = mapEntityToModel(await context.repo.findOne({ id: data.id }));
 
   if (data.passcode) {
-    entity.config_passcode = data.passcode;
+    model.setConfigPasscode(data.passcode);
   }
   if (data.expiryDate) {
-    entity.config_exp = data.expiryDate;
+    model.setConfigExp(data.expiryDate);
   }
 
   await context.validator({
-    shlink: mapEntityToModel(entity),
-    passcode: entity.config_passcode,
+    shlink: model,
+    passcode: model.getConfigPasscode(),
   });
 
-  updateShlink = await context.repo.update(entity);
+  updateShlink = await context.repo.update(mapModelToEntity(model));
 
   return mapEntityToModel(updateShlink);
 };

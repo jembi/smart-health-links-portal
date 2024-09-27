@@ -8,14 +8,18 @@ export class SHLinkEndpointModel extends BaseModel {
     private serverConfigId: string,
     private urlPath: string,
     private id?: string,
+    createdAt?: Date,
+    updatedAt?: Date
   ) {
     super(
       z.object({
         shlinkId: z.string(),
         serverConfigId: z.string(),
         urlPath: z.string(),
-        id: z.string().optional(),
+        id: z.string().optional()
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }

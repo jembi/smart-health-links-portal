@@ -8,14 +8,18 @@ export class SHLinkAccessModel extends BaseModel {
     private accessTime: Date,
     private recipient: string,
     private id?: string,
+    createdAt?: Date,
+    updatedAt?: Date,
   ) {
     super(
       z.object({
         shlinkId: z.string().min(1),
         id: z.string().optional(),
         access_time: z.date().default(new Date()),
-        recipient: z.string().min(1),
+        recipient: z.string().min(1)
       }),
+      createdAt,
+      updatedAt
     );
     this.validate();
   }

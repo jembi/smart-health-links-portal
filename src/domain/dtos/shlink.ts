@@ -81,7 +81,7 @@ export class SHLinkFileDto {
  *         configExp:
  *           type: datetime
  *           description: An optional date representing the date when the share link expires.
- *           example:
+ *           example: 2024-09-26T10:03:39.379Z
  *         passcodeFailureRemaining:
  *           type: number
  *           description: An integer representing how many passcode failure attempts are remaining for the share link.
@@ -90,12 +90,22 @@ export class SHLinkFileDto {
  *           type: string
  *           description: A string representing the share link's unique management token used for managing the share link.
  *           example: hWWNwskdGOnEdq0KIQ3S
+ *         createdAt:
+ *            type: datetime
+ *            description: A date representing the date the share link was created.
+ *            example: 2024-09-26T10:03:39.379Z
+ *         updatedAt:
+ *            type:datetime
+ *            description: A date representing the date the share link was updated.
+ *            example: 2024-09-26T10:03:39.379Z
  */
 export class SHLinkDto extends CreateSHLinkDto {
   id: string;
   passcodeFailuresRemaining: number;
   active: boolean;
   managementToken: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 /**
@@ -148,6 +158,8 @@ export class SHLinkMiniDto {
   name: string;
   url: string;
   active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 /**
