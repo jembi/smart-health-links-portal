@@ -10,6 +10,8 @@ jest.mock('@/mappers/shlink-mapper', () => ({
   mapEntityToModel: jest.fn(),
 }));
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('updateSingleSHLinkUseCase', () => {
   let mockRepo: jest.Mocked<ISHLinkRepository>;
   let mockSHLinkModel: SHLinkModel;
@@ -24,10 +26,9 @@ describe('updateSingleSHLinkUseCase', () => {
       active: true,
       managementToken: 'token-xyz1234',
       configPasscode: 'passcode-abcde',
-      configExp: new Date('2024-01-01T00:00:00Z'),
-      created_at: new Date('2024-01-01T00:00:00Z'),
-      updated_at: new Date('2024-01-01T00:00:00Z'),
-      deleted_at: null
+      configExp: dateValue,
+      created_at: dateValue,
+      updated_at: dateValue
     };
 
     mockSHLinkModel = new SHLinkModel(
@@ -39,9 +40,8 @@ describe('updateSingleSHLinkUseCase', () => {
       mockDto.configPasscode,
       mockDto.configExp,
       '1',
-      new Date('2024-01-01T00:00:00Z'),
-      new Date('2024-01-01T00:00:00Z'),
-      null
+      dateValue,
+      dateValue
     );
 
     mockSHLinkEntity = {
@@ -53,9 +53,8 @@ describe('updateSingleSHLinkUseCase', () => {
       management_token: mockDto.managementToken,
       config_passcode: mockDto.configPasscode,
       config_exp: mockDto.configExp,
-      created_at: new Date('2024-01-01T00:00:00Z'),
-      updated_at: new Date('2024-01-01T00:00:00Z'),
-      deleted_at: null
+      created_at: dateValue,
+      updated_at: dateValue
     };
 
     mockRepo = {
@@ -68,7 +67,7 @@ describe('updateSingleSHLinkUseCase', () => {
     const updatedSHLinkEntity: SHLinkEntity = {
       ...mockSHLinkEntity,
       config_passcode: 'new-passcode',
-      config_exp: new Date('2024-01-01T00:00:00Z'),
+      config_exp: dateValue,
     };
 
     // Mock repository behavior
@@ -82,7 +81,7 @@ describe('updateSingleSHLinkUseCase', () => {
       {
         id: '1',
         passcode: 'new-passcode',
-        expiryDate: new Date('2024-01-01T00:00:00Z'),
+        expiryDate: dateValue,
       },
     );
 
@@ -91,7 +90,7 @@ describe('updateSingleSHLinkUseCase', () => {
     expect(mockRepo.update).toHaveBeenCalledWith({
       ...mockSHLinkEntity,
       config_passcode: 'new-passcode',
-      config_exp: new Date('2024-01-01T00:00:00Z'),
+      config_exp: dateValue,
     });
 
     // Verify mapper and result

@@ -10,6 +10,8 @@ jest.mock('@/mappers/shlink-mapper', () => ({
   mapEntityToModel: jest.fn(),
 }));
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('activeSHLinksUseCase', () => {
   let mockRepo: Partial<jest.Mocked<ISHLinkRepository>>;
   let mockContext: { repo: ISHLinkRepository };
@@ -37,10 +39,9 @@ describe('activeSHLinksUseCase', () => {
       active: false,
       management_token: 'token-xyz1234',
       config_passcode: 'passcode-abcde',
-      config_exp: new Date('2024-01-01T00:00:00Z'),
-      created_at: new Date('2024-01-01T00:00:00Z'),
-      updated_at: new Date('2024-01-01T00:00:00Z'),
-      deleted_at: null
+      config_exp: dateValue,
+      created_at: dateValue,
+      updated_at: dateValue
     };
 
     mockUpdatedSHLinkEntity = {
@@ -57,9 +58,8 @@ describe('activeSHLinksUseCase', () => {
       mockSHLinkEntity.config_passcode,
       mockSHLinkEntity.config_exp,
       mockSHLinkEntity.id,
-      new Date('2024-01-01T00:00:00Z'),
-      new Date('2024-01-01T00:00:00Z'),
-      null
+      dateValue,
+      dateValue
     );
 
     // Set up mock implementations

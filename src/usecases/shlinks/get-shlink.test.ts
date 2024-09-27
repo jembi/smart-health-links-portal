@@ -7,6 +7,8 @@ import { ISHLinkRepository } from '@/infrastructure/repositories/interfaces/shli
 
 import { getSHLinkUseCase } from './get-shlink';
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 // Mock the repository interface
 describe('getSHLinkUseCase', () => {
   let mockRepo: Partial<jest.Mocked<ISHLinkRepository>>;
@@ -34,10 +36,9 @@ describe('getSHLinkUseCase', () => {
         active: true,
         management_token: 'token-xyz1234',
         config_passcode: 'passcode-abcde',
-        config_exp: new Date('2024-01-01T00:00:00Z'),
-        created_at: new Date('2024-01-01T00:00:00Z'),
-        updated_at: new Date('2024-01-01T00:00:00Z'),
-        deleted_at: null
+        config_exp: dateValue,
+        created_at: dateValue,
+        updated_at: dateValue
       },
       {
         id: '2',
@@ -48,9 +49,8 @@ describe('getSHLinkUseCase', () => {
         management_token: 'token-uvw5678',
         config_passcode: 'passcode-fghij',
         config_exp: new Date('2024-06-01T00:00:00Z'),
-        created_at: new Date('2024-01-01T00:00:00Z'),
-        updated_at: new Date('2024-01-01T00:00:00Z'),
-        deleted_at: null
+        created_at: dateValue,
+        updated_at: dateValue
       },
     ];
 
@@ -62,11 +62,10 @@ describe('getSHLinkUseCase', () => {
         true,
         'token-xyz1234',
         'passcode-abcde',
-        new Date('2024-01-01T00:00:00Z'),
+        dateValue,
         '1',
-        new Date('2024-01-01T00:00:00Z'),
-        new Date('2024-01-01T00:00:00Z'),
-        null
+        dateValue,
+        dateValue
       ),
       new SHLinkModel(
         mockUserId,
@@ -77,9 +76,8 @@ describe('getSHLinkUseCase', () => {
         'passcode-fghij',
         new Date('2024-06-01T00:00:00Z'),
         '2',
-        new Date('2024-01-01T00:00:00Z'),
-        new Date('2024-01-01T00:00:00Z'),
-        null
+        dateValue,
+        dateValue
       ),
     ];
 
