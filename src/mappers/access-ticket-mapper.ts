@@ -4,18 +4,17 @@ import { AccessTicketEntity } from '@/entities/access-ticket';
 export const mapEntityToModel = (
   accessTicketEntity: AccessTicketEntity,
 ): AccessTicketModel | undefined => {
-  return accessTicketEntity
-    ? new AccessTicketModel(accessTicketEntity.shlink_id, accessTicketEntity.id)
-    : undefined;
+  if (!accessTicketEntity) return undefined;
+  const { shlink_id, id } = accessTicketEntity;
+  return new AccessTicketModel(shlink_id, id);
 };
 
 export const mapModelToEntity = (
   accessTicketModel: AccessTicketModel,
 ): AccessTicketEntity | undefined => {
-  return accessTicketModel
-    ? {
-        id: accessTicketModel.getId(),
-        shlink_id: accessTicketModel.getSHLinkId(),
-      }
-    : undefined;
+  if (!accessTicketModel) return undefined;
+  return {
+    id: accessTicketModel.getId(),
+    shlink_id: accessTicketModel.getSHLinkId(),
+  };
 };
