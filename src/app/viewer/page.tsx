@@ -178,12 +178,6 @@ export default function SHlinkViewer() {
     return <PatientSummarySkeleton />;
   }
 
-  if (!isAuthenticated) {
-    return (
-      <ErrorState message="You must log in or register to access the viewer." />
-    );
-  }
-
   if (error) {
     return <ErrorState message={error} />;
   }
