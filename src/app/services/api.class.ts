@@ -4,7 +4,6 @@ import type { IApi, TBaseApiProps, IApiWithPayload } from './api.types';
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true,
 });
 
 export class BaseApi<T extends TBaseApiProps<T>> {
