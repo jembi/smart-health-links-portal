@@ -18,9 +18,9 @@ import {
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { apiSharedLink } from '@/app/utils/api.class';
+import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
 import { uuid } from '@/app/utils/helpers';
-import { SHLinkMiniDto } from '@/domain/dtos/shlink';
+import { type SHLinkMiniDto } from '@/domain/dtos/shlink';
 
 import { AddLinkDialog } from './AddLinkDialog';
 import BooleanIcon from './BooleanIcon';
@@ -130,7 +130,7 @@ export default function LinksTable() {
       <LinkOffIcon />,
       handleDeactivate,
       'Deactivate',
-      (row) => row.active,
+      ({ active }) => !active,
     ),
     createActionColumn(<QrCode />, handleQrCode, 'Show QR Code'),
   ];

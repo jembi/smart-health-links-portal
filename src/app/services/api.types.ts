@@ -1,10 +1,15 @@
 import { type AxiosRequestConfig } from 'axios';
 
-import {
+import type {
   SHLinkDto,
   SHLinkMiniDto,
   CreateSHLinkDto,
 } from '@/domain/dtos/shlink';
+import type {
+  SHLinkEndpointDto,
+  CreateSHLinkEndpointDto,
+} from '@/domain/dtos/shlink-endpoint';
+import { type TBundle } from '@/types/fhir.types';
 
 export interface IApi {
   url: string;
@@ -16,9 +21,11 @@ export interface IApiWithPayload<T> extends IApi {
 }
 
 export enum EPath {
-  'shareLinks' = 'share-links',
-  'users' = 'users',
-  'ips' = 'ips',
+  endpoints = 'endpoints',
+  ips = 'ips',
+  qrCode = 'qrCode',
+  shareLinks = 'share-links',
+  users = 'users',
 }
 
 export type TOperation<T extends { req?: unknown; res?: unknown }> = {
@@ -41,6 +48,33 @@ export type TBaseApiProps<
 };
 
 export interface IPathMapTypes {
+  [EPath.endpoints]: {
+    create: {
+      req: CreateSHLinkEndpointDto;
+      res: SHLinkEndpointDto;
+    };
+    read: never;
+    update: never;
+    delete: never;
+  };
+  [EPath.ips]: {
+    create: {
+      req: never;
+      res: never;
+    };
+    read: TBundle;
+    update: never;
+    delete: never;
+  };
+  [EPath.qrCode]: {
+    create: {
+      req: never;
+      res: never;
+    };
+    read: never;
+    update: never;
+    delete: never;
+  };
   [EPath.shareLinks]: {
     create: {
       req: Omit<CreateSHLinkDto, 'configExp'> & { configExp?: string };

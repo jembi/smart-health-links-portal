@@ -1,10 +1,10 @@
 import axios, { type AxiosResponse, type AxiosInstance } from 'axios';
 
-import {
-  type IApi,
-  type TOperation,
-  type TBaseApiProps,
-  type IApiWithPayload,
+import type {
+  IApi,
+  TOperation,
+  TBaseApiProps,
+  IApiWithPayload,
 } from './api.types';
 
 export const instance = axios.create({

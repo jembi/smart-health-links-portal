@@ -9,7 +9,7 @@ import PatientSummary from './components/PatientSummary';
 import ErrorState from './ErrorState';
 import PatientSummarySkeleton from './PatientSummarySkeleton';
 import { useAuth } from '../context/AuthProvider';
-import { apiSharedLink } from '../utils/api.class';
+import { apiIps } from '../services/endpoints/ips.class';
 
 export default function PatientSummaryPage() {
   const { user, isAuthenticated } = useAuth();
@@ -20,8 +20,8 @@ export default function PatientSummaryPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiSharedLink.getPatientData(user.id);
-        setFhirBundle(response.data as TBundle);
+        const response = await apiIps.getPatientData(user.id);
+        setFhirBundle(response.data);
       } catch (error) {
         setError(error.message);
       } finally {
