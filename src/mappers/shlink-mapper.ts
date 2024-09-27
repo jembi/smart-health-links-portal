@@ -35,9 +35,7 @@ export const mapModelToEntity = (
         active: shlinkModel.getActive(),
         management_token: shlinkModel.getManagementToken(),
         config_passcode: shlinkModel.getConfigPasscode(),
-        config_exp: shlinkModel.getConfigExp(),
-        created_at: shlinkModel.getCreatedAt(),
-        updated_at: shlinkModel.getUpdatedAt()
+        config_exp: shlinkModel.getConfigExp()
       }
     : undefined;
 };

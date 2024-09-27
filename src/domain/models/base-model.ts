@@ -15,7 +15,7 @@ export abstract class BaseModel {
   public createdAt?: Date;
   public updatedAt?: Date;
 
-  private static _baseSchema = z.object({
+  private _baseSchema = z.object({
     createdAt: z.date().optional(),
     updatedAt: z.date().optional(),
   });
@@ -26,7 +26,7 @@ export abstract class BaseModel {
   }
 
   validate() {
-    const combinedSchema = BaseModel._baseSchema.merge(this._schema);
+    const combinedSchema = this._baseSchema.merge(this._schema);
 
     const result = combinedSchema.safeParse(this);
 

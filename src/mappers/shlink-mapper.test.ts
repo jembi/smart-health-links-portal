@@ -86,8 +86,6 @@ describe('SHLink Mappers', () => {
         management_token: shLinkModel.getManagementToken(),
         config_passcode: shLinkModel.getConfigPasscode(),
         config_exp: shLinkModel.getConfigExp(),
-        created_at: shLinkModel.getCreatedAt(),
-        updated_at: shLinkModel.getUpdatedAt()
       });
     });
 
