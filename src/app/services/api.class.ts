@@ -1,11 +1,6 @@
-import axios, { type AxiosResponse, type AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 
-import type {
-  IApi,
-  TOperation,
-  TBaseApiProps,
-  IApiWithPayload,
-} from './api.types';
+import type { IApi, TBaseApiProps, IApiWithPayload } from './api.types';
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -14,43 +9,32 @@ export const instance = axios.create({
 export class BaseApi<T extends TBaseApiProps<T>> {
   constructor(protected readonly instance: AxiosInstance) {}
 
-  async create<TCreate extends T['create']>({
+  async create<TC extends T['create']>({
     url,
     data,
     config = {},
-  }: IApiWithPayload<TCreate['req']>): Promise<AxiosResponse<TCreate['res']>> {
-    return this.instance.post(url, data, config);
+  }: IApiWithPayload<TC['req']>) {
+    return this.instance.post<TC['res']>(url, data, config);
   }
 
-  async find<TRead extends T['read']>({
-    url,
-    config = {},
-  }: IApi): Promise<AxiosResponse<TRead[]>> {
-    return this.instance.get(url, config);
+  async find({ url, config = {} }: IApi) {
+    return this.instance.get<T['read'][]>(url, config);
   }
 
-  async get<TRead extends T['read']>({
-    url,
-    config = {},
-  }: IApi): Promise<AxiosResponse<TRead>> {
-    return this.instance.get(url, config);
+  async get({ url, config = {} }: IApi) {
+    return this.instance.get<T['read']>(url, config);
   }
 
-  async update<TUpdate extends T['update']>({
+  async update<TU extends T['update']>({
     url,
     data,
     config = {},
-  }: IApiWithPayload<TOperation<TUpdate>['req']>): Promise<
-    AxiosResponse<TOperation<TUpdate>['res']>
-  > {
-    return this.instance.put(url, data, config);
+  }: IApiWithPayload<TU['req']>) {
+    return this.instance.put<TU['res']>(url, data, config);
   }
 
-  async delete<TDelete extends T['delete']>({
-    url,
-    config = {},
-  }: IApi): Promise<AxiosResponse<TDelete>> {
-    return this.instance.delete(url, config);
+  async delete({ url, config = {} }: IApi) {
+    return this.instance.delete<T['delete']>(url, config);
   }
 }
 
