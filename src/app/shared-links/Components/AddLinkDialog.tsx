@@ -14,8 +14,9 @@ import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogContent } from '@/app/components/StyledDialogContent';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
 import { useAuth } from '@/app/context/AuthProvider';
-import { apiSharedLink } from '@/app/utils/api.class';
-import { CreateSHLinkDto } from '@/domain/dtos/shlink';
+import { apiEndpoint } from '@/app/services/endpoints/endpoint.class';
+import { apiSharedLink } from '@/app/services/endpoints/share-link.class';
+import { type CreateSHLinkDto } from '@/domain/dtos/shlink';
 
 const removeUndefinedValues = <T extends Record<string, unknown>>(
   object: T,
@@ -54,8 +55,8 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
       const transformedData = removeUndefinedValues(data);
       const { data: createdLink } =
         await apiSharedLink.createLink(transformedData);
-      await apiSharedLink
-        .createEndpoint(createdLink['id'])
+      await apiEndpoint
+        .createEndpoint(createdLink.id)
         .then(() => {
           callback?.();
         })

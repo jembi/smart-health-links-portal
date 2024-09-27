@@ -16,8 +16,8 @@ import { FC, useEffect, useState } from 'react';
 import { StyledDialogActions } from '@/app/components/StyledDialogActions';
 import { StyledDialogContent } from '@/app/components/StyledDialogContent';
 import { StyledDialogTitle } from '@/app/components/StyledDialogTitle';
-import { apiSharedLink } from '@/app/utils/api.class';
-import { CreateSHLinkDto } from '@/domain/dtos/shlink';
+import { apiQrCode } from '@/app/services/endpoints/qr-code.class';
+import { type CreateSHLinkDto } from '@/domain/dtos/shlink';
 
 export type TCreateSHLinkDto = Omit<CreateSHLinkDto, 'configExp'> & {
   configExp?: string;
@@ -47,7 +47,7 @@ export const QRCodeDialog: FC<QRCodeDialogProps> = ({
 
   useEffect(() => {
     if (open && data?.id) {
-      apiSharedLink
+      apiQrCode
         .getQrCode(data.id, {
           managementToken: data?.managementToken,
         })
