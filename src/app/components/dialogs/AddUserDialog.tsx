@@ -78,7 +78,7 @@ export const AddUserDialog: FC<AddUserDialogProps> = ({
   return (
     <Dialog open={!!open} fullWidth maxWidth="xs">
       <form onSubmit={handleSubmit(onSubmitForm)}>
-        <StyledDialogTitle>Create a user</StyledDialogTitle>
+        <StyledDialogTitle>Verify user details</StyledDialogTitle>
         <DialogContent style={{ padding: '5px 8px' }}>
           <StyledDialogContent>
             {hasError && (

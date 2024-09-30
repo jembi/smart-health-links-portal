@@ -16,8 +16,6 @@ export const RequiredSteps = ({ children }: { children: React.ReactNode }) => {
   const [hasUser, setHasUser] = React.useState(false);
   const isAnonymous = !isAuthenticated && pathname === '/viewer';
 
-  console.log(pathname);
-
   React.useEffect(() => {
     const fetchUser = async (id: string) =>
       apiUser
