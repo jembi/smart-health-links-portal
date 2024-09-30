@@ -1,6 +1,6 @@
 'use client';
 import { Home, Article, Dashboard } from '@mui/icons-material';
-import { Avatar, Box, Grid, MenuItem } from '@mui/material';
+import { Avatar, Box, Grid, MenuItem, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import NextLink from 'next/link';
@@ -25,10 +25,10 @@ export default function Header() {
   const pathname = usePathname();
   const AuthButton = isAuthenticated ? (
     <Grid container alignItems="center" gap="6px" justifyContent="end">
-      <Grid item>{user?.name && <Avatar {...stringAvatar(user.name)} />}</Grid>
       <Grid item pr="13px">
-        {user?.name}
+        <Typography variant="subtitle1">{user?.name}</Typography>
       </Grid>
+      <Grid item>{user?.name && <Avatar {...stringAvatar(user.name)} />}</Grid>
       <Grid item>
         <Logout />
       </Grid>
