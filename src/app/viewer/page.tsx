@@ -99,9 +99,6 @@ export default function SHlinkViewer() {
         'Invalid token data. Please ask the patient to generate a new valid link.',
       );
       return;
-    } else if (!isValidUrl(url)) {
-      setError('Invalid URL detected. Please contact support.');
-      return;
     }
     if (tokenData && tokenData.flag !== 'L' && !passcode) {
       setPasscodeError(true);
