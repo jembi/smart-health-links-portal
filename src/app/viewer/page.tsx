@@ -121,7 +121,7 @@ export default function SHlinkViewer() {
       recipient: name,
     };
 
-    if (tokenData?.flag === 'P') {
+    if (tokenData?.flag.includes('P')) {
       requestBody.passcode = passcode;
     }
 
