@@ -24,7 +24,7 @@ export const RequiredSteps = ({ children }: { children: React.ReactNode }) => {
           setHasUser(true);
           return data;
         })
-        .catch((e) => {
+        .catch(() => {
           setHasUser(false);
           setIsCreateUserDialogOpened(true);
         });
