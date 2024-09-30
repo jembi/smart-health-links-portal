@@ -1,5 +1,6 @@
 'use client';
 import { Grid } from '@mui/material';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { AddUserDialog } from './dialogs/AddUserDialog';
@@ -7,15 +8,20 @@ import { useAuth } from '../context/AuthProvider';
 import { apiUser } from '../services/endpoints/user.class';
 
 export const RequiredSteps = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const pathname = usePathname();
 
   const [isCreateUserDialogOpened, setIsCreateUserDialogOpened] =
     React.useState(false);
   const [hasUser, setHasUser] = React.useState(false);
+  const isAnonymous = !isAuthenticated && pathname === '/viewer';
+
+  console.log(pathname);
+
   React.useEffect(() => {
-    const fetchUser = async () => {
-      await apiUser
-        .getUser(user.id)
+    const fetchUser = async (id: string) =>
+      apiUser
+        .getUser(id)
         .then(({ data }) => {
           setHasUser(true);
           return data;
@@ -24,13 +30,13 @@ export const RequiredSteps = ({ children }: { children: React.ReactNode }) => {
           setHasUser(false);
           setIsCreateUserDialogOpened(true);
         });
-    };
-    fetchUser();
+
+    if (user?.id) fetchUser(user.id);
   }, []);
 
   return (
     <Grid minHeight={'calc(100vh - 137px)'}>
-      {hasUser ? (
+      {isAnonymous || hasUser ? (
         children
       ) : (
         <AddUserDialog
