@@ -4,14 +4,13 @@ import Box from '@mui/material/Box';
 
 export default function Home() {
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={false} sx={{ height: 'calc(100vh - 137px - 48px)' }}>
       <Box
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        paddingTop={8}
-        paddingBottom={8}
+        sx={{ height: '100%' }}
       >
         <MonitorHeartOutlinedIcon sx={{ fontSize: 200 }} />
         <Typography variant="h4" align="center" gutterBottom>
