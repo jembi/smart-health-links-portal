@@ -50,7 +50,7 @@ export default function SHlinkViewer() {
   function isValidUrl(inputUrl: string): boolean {
     // Define allowed domains or patterns
 
-    const allowedDomains = [process.env.DOMAIN || 'localhost'];
+    const allowedDomains = [process.env.NEXT_PUBLIC_DOMAIN || 'localhost'];
     try {
       const parsedUrl = new URL(inputUrl);
       return allowedDomains.includes(parsedUrl.hostname);
