@@ -1,7 +1,7 @@
 'use client';
 import { Grid } from '@mui/material';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { AddUserDialog } from './dialogs/AddUserDialog';
 import { useAuth } from '../context/AuthProvider';
@@ -16,7 +16,7 @@ export const RequiredSteps = ({ children }: { children: React.ReactNode }) => {
   const [hasUser, setHasUser] = React.useState(false);
   const isAnonymous = !isAuthenticated && pathname === '/viewer';
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchUser = async (id: string) =>
       apiUser
         .getUser(id)

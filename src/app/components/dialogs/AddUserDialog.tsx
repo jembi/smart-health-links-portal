@@ -1,14 +1,7 @@
 'use client';
 
-import { KeyboardBackspace, Send } from '@mui/icons-material';
-import {
-  Dialog,
-  DialogContent,
-  Grid,
-  Alert,
-  TextField,
-  Button,
-} from '@mui/material';
+import { Send } from '@mui/icons-material';
+import { Dialog, DialogContent, Grid, Alert, TextField } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
