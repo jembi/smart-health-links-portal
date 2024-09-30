@@ -152,10 +152,18 @@ export default function LinksTable() {
   ];
 
   const fetchLinks = async () => {
-    setLoading(true); // Set loading to true before fetching
-    const { data } = await apiSharedLink.findLinks();
-    setLinks(data);
-    setLoading(false); // Set loading to false after fetching
+    setLoading(true);
+    apiSharedLink
+      .findLinks()
+      .then(({ data }) => {
+        setLinks(data);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch links:', error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after fetching
+      });
   };
 
   useEffect(() => {

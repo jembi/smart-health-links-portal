@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 
 import { TBundle } from '@/types/fhir.types';
 
-import PatientSummary from './components/PatientSummary';
-import ErrorState from './ErrorState';
-import PatientSummarySkeleton from './PatientSummarySkeleton';
+import ErrorState from '../components/ErrorState';
+import PatientSummary from '../components/PatientSummaryViewer/PatientSummary';
+import PatientSummarySkeleton from '../components/PatientSummaryViewer/PatientSummarySkeleton';
 import { useAuth } from '../context/AuthProvider';
 import { apiIps } from '../services/endpoints/ips.class';
 
