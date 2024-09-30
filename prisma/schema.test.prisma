@@ -9,62 +9,72 @@ datasource db {
 }
 
 model cas_item {
-    id         String   @id @unique @default(cuid()) 
-    hash       String   @unique
-    content    Bytes    @unique
-    ref_count  Int      @default(0)
-    shlink_file shlink_file[]
+    id            String        @id @unique @default(cuid()) 
+    created_at    DateTime      @default(now())
+    updated_at    DateTime      @updatedAt @default(now())
+    hash          String        @unique
+    content       Bytes         @unique
+    ref_count     Int           @default(0)
+    shlink_file   shlink_file[]
 
     @@index([id], name: "idx_cas_item_hash")
 }
 
 model shlink_file {
-    id             String    @id @unique @default(cuid()) 
+    id              String      @id @unique @default(cuid()) 
+    created_at      DateTime    @default(now())
+    updated_at      DateTime    @updatedAt @default(now())
     shlink_id       String
-    content_type   String    @default("application/json")
-    content_id    String?
-    cas_item        cas_item? @relation(fields: [content_id], references: [id])
-    shlink         shlink    @relation(fields: [shlink_id], references: [id])
+    content_type    String      @default("application/json")
+    content_id      String?
+    cas_item        cas_item?   @relation(fields: [content_id], references: [id])
+    shlink          shlink      @relation(fields: [shlink_id], references: [id])
 
     @@index([shlink_id], name: "idx_shlink_file_shlinkId")
     @@index([content_id], name: "idx_shlink_file_content_id")
 }
 
 model shlink_access {
-    id           String   @id @unique @default(cuid()) 
-    shlink_id    String
-    recipient    String
-    access_time  DateTime @default(now())
-    shlink       shlink   @relation(fields: [shlink_id], references: [id])
+    id            String      @id @unique @default(cuid()) 
+    created_at    DateTime    @default(now())
+    updated_at    DateTime    @updatedAt @default(now())
+    shlink_id     String
+    recipient     String
+    access_time   DateTime    @default(now())
+    shlink        shlink      @relation(fields: [shlink_id], references: [id])
 
     @@index([shlink_id], name: "idx_shlink_access_shlinkId")
 }
 
 
 model shlink {
-    id                         String           @id @unique @default(cuid())
-    passcode_failures_remaining Int             @default(5)
-    config_passcode            String?          /// @encrypted
-    config_passcode_hash        String?         /// @encryption:hash(config_passcode)
-    config_exp                 DateTime?
-    active                     Boolean          @default(true)
-    management_token           String           @unique @default(cuid())
-    user                       user   @relation(fields: [user_id], references: [user_id])
-    user_id                    String           
+    id                          String           @id @unique @default(cuid())
+    created_at                  DateTime         @default(now())
+    updated_at                  DateTime         @updatedAt @default(now())
+    passcode_failures_remaining Int              @default(5)
+    config_passcode             String?          /// @encrypted
+    config_passcode_hash        String?          /// @encryption:hash(config_passcode)
+    config_exp                  DateTime?
+    active                      Boolean          @default(true)
+    management_token            String           @unique @default(cuid())
+    user                        user             @relation(fields: [user_id], references: [user_id])
+    user_id                     String           
     shlink_file                 shlink_file[]
     shlink_endpoint             shlink_endpoint[]
     shlink_access               shlink_access[]
     access_ticket               access_ticket[]
-    name                       String           @default("nameless shlink")
+    name                        String           @default("nameless shlink")
 
     @@index([id], name: "idx_shlink_id")
 }
 
 model user {
-    id           String   @id @unique @default(cuid()) 
-    user_id       String    @unique
+    id            String      @id @unique @default(cuid()) 
+    created_at    DateTime    @default(now())
+    updated_at    DateTime    @updatedAt @default(now())
+    user_id       String      @unique
     patient_id    String
-    shlink       shlink[]
+    shlink        shlink[]
     
 
     @@index([id], name: "idx_user_id")
@@ -74,6 +84,8 @@ model user {
 
 model server_config {
     id                    String  @id @unique @default(cuid())
+    created_at            DateTime    @default(now())
+    updated_at            DateTime    @updatedAt @default(now())
     endpoint_url          String
     config_key            String?  
     config_client_id      String?
@@ -89,6 +101,8 @@ model server_config {
 
 model shlink_endpoint {
     id                    String          @id @unique @default(cuid())
+    created_at            DateTime        @default(now())
+    updated_at            DateTime        @updatedAt @default(now())
     shlink_id             String
     server_config_id      String
     url_path              String          
@@ -101,9 +115,11 @@ model shlink_endpoint {
 
 
 model access_ticket {
-    id           String   @id @default(cuid())
-    shlink_id    String    
-    shlink       shlink   @relation(fields: [shlink_id], references: [id])
+    id            String      @id @default(cuid())
+    created_at    DateTime    @default(now())
+    updated_at    DateTime    @updatedAt @default(now())
+    shlink_id     String    
+    shlink        shlink      @relation(fields: [shlink_id], references: [id])
 
     @@index([id], name: "idx_access_ticket_id")
 }

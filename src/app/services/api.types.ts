@@ -4,6 +4,7 @@ import type {
   SHLinkDto,
   SHLinkMiniDto,
   CreateSHLinkDto,
+  SHLinkRequestDto,
 } from '@/domain/dtos/shlink';
 import type {
   SHLinkEndpointDto,
@@ -27,6 +28,7 @@ export enum EPath {
   qrCode = 'qrCode',
   shareLinks = 'share-links',
   users = 'users',
+  viewer = 'viewer',
 }
 
 export type TOperation<T extends { req?: unknown; res?: unknown }> = {
@@ -82,6 +84,15 @@ export interface IPathMapTypes {
       res: SHLinkDto;
     };
     read: SHLinkMiniDto;
+    update: never;
+    delete: never;
+  };
+  [EPath.viewer]: {
+    create: {
+      req: SHLinkRequestDto;
+      res: SHLinkMiniDto;
+    };
+    read: TBundle;
     update: never;
     delete: never;
   };

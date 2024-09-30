@@ -5,8 +5,8 @@ export const mapEntityToModel = (
   accessTicketEntity: AccessTicketEntity,
 ): AccessTicketModel | undefined => {
   if (!accessTicketEntity) return undefined;
-  const { shlink_id, id } = accessTicketEntity;
-  return new AccessTicketModel(shlink_id, id);
+  const { shlink_id, id, created_at, updated_at } = accessTicketEntity;
+  return new AccessTicketModel(shlink_id, id, created_at, updated_at);
 };
 
 export const mapModelToEntity = (

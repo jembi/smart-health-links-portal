@@ -19,7 +19,10 @@ describe('getSHLinkQRCodeUseCase', () => {
     'testing-token',      
     'pass12345',          
     new Date(),      
-    '123'               
+    '123',
+    new Date('2024-01-01T00:00:00Z'),
+    new Date('2024-01-01T00:00:00Z'),
+    null           
   );
 
   afterEach(() => {

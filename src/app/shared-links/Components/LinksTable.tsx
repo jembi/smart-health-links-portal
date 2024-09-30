@@ -15,6 +15,8 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
+  Toolbar,
+  Typography,
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
@@ -28,6 +30,7 @@ import { type SHLinkMiniDto } from '@/domain/dtos/shlink';
 import { AddLinkDialog } from './dialogs/AddLinkDialog';
 import ConfirmationDialog from './dialogs/ConfirmationDialog';
 import { QRCodeDialog } from './dialogs/QRCodeDialog';
+import TableSkeleton from './TableSkeleton';
 
 interface Column {
   id: keyof SHLinkMiniDto;
@@ -100,6 +103,7 @@ export default function LinksTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [addDialog, setAddDialog] = React.useState<boolean>();
   const [refetch, setRefetch] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedLinkId, setSelectedLinkId] = useState<string | null>(null);
@@ -148,8 +152,18 @@ export default function LinksTable() {
   ];
 
   const fetchLinks = async () => {
-    const { data } = await apiSharedLink.findLinks();
-    setLinks(data);
+    setLoading(true);
+    apiSharedLink
+      .findLinks()
+      .then(({ data }) => {
+        setLinks(data);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch links:', error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after fetching
+      });
   };
 
   useEffect(() => {
@@ -188,20 +202,25 @@ export default function LinksTable() {
           }}
         />
       )}
-      <Grid container justifyContent="end">
-        <Grid item>
-          <StyledButton
-            size="small"
-            variant="contained"
-            onClick={handleCreateLink}
-          >
-            <Add
-              sx={{ color: '#eee', paddingRight: '4px', marginRight: '4px' }}
-            />
-            new link
-          </StyledButton>
+      <Toolbar>
+        <Grid container justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h4">Your Shared Links</Typography>
+          </Grid>
+          <Grid item>
+            <StyledButton
+              size="small"
+              variant="contained"
+              onClick={handleCreateLink}
+            >
+              <Add
+                sx={{ color: '#eee', paddingRight: '4px', marginRight: '4px' }}
+              />
+              new link
+            </StyledButton>
+          </Grid>
         </Grid>
-      </Grid>
+      </Toolbar>
       <TableContainer sx={{ maxHeight: '50vh' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -218,41 +237,45 @@ export default function LinksTable() {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {links
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow hover tabIndex={-1} key={row.id}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell
-                        key={column.id + row.active}
-                        align={column.align}
-                      >
-                        {column.format
-                          ? column.format(value)
-                          : value?.toString()}
-                      </TableCell>
-                    );
-                  })}
-                  <TableCell width={250}>
-                    {actionColumns.map((actionColumn) => (
-                      <Tooltip key={uuid()} title={actionColumn.tooltipTitle}>
-                        <span>
-                          <Button
-                            disabled={actionColumn.isDisabled?.(row)}
-                            onClick={() => actionColumn.action(row)}
-                          >
-                            {actionColumn.label}
-                          </Button>
-                        </span>
-                      </Tooltip>
-                    ))}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
+          {loading ? (
+            <TableSkeleton />
+          ) : (
+            <TableBody>
+              {links
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow hover tabIndex={-1} key={row.id}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell
+                          key={column.id + row.active}
+                          align={column.align}
+                        >
+                          {column.format
+                            ? column.format(value)
+                            : value?.toString()}
+                        </TableCell>
+                      );
+                    })}
+                    <TableCell width={250}>
+                      {actionColumns.map((actionColumn) => (
+                        <Tooltip key={uuid()} title={actionColumn.tooltipTitle}>
+                          <span>
+                            <Button
+                              disabled={actionColumn.isDisabled?.(row)}
+                              onClick={() => actionColumn.action(row)}
+                            >
+                              {actionColumn.label}
+                            </Button>
+                          </span>
+                        </Tooltip>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          )}
         </Table>
       </TableContainer>
       <TablePagination

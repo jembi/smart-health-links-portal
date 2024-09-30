@@ -16,6 +16,8 @@ export const mapEntityToModel = (
         serverConfigEntity.id,
         serverConfigEntity.access_token_response,
         serverConfigEntity.config_refresh_token,
+        serverConfigEntity.created_at,
+        serverConfigEntity.updated_at
       )
     : undefined;
 };
@@ -34,6 +36,8 @@ export const mapModelToEntity = (
         config_refresh_token: serverModel.getRefreshToken(),
         config_token_endpoint: serverModel.getTokenEndpoint(),
         refresh_time: serverModel.getRefreshTime(),
+        created_at: serverModel.getCreatedAt(),
+        updated_at: serverModel.getUpdatedAt()
       }
     : undefined;
 };
@@ -51,7 +55,7 @@ export const mapModelToDto = (
         endpointUrl: serverModel.getEndpointUrl(),
         refreshTime: serverModel.getRefreshTime(),
         refreshToken: serverModel.getRefreshToken(),
-        tokenEndpoint: serverModel.getTokenEndpoint(),
+        tokenEndpoint: serverModel.getTokenEndpoint()
       }
     : undefined;
 };
@@ -69,7 +73,7 @@ export const mapDtoToModel = (
         serverDto.refreshTime,
         serverDto.id,
         serverDto.accessTokenResponse || '',
-        serverDto.refreshToken,
+        serverDto.refreshToken
       )
     : undefined;
 };

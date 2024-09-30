@@ -9,23 +9,30 @@ import {
   mapDtoToModel,
 } from './user-mapper';
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('User Mappers', () => {
   const userEntity: UserEntity = {
     id: 'entity-id',
     user_id: 'entity-user-id',
     patient_id: 'entity-patient-id',
+    server_config_id: 'server-id'
   };
 
   const userModel = new UserModel(
     'model-user-id',
     'model-patient-id',
     'model-id',
+    'server-id',
+    dateValue,
+    dateValue
   );
 
   const userDto: UserDto = {
     id: 'dto-id',
     userId: 'dto-user-id',
     patientId: 'dto-patient-id',
+    serverConfigId: 'server-id'
   };
 
   describe('mapEntityToModel', () => {
@@ -50,6 +57,7 @@ describe('User Mappers', () => {
         id: userModel.getId(),
         user_id: userModel.getUserId(),
         patient_id: userModel.getPatientId(),
+        server_config_id: userModel.getServerConfigId()
       });
     });
 
@@ -65,7 +73,7 @@ describe('User Mappers', () => {
       expect(result).toEqual({
         id: userModel.getId(),
         userId: userModel.getUserId(),
-        patientId: userModel.getPatientId(),
+        patientId: userModel.getPatientId()
       });
     });
 

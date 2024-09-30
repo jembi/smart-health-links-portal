@@ -26,6 +26,8 @@ jest.mock('@/domain/models/shlink-access', () => {
   };
 });
 
+const dateValue = new Date('2024-01-01T00:00:00Z')
+
 describe('mapModelToEntity', () => {
   it('should map a SHLinkAccessModel to SHLinkAccessEntity', () => {
     const accessTime = new Date('2024-09-01T12:00:00Z');
@@ -39,7 +41,7 @@ describe('mapModelToEntity', () => {
       access_time: accessTime,
       recipient: recipient,
       shlink_id: shlinkId,
-      id: id,
+      id: id
     };
 
     const result = mapModelToEntity(model);
@@ -71,14 +73,14 @@ describe('mapEntityToModel', () => {
       access_time: accessTime,
       recipient: recipient,
       shlink_id: shlinkId,
-      id: id,
+      id: id
     };
 
     const expectedModel = new SHLinkAccessModel(
       shlinkId,
       accessTime,
       recipient,
-      id,
+      id
     );
 
     const result = mapEntityToModel(entity);
@@ -115,7 +117,7 @@ describe('mapModelToDto', () => {
       accessTime: accessTime,
       recipient: recipient,
       shlinkId: shlinkId,
-      id: id,
+      id: id
     };
 
     const result = mapModelToDto(model);
