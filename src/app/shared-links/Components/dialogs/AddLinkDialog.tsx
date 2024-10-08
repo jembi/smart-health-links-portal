@@ -122,6 +122,9 @@ export const AddLinkDialog: FC<AddLinkDialogProps> = ({
               type="date"
               label="Expiration Date"
               InputLabelProps={{ shrink: true }}
+              InputProps={{
+                inputProps: { min: new Date().toISOString().split('T')[0] },
+              }}
               {...register('configExp', {
                 setValueAs: (value) => value || undefined,
               })}
