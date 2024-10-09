@@ -11,6 +11,7 @@ import type {
   CreateSHLinkEndpointDto,
 } from '@/domain/dtos/shlink-endpoint';
 import { SHLinkQRCodeRequestDto } from '@/domain/dtos/shlink-qrcode';
+import { CreateUserDto, UserDto } from '@/domain/dtos/user';
 import { type TBundle } from '@/types/fhir.types';
 
 export interface IApi {
@@ -84,6 +85,15 @@ export interface IPathMapTypes {
       res: SHLinkDto;
     };
     read: SHLinkMiniDto;
+    update: never;
+    delete: never;
+  };
+  [EPath.users]: {
+    create: {
+      req: CreateUserDto;
+      res: UserDto;
+    };
+    read: UserDto;
     update: never;
     delete: never;
   };

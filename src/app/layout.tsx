@@ -1,12 +1,13 @@
-import { Grid } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import type { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
+import React from 'react';
 
 import { authOptions } from './api/auth/authOptions';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import { RequiredSteps } from './components/RequiredSteps';
 import AuthProvider from './context/AuthProvider';
 import theme from './theme';
 
@@ -32,7 +33,7 @@ export default async function RootLayout({
           <ThemeProvider theme={theme}>
             <AuthProvider session={session}>
               <Header />
-              <Grid minHeight={'calc(100vh - 137px)'}>{children}</Grid>
+              <RequiredSteps>{children}</RequiredSteps>
               <Footer />
             </AuthProvider>
           </ThemeProvider>
