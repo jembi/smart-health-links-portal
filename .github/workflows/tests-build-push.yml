@@ -52,7 +52,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
       - name: Build and push latest
         if: ${{ github.ref_name == 'main' }}
         uses: docker/build-push-action@v5
@@ -61,3 +61,12 @@ jobs:
           push: true
           file: docker/production/Dockerfile
           tags: jembi/smart-health-links-portal:latest
+
+      - name: Build and push latest - tag
+        if: ${{ github.ref_name != 'main' }}
+        uses: docker/build-push-action@v5
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          file: docker/production/Dockerfile
+          tags: jembi/smart-health-links-portal:hotfix
