@@ -1,5 +1,7 @@
+import Box from '@mui/material/Box';
 import { JSX } from 'react';
 
+import { StyledButton } from '@/app/components/StyledButton';
 import {
   camelCaseToFlat,
   getSection,
@@ -518,6 +520,57 @@ const rows: TRow<TComposition>[] = [
           },
           [] as JSX.Element[][],
         ) as JSX.Element[][],
+    },
+  },
+  {
+    type: 'row',
+    config: {
+      label: '',
+      render: ({ text }) => {
+        const toggleInfo = () => {
+          const infoDiv = document.getElementById('composition-generated');
+
+          if (!infoDiv) {
+            return null;
+          }
+
+          if (infoDiv.style.display === 'none') {
+            infoDiv.style.display = 'block';
+          } else {
+            infoDiv.style.display = 'none';
+          }
+          return null;
+        };
+
+        return (
+          <Box
+            sx={{
+              padding: '20px 0px',
+              width: '100%',
+              '& table': {
+                width: '100%',
+                borderCollapse: 'collapse',
+                marginBottom: '20px',
+                '& th, & td': {
+                  border: '1px solid gray',
+                  padding: '8px',
+                  textAlign: 'left',
+                },
+              },
+            }}
+          >
+            <StyledButton size="small" variant="contained" onClick={toggleInfo}>
+              Toggle Generated
+            </StyledButton>
+            <div
+              dangerouslySetInnerHTML={{ __html: text.div }}
+              className="extra-info"
+              id="composition-generated"
+              style={{ display: 'none' }}
+            />
+          </Box>
+        );
+      },
     },
   },
 ];

@@ -37,7 +37,7 @@ const rows: TRow<TImmunization>[] = [
       render: ({ performer }, references) =>
         getResource<EResource.Organization>(
           references,
-          performer?.[0]?.actor.reference,
+          performer?.[0]?.actor?.reference,
         )?.name,
     },
   },
